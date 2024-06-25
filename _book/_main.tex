@@ -113,32 +113,15 @@
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
 \urlstyle{same}
 \hypersetup{
-  pdftitle={Data Analysis in R: A Comprehensive Guide},
+  pdftitle={Data Analysis in R: A Basic Guide},
   pdfauthor={Antonio Solorio},
   hidelinks,
   pdfcreator={LaTeX via pandoc}}
 
-\title{Data Analysis in R: A Comprehensive Guide}
+\title{Data Analysis in R: A Basic Guide}
 \author{Antonio Solorio}
-\date{2024-06-17}
+\date{2024-06-24}
 
-\usepackage{amsthm}
-\newtheorem{theorem}{Theorem}[chapter]
-\newtheorem{lemma}{Lemma}[chapter]
-\newtheorem{corollary}{Corollary}[chapter]
-\newtheorem{proposition}{Proposition}[chapter]
-\newtheorem{conjecture}{Conjecture}[chapter]
-\theoremstyle{definition}
-\newtheorem{definition}{Definition}[chapter]
-\theoremstyle{definition}
-\newtheorem{example}{Example}[chapter]
-\theoremstyle{definition}
-\newtheorem{exercise}{Exercise}[chapter]
-\theoremstyle{definition}
-\newtheorem{hypothesis}{Hypothesis}[chapter]
-\theoremstyle{remark}
-\newtheorem*{remark}{Remark}
-\newtheorem*{solution}{Solution}
 \begin{document}
 \maketitle
 
@@ -146,190 +129,268 @@
 \setcounter{tocdepth}{1}
 \tableofcontents
 }
-\chapter{Hello bookdown}\label{hello-bookdown}
+\chapter{Introduction}\label{introduction}
 
-All chapters start with a first-level heading followed by your chapter title, like the line above. There should be only one first-level heading (\texttt{\#}) per .Rmd file.
+Welcome to ``Data Analysis in R: A Basic Guide.'' This book aims to provide you with a solid foundation in data analysis using R, a powerful and versatile programming language. Throughout this book, you will learn various techniques and tools essential for effective data analysis.
 
-\section{A section}\label{a-section}
+To illustrate these concepts, we will use the Home Mortgage Disclosure Act (HMDA) data as a practical example. This real-world dataset will help you understand how to apply data analysis methods in a meaningful context.
 
-All chapter sections start with a second-level (\texttt{\#\#}) or higher heading followed by your section title, like the sections above and below here. You can have as many as you want within a chapter.
+\section{What is HMDA Data?}\label{what-is-hmda-data}
 
-\subsection*{An unnumbered section}\label{an-unnumbered-section}
-\addcontentsline{toc}{subsection}{An unnumbered section}
+The Home Mortgage Disclosure Act (HMDA) was enacted by Congress in 1975 and is implemented by the Consumer Financial Protection Bureau (CFPB). The HMDA requires many financial institutions to maintain, report, and publicly disclose information about mortgages. This information is crucial for understanding and monitoring trends in housing finance, and for ensuring compliance with fair lending laws.
 
-Chapters and sections are numbered by default. To un-number a heading, add a \texttt{\{.unnumbered\}} or the shorter \texttt{\{-\}} at the end of the heading, like in this section.
+HMDA data includes information on loan applications, loan originations, loan purchases, and denied applications. The data encompasses various aspects such as:
 
-\chapter{Cross-references}\label{cross}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Loan Characteristics}: Information about the loan amount, type of loan, and purpose of the loan (e.g., home purchase, refinance).
+\item
+  \textbf{Applicant Information}: Demographic details of the loan applicants including race, ethnicity, gender, and income.
+\item
+  \textbf{Property Information}: Data about the location and type of property being financed.
+\item
+  \textbf{Action Taken}: The outcome of the loan application, whether it was approved, denied, or withdrawn.
+\end{itemize}
 
-Cross-references make it easier for your readers to find and link to elements in your book.
+\subsection{Why Use HMDA Data?}\label{why-use-hmda-data}
 
-\section{Chapters and sub-chapters}\label{chapters-and-sub-chapters}
-
-There are two steps to cross-reference any heading:
+While this book is focused on teaching data analysis in R, the HMDA dataset serves as an excellent example for several reasons:
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
 \tightlist
 \item
-  Label the heading: \texttt{\#\ Hello\ world\ \{\#nice-label\}}.
-
-  \begin{itemize}
-  \tightlist
-  \item
-    Leave the label off if you like the automated heading generated based on your heading title: for example, \texttt{\#\ Hello\ world} = \texttt{\#\ Hello\ world\ \{\#hello-world\}}.
-  \item
-    To label an un-numbered heading, use: \texttt{\#\ Hello\ world\ \{-\#nice-label\}} or \texttt{\{\#\ Hello\ world\ .unnumbered\}}.
-  \end{itemize}
+  \textbf{Real-World Relevance}: HMDA data provides a real-world context that makes the learning process more engaging and practical.
 \item
-  Next, reference the labeled heading anywhere in the text using \texttt{\textbackslash{}@ref(nice-label)}; for example, please see Chapter \ref{cross}.
-
-  \begin{itemize}
-  \tightlist
-  \item
-    If you prefer text as the link instead of a numbered reference use: \hyperref[cross]{any text you want can go here}.
-  \end{itemize}
+  \textbf{Comprehensive Dataset}: The dataset includes a wide range of variables, making it suitable for demonstrating various data analysis techniques.
+\item
+  \textbf{Publicly Available}: HMDA data is publicly accessible, allowing you to follow along with the examples and practice on your own.
 \end{enumerate}
 
-\section{Captioned figures and tables}\label{captioned-figures-and-tables}
+By the end of this book, you will not only have a solid understanding of data analysis in R but also be equipped with practical skills that can be applied to other datasets and domains.
 
-Figures and tables \emph{with captions} can also be cross-referenced from elsewhere in your book using \texttt{\textbackslash{}@ref(fig:chunk-label)} and \texttt{\textbackslash{}@ref(tab:chunk-label)}, respectively.
+Let's get started on this journey of exploring data analysis with R, using the HMDA data as our guide!
 
-See Figure \ref{fig:nice-fig}.
+\chapter{Data Importing}\label{data-importing}
+
+In this chapter, we will explore the process of importing data into R for analysis. Data import is a crucial step in the data analysis workflow, as it allows you to load external data into R for further processing and analysis. We will focus on importing data from CSV files, which are one of the most common data formats used in data analysis. We will also discuss common issues encountered during data import and how to handle them, and how to handle the importation of large datasets in chunks.
+
+\section{Different Types of Data}\label{different-types-of-data}
+
+In the realm of data analysis, you will encounter various types of data formats. Here are some common ones:
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Text Files}: Unstructured text data that can be read line by line or in blocks, and which may be delimited by specific characters.
+\item
+  \textbf{CSV (Comma-Separated Values)}: A CSV file is a type of text file that is delimited by commas. It is one of the most common data formats used for storing tabular data.
+\item
+  \textbf{Excel Files}: Commonly used spreadsheets saved in formats like \texttt{.xlsx} or \texttt{.xls}.
+\item
+  \textbf{JSON (JavaScript Object Notation)}: A lightweight data interchange format that is easy for humans to read and write and easy for machines to parse and generate.
+\item
+  \textbf{SQL Databases}: Structured data stored in relational databases, which can be queried using SQL (Structured Query Language).
+\item
+  \textbf{API Data}: Data fetched from web APIs, which often come in formats like JSON or XML.
+\end{itemize}
+
+\subsection{Why Start with CSV Files?}\label{why-start-with-csv-files}
+
+We will start with CSV files for several reasons:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{Simplicity}: CSV files are easy to understand and work with, making them ideal for beginners.
+\item
+  \textbf{Ubiquity}: CSV is one of the most common data formats, widely supported by various applications and programming languages.
+\item
+  \textbf{Ease of Use in R}: R provides straightforward functions for importing and handling CSV files, making it an excellent starting point for learning data import techniques.
+\end{enumerate}
+
+By mastering the import of CSV files, you'll build a strong foundation that will make it easier to work with other data formats as you progress in your data analysis journey.
+
+\section{Downloading HMDA Data in CSV Format}\label{downloading-hmda-data-in-csv-format}
+
+To practice importing CSV files in R, we will use the Home Mortgage Disclosure Act (HMDA) data in CSV format. This data can be found at the \href{https://ffiec.cfpb.gov/}{Consumer Financial Protection Bureau (CFPB) website}. In particular we will be working with the Snapshot National Loan Level Dataset, specifically for that in 2022 for Nevada.
+
+\subsection{Snapshot National Loan Level Dataset}\label{snapshot-national-loan-level-dataset}
+
+The Snapshot files contain the national HMDA datasets as of May 1, 2023 for all HMDA reporters, as modified by the Bureau to protect applicant and borrower privacy. The snapshot files are available to download in both .csv and pipe delimited text file formats at the following link: \url{https://ffiec.cfpb.gov/data-publication/snapshot-national-loan-level-dataset/}. One of the issues with these files however is that they are quite large, so we will be working with a subset of the data for Nevada in 2022.
+
+The subset of the data for Nevada in 2022 can be downloaded from the following link: \href{https://ffiec.cfpb.gov/v2/data-browser-api/view/csv?states=NV&years=2022}{Nevada 2022 HMDA Data}.
+
+\section{Importing CSV Files in R}\label{importing-csv-files-in-r}
+
+R provides several functions for importing CSV files. The most commonly used function is \texttt{read.csv()}, which is part of the base R package. Additionally, the \texttt{readr} package offers the \texttt{read\_csv()} function, which is optimized for faster performance and easier handling of large datasets.
+
+\subsection{\texorpdfstring{Using \texttt{read.csv()}}{Using read.csv()}}\label{using-read.csv}
+
+The \texttt{read.csv()} function is straightforward to use. Here's how you can import a CSV file using this function:
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\FunctionTok{par}\NormalTok{(}\AttributeTok{mar =} \FunctionTok{c}\NormalTok{(}\DecValTok{4}\NormalTok{, }\DecValTok{4}\NormalTok{, .}\DecValTok{1}\NormalTok{, .}\DecValTok{1}\NormalTok{))}
-\FunctionTok{plot}\NormalTok{(pressure, }\AttributeTok{type =} \StringTok{\textquotesingle{}b\textquotesingle{}}\NormalTok{, }\AttributeTok{pch =} \DecValTok{19}\NormalTok{)}
+\CommentTok{\# Importing a CSV file using read.csv()}
+\NormalTok{data }\OtherTok{\textless{}{-}} \FunctionTok{read.csv}\NormalTok{(}\StringTok{"downloads/state\_NV.csv"}\NormalTok{)}
+
+\CommentTok{\# Display the first few rows of the data}
+\FunctionTok{head}\NormalTok{(data)}
 \end{Highlighting}
 \end{Shaded}
 
-\begin{figure}
+In this example, replace \texttt{"downloads/state\_NV.csv"} with the actual path to your CSV file. The \texttt{head()} function is used to display the first few rows of the imported data.
 
-{\centering \includegraphics[width=0.8\linewidth]{_main_files/figure-latex/nice-fig-1} 
+\subsection{\texorpdfstring{Using \texttt{read\_csv()} from the \texttt{readr} Package}{Using read\_csv() from the readr Package}}\label{using-read_csv-from-the-readr-package}
 
-}
-
-\caption{Here is a nice figure!}\label{fig:nice-fig}
-\end{figure}
-
-Don't miss Table \ref{tab:nice-tab}.
+The \texttt{readr} package provides a faster and more convenient way to import CSV files with the \texttt{read\_csv()} function. First, you need to install and load the \texttt{readr} package:
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{knitr}\SpecialCharTok{::}\FunctionTok{kable}\NormalTok{(}
-  \FunctionTok{head}\NormalTok{(pressure, }\DecValTok{10}\NormalTok{), }\AttributeTok{caption =} \StringTok{\textquotesingle{}Here is a nice table!\textquotesingle{}}\NormalTok{,}
-  \AttributeTok{booktabs =} \ConstantTok{TRUE}
+\CommentTok{\# Install the readr package}
+\FunctionTok{install.packages}\NormalTok{(}\StringTok{"readr"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+Once the package is installed, you can use the \texttt{read\_csv()} function to import the CSV file:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Load the readr package}
+\FunctionTok{library}\NormalTok{(readr)}
+
+\CommentTok{\# Importing a CSV file using read\_csv()}
+\NormalTok{data }\OtherTok{\textless{}{-}} \FunctionTok{read\_csv}\NormalTok{(}\StringTok{"downloads/state\_NV.csv"}\NormalTok{)}
+
+\CommentTok{\# Display the first few rows of the data}
+\FunctionTok{head}\NormalTok{(data,}\DecValTok{50}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+Similar to \texttt{read.csv()}, replace \texttt{"downloads/state\_NV.csv"} with the actual path to your CSV file. The \texttt{read\_csv()} function also automatically parses the data types of the columns, which can save you time and effort, {you need to be carefull as sometimes read\_csv() may guess the column type wrong!}
+
+\subsubsection{Handling Parsing Issues}\label{handling-parsing-issues}
+
+If you been following along, when you ran \texttt{data\ \textless{}-\ read\_csv("downloads/state\_NV.csv")} you have probably encountered a {warning} similar to:
+
+\includegraphics{images/clipboard-3586307356.png}
+
+The warning is letting us know that \texttt{read\_csv()} ran into some parsing issues, and its recommending that we run \texttt{problems()} to see what the issues are. Let's run \texttt{problems()} to see what the issues are:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Display the problems encountered during parsing}
+\FunctionTok{problems}\NormalTok{(data)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{images/clipboard-1927136276.png}
+
+The \texttt{problems()} function displays the issues encountered during parsing. The \textbf{`row'} column indicates the row number where the issue occurred, and the \textbf{`col'} column indicates the column number. The \textbf{`expected'} column shows the expected data type, and the \textbf{`actual'} column shows the actual value.
+
+There are two main ways to handle parsing issues in \texttt{read\_csv()}:
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Manually Specify Column Types}: You can manually specify the column types using the \texttt{col\_types} argument in \texttt{read\_csv()}. This approach is useful when you know the data types of the columns in advance, but might be cumbersome for large datasets with many columns.
+\item
+  \textbf{Increase the \texttt{guess\_max} Argument}: You can increase the \texttt{guess\_max} argument in \texttt{read\_csv()} to allow the function to guess the column types for a larger number of rows. This approach isn't perfect, but this way you can avoid having to manually specify the column types.
+\end{itemize}
+
+Below is the code to manually specify the column types:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Manually specify the column types}
+\NormalTok{data }\OtherTok{\textless{}{-}} \FunctionTok{read\_csv}\NormalTok{(}
+  \StringTok{"C:}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{Users}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{anton}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{Desktop}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{Code Projects}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{Using R to Work with Data}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{downloads}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{state\_NV.csv"}\NormalTok{,}
+  \AttributeTok{col\_types =} \FunctionTok{cols}\NormalTok{(}
+    \AttributeTok{loan\_amount =} \FunctionTok{col\_double}\NormalTok{(),}
+    \AttributeTok{total\_units =} \FunctionTok{col\_character}\NormalTok{(),}
+    \AttributeTok{.default =} \FunctionTok{col\_character}\NormalTok{(),}
+\NormalTok{  ),}
+  \AttributeTok{na =} \FunctionTok{c}\NormalTok{(}\StringTok{""}\NormalTok{, }\StringTok{"NA"}\NormalTok{) }\CommentTok{\# This is to specify what is considered a missing value}
+\NormalTok{  )}
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{Handling File Paths}\label{handling-file-paths}
+
+When specifying the path to your CSV file, it's important to ensure that the path is correct. You can use absolute paths or relative paths. Here are some examples:
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Absolute Path}: An absolute path specifies the complete path from the root directory. For example, on Windows: \texttt{"C:/Users/YourName/Documents/data.csv"}, or on macOS/Linux: \texttt{"/Users/YourName/Documents/data.csv"}.
+\item
+  \textbf{Relative Path}: A relative path specifies the path relative to your current working directory. For example, if your current working directory is \texttt{"C:/Users/YourName/Documents"}, you can use \texttt{"data.csv"}.
+\end{itemize}
+
+You can check your current working directory in R using the \texttt{getwd()} function:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Get the current working directory}
+\FunctionTok{getwd}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+You can also set the working directory using the \texttt{setwd()} function:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Set the working directory}
+\FunctionTok{setwd}\NormalTok{(}\StringTok{"path/to/your/directory"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{Common Issues and Solutions}\label{common-issues-and-solutions}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{File Not Found Error}: Ensure the file path is correct and the file exists at the specified location.
+\item
+  \textbf{Incorrect Data Parsing}: If columns are not parsed correctly, you can specify the column types manually using the \texttt{col\_types} argument in \texttt{read\_csv()}.
+\item
+  \textbf{Missing Values}: R automatically handles missing values as \texttt{NA}. You can customize the handling of missing values using the \texttt{na} argument.
+\end{itemize}
+
+By understanding how to import CSV files in R, you can easily load your data and start your data analysis process. In the next sections, we will explore how to clean and manipulate the imported data to prepare it for analysis.
+
+\newpage
+
+\section{Importing Data in Chunks}\label{importing-data-in-chunks}
+
+When working with large datasets, it is often necessary to import the data in chunks. This is especially true when working with data that is too large to fit into memory. In this case, we can use the \texttt{readr} package to import the data in chunks.
+
+The \texttt{readr} package provides the \texttt{read\_csv\_chunked()} function, which allows us to read a CSV file in chunks. This function is similar to \texttt{read\_csv()}, but it reads the data in smaller chunks, making it easier to work with large datasets.
+
+Here's an example of how to import a CSV file in chunks using the \texttt{read\_csv\_chunked()} function applying a callback function to each chunk to filter the data for state\_code ``NV'':
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Load the readr package}
+\FunctionTok{library}\NormalTok{(readr)}
+
+\CommentTok{\# Creating callback function to filter data for state\_code "NV"}
+\NormalTok{filter\_data }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(data) \{}
+\NormalTok{  data[data}\SpecialCharTok{$}\NormalTok{state\_code }\SpecialCharTok{==} \StringTok{"NV"}\NormalTok{, ]}
+\NormalTok{\}}
+
+\CommentTok{\# Importing a CSV file in chunks using read\_csv\_chunked()}
+\NormalTok{chunked\_data }\OtherTok{\textless{}{-}} \FunctionTok{read\_csv\_chunked}\NormalTok{(}
+  \StringTok{"downloads/state\_data.csv"}\NormalTok{, }\CommentTok{\# specify the path to the CSV file}
+  \AttributeTok{callback =}\NormalTok{ filter\_data, }\CommentTok{\# specify the callback function}
+  \AttributeTok{chunk\_size =} \DecValTok{1000} \CommentTok{\# specify the chunk size}
 \NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
-\begin{table}
-
-\caption{\label{tab:nice-tab}Here is a nice table!}
-\centering
-\begin{tabular}[t]{rr}
-\toprule
-temperature & pressure\\
-\midrule
-0 & 0.0002\\
-20 & 0.0012\\
-40 & 0.0060\\
-60 & 0.0300\\
-80 & 0.0900\\
-\addlinespace
-100 & 0.2700\\
-120 & 0.7500\\
-140 & 1.8500\\
-160 & 4.2000\\
-180 & 8.8000\\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\chapter{Parts}\label{parts}
-
-You can add parts to organize one or more book chapters together. Parts can be inserted at the top of an .Rmd file, before the first-level chapter heading in that same file.
-
-Add a numbered part: \texttt{\#\ (PART)\ Act\ one\ \{-\}} (followed by \texttt{\#\ A\ chapter})
-
-Add an unnumbered part: \texttt{\#\ (PART\textbackslash{}*)\ Act\ one\ \{-\}} (followed by \texttt{\#\ A\ chapter})
-
-Add an appendix as a special kind of un-numbered part: \texttt{\#\ (APPENDIX)\ Other\ stuff\ \{-\}} (followed by \texttt{\#\ A\ chapter}). Chapters in an appendix are prepended with letters instead of numbers.
-
-\chapter{Footnotes and citations}\label{footnotes-and-citations}
-
-\section{Footnotes}\label{footnotes}
-
-Footnotes are put inside the square brackets after a caret \texttt{\^{}{[}{]}}. Like this one \footnote{This is a footnote.}.
-
-\section{Citations}\label{citations}
-
-Reference items in your bibliography file(s) using \texttt{@key}.
-
-For example, we are using the \textbf{bookdown} package \citep{R-bookdown} (check out the last code chunk in index.Rmd to see how this citation key was added) in this sample book, which was built on top of R Markdown and \textbf{knitr} \citep{xie2015} (this citation was added manually in an external file book.bib).
-Note that the \texttt{.bib} files need to be listed in the index.Rmd with the YAML \texttt{bibliography} key.
-
-The RStudio Visual Markdown Editor can also make it easier to insert citations: \url{https://rstudio.github.io/visual-markdown-editing/\#/citations}
-
-\chapter{Blocks}\label{blocks}
-
-\section{Equations}\label{equations}
-
-Here is an equation.
-
-\begin{equation} 
-  f\left(k\right) = \binom{n}{k} p^k\left(1-p\right)^{n-k}
-  \label{eq:binom}
-\end{equation}
-
-You may refer to using \texttt{\textbackslash{}@ref(eq:binom)}, like see Equation \eqref{eq:binom}.
-
-\section{Theorems and proofs}\label{theorems-and-proofs}
-
-Labeled theorems can be referenced in text using \texttt{\textbackslash{}@ref(thm:tri)}, for example, check out this smart theorem \ref{thm:tri}.
-
-\begin{theorem}
-\protect\hypertarget{thm:tri}{}\label{thm:tri}For a right triangle, if \(c\) denotes the \emph{length} of the hypotenuse
-and \(a\) and \(b\) denote the lengths of the \textbf{other} two sides, we have
-\[a^2 + b^2 = c^2\]
-\end{theorem}
-
-Read more here \url{https://bookdown.org/yihui/bookdown/markdown-extensions-by-bookdown.html}.
-
-\section{Callout blocks}\label{callout-blocks}
-
-The R Markdown Cookbook provides more help on how to use custom blocks to design your own callouts: \url{https://bookdown.org/yihui/rmarkdown-cookbook/custom-blocks.html}
-
-\chapter{Sharing your book}\label{sharing-your-book}
-
-\section{Publishing}\label{publishing}
-
-HTML books can be published online, see: \url{https://bookdown.org/yihui/bookdown/publishing.html}
-
-\section{404 pages}\label{pages}
-
-By default, users will be directed to a 404 page if they try to access a webpage that cannot be found. If you'd like to customize your 404 page instead of using the default, you may add either a \texttt{\_404.Rmd} or \texttt{\_404.md} file to your project root and use code and/or Markdown syntax.
-
-\section{Metadata for sharing}\label{metadata-for-sharing}
-
-Bookdown HTML books will provide HTML metadata for social sharing on platforms like Twitter, Facebook, and LinkedIn, using information you provide in the \texttt{index.Rmd} YAML. To setup, set the \texttt{url} for your book and the path to your \texttt{cover-image} file. Your book's \texttt{title} and \texttt{description} are also used.
-
-This \texttt{gitbook} uses the same social sharing data across all chapters in your book- all links shared will look the same.
-
-Specify your book's source repository on GitHub using the \texttt{edit} key under the configuration options in the \texttt{\_output.yml} file, which allows users to suggest an edit by linking to a chapter's source file.
-
-Read more about the features of this output format here:
-
-\url{https://pkgs.rstudio.com/bookdown/reference/gitbook.html}
-
-Or use:
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{?bookdown}\SpecialCharTok{::}\NormalTok{gitbook}
-\end{Highlighting}
-\end{Shaded}
-
+In this example, replace \texttt{"downloads/state\_data.csv"} with the actual path to your CSV file. The \texttt{filter\_data()} function is used as a callback function to filter the data for the state code ``NV''. A callback function is a function that is passed as an argument to another function and is executed by that function. In this case, the \texttt{filter\_data()} function is applied to each chunk of data read by \texttt{read\_csv\_chunked()}. This allows us to filter the data for the state code ``NV'' as it is read in chunks.
 
   \bibliography{book.bib,packages.bib}
 

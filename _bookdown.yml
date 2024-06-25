@@ -2,3 +2,9 @@ delete_merged_file: true
 language:
   ui:
     chapter_name: "Chapter "
+number_depth: 2
+rmd_files:
+  - chapter1/intro.Rmd
+  - chapter2/data-importing.Rmd
+  - chapter2/data-in-chunks.rmd
+  

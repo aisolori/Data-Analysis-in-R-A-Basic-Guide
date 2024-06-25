@@ -1,6 +1,19 @@
-# Introduction
+---
+title: "Data Analysis in R: A Basic Guide"
+author: "Antonio Solorio"
+date: "`r Sys.Date()`"
+site: bookdown::bookdown_site
+documentclass: book
+bibliography: [book.bib, packages.bib]
+# url: your book url like https://bookdown.org/yihui/bookdown
+# cover-image: path to the social sharing image like images/cover.jpg
+description: |
+  This book provides a comprehensive guide to data analysis using R, with a focus on the Home Mortgage Disclosure Act (HMDA) data as a practical example. It covers the essential techniques and tools needed to perform effective data analysis, offering step-by-step instructions and detailed explanations. The HTML output format for this book is bookdown::gitbook, as set in the _output.yml file.
+link-citations: yes
+github-repo: rstudio/bookdown-demo
+---
 
-## About This Book
+# Introduction
 
 Welcome to "Data Analysis in R: A Basic Guide." This book aims to provide you with a solid foundation in data analysis using R, a powerful and versatile programming language. Throughout this book, you will learn various techniques and tools essential for effective data analysis.
 
@@ -17,7 +30,7 @@ HMDA data includes information on loan applications, loan originations, loan pur
 - **Property Information**: Data about the location and type of property being financed.
 - **Action Taken**: The outcome of the loan application, whether it was approved, denied, or withdrawn.
 
-## Why Use HMDA Data?
+### Why Use HMDA Data?
 
 While this book is focused on teaching data analysis in R, the HMDA dataset serves as an excellent example for several reasons:
 

@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Data Analysis in R: A Basic Guide</title>
+  <title>2.2 Downloading HMDA Data in CSV Format | Data Analysis in R: A Basic Guide</title>
   <meta name="description" content="This book provides a comprehensive guide to data analysis using R, with a focus on the Home Mortgage Disclosure Act (HMDA) data as a practical example. It covers the essential techniques and tools needed to perform effective data analysis, offering step-by-step instructions and detailed explanations. The HTML output format for this book is bookdown::gitbook, as set in the _output.yml file." />
   <meta name="generator" content="bookdown 0.39 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Data Analysis in R: A Basic Guide" />
+  <meta property="og:title" content="2.2 Downloading HMDA Data in CSV Format | Data Analysis in R: A Basic Guide" />
   <meta property="og:type" content="book" />
   
   <meta property="og:description" content="This book provides a comprehensive guide to data analysis using R, with a focus on the Home Mortgage Disclosure Act (HMDA) data as a practical example. It covers the essential techniques and tools needed to perform effective data analysis, offering step-by-step instructions and detailed explanations. The HTML output format for this book is bookdown::gitbook, as set in the _output.yml file." />
   <meta name="github-repo" content="rstudio/bookdown-demo" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Data Analysis in R: A Basic Guide" />
+  <meta name="twitter:title" content="2.2 Downloading HMDA Data in CSV Format | Data Analysis in R: A Basic Guide" />
   
   <meta name="twitter:description" content="This book provides a comprehensive guide to data analysis using R, with a focus on the Home Mortgage Disclosure Act (HMDA) data as a practical example. It covers the essential techniques and tools needed to perform effective data analysis, offering step-by-step instructions and detailed explanations. The HTML output format for this book is bookdown::gitbook, as set in the _output.yml file." />
   
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-
-<link rel="next" href="introduction.html"/>
+<link rel="prev" href="different-types-of-data.html"/>
+<link rel="next" href="importing-csv-files-in-r.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -140,11 +140,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="./">Data Analysis in R: A Basic Guide</a></li>
 
 <li class="divider"></li>
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Test Index</a></li>
 <li class="chapter" data-level="1" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>1</b> Introduction</a>
 <ul>
-<li class="chapter" data-level="1.1" data-path="what-is-hmda-data.html"><a href="what-is-hmda-data.html"><i class="fa fa-check"></i><b>1.1</b> What is HMDA Data?</a></li>
-<li class="chapter" data-level="1.2" data-path="why-use-hmda-data.html"><a href="why-use-hmda-data.html"><i class="fa fa-check"></i><b>1.2</b> Why Use HMDA Data?</a></li>
+<li class="chapter" data-level="1.1" data-path="what-is-hmda-data.html"><a href="what-is-hmda-data.html"><i class="fa fa-check"></i><b>1.1</b> What is HMDA Data?</a>
+<ul>
+<li class="chapter" data-level="1.1.1" data-path="what-is-hmda-data.html"><a href="what-is-hmda-data.html#why-use-hmda-data"><i class="fa fa-check"></i><b>1.1.1</b> Why Use HMDA Data?</a></li>
+</ul></li>
 </ul></li>
 <li class="chapter" data-level="2" data-path="data-importing.html"><a href="data-importing.html"><i class="fa fa-check"></i><b>2</b> Data Importing</a>
 <ul>
@@ -188,22 +189,22 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="header">
-<h1 class="title">Data Analysis in R: A Basic Guide</h1>
-<p class="author"><em>Antonio Solorio</em></p>
-<p class="date"><em>2024-06-24</em></p>
+<div id="downloading-hmda-data-in-csv-format" class="section level2 hasAnchor" number="2.2">
+<h2><span class="header-section-number">2.2</span> Downloading HMDA Data in CSV Format<a href="downloading-hmda-data-in-csv-format.html#downloading-hmda-data-in-csv-format" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>To practice importing CSV files in R, we will use the Home Mortgage Disclosure Act (HMDA) data in CSV format. This data can be found at the <a href="https://ffiec.cfpb.gov/">Consumer Financial Protection Bureau (CFPB) website</a>. In particular we will be working with the Snapshot National Loan Level Dataset, specifically for that in 2022 for Nevada.</p>
+<div id="snapshot-national-loan-level-dataset" class="section level3 hasAnchor" number="2.2.1">
+<h3><span class="header-section-number">2.2.1</span> Snapshot National Loan Level Dataset<a href="downloading-hmda-data-in-csv-format.html#snapshot-national-loan-level-dataset" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The Snapshot files contain the national HMDA datasets as of May 1, 2023 for all HMDA reporters, as modified by the Bureau to protect applicant and borrower privacy. The snapshot files are available to download in both .csv and pipe delimited text file formats at the following link: <a href="https://ffiec.cfpb.gov/data-publication/snapshot-national-loan-level-dataset/" class="uri">https://ffiec.cfpb.gov/data-publication/snapshot-national-loan-level-dataset/</a>. One of the issues with these files however is that they are quite large, so we will be working with a subset of the data for Nevada in 2022.</p>
+<p>The subset of the data for Nevada in 2022 can be downloaded from the following link: <a href="https://ffiec.cfpb.gov/v2/data-browser-api/view/csv?states=NV&amp;years=2022">Nevada 2022 HMDA Data</a>.</p>
 </div>
-<div id="test-index" class="section level1 unnumbered hasAnchor">
-<h1>Test Index<a href="index.html#test-index" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-
 </div>
             </section>
 
           </div>
         </div>
       </div>
-
-<a href="introduction.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="different-types-of-data.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="importing-csv-files-in-r.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -234,7 +235,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/USERNAME/REPO/edit/BRANCH/index.Rmd",
+"link": "https://github.com/USERNAME/REPO/edit/BRANCH/chapter2/data-importing.Rmd",
 "text": "Edit"
 },
 "history": {

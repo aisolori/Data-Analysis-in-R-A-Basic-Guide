@@ -1,10 +1,13 @@
 # Data Importing
 
+In this chapter, we will explore the process of importing data into R for analysis. Data import is a crucial step in the data analysis workflow, as it allows you to load external data into R for further processing and analysis. We will focus on importing data from CSV files, which are one of the most common data formats used in data analysis. We will also discuss common issues encountered during data import and how to handle them, and how to handle the importation of large datasets in chunks.
+
 ## Different Types of Data
 
 In the realm of data analysis, you will encounter various types of data formats. Here are some common ones:
 
--   **CSV (Comma-Separated Values)**: A plain text format where each line corresponds to a row in the table, and fields are separated by commas.
+-   **Text Files**: Unstructured text data that can be read line by line or in blocks, and which may be delimited by specific characters. 
+-   **CSV (Comma-Separated Values)**: A CSV file is a type of text file that is delimited by commas. It is one of the most common data formats used for storing tabular data.
 -   **Excel Files**: Commonly used spreadsheets saved in formats like `.xlsx` or `.xls`.
 -   **JSON (JavaScript Object Notation)**: A lightweight data interchange format that is easy for humans to read and write and easy for machines to parse and generate.
 -   **SQL Databases**: Structured data stored in relational databases, which can be queried using SQL (Structured Query Language).
@@ -24,7 +27,8 @@ By mastering the import of CSV files, you'll build a strong foundation that will
 
 To practice importing CSV files in R, we will use the Home Mortgage Disclosure Act (HMDA) data in CSV format. This data can be found at the [Consumer Financial Protection Bureau (CFPB) website](https://ffiec.cfpb.gov/). In particular we will be working with the Snapshot National Loan Level Dataset, specifically for that in 2022 for Nevada.
 
-### Snapshot National Loan Level Dataset{#snapshot-national-loan-level-dataset}
+### Snapshot National Loan Level Dataset {#snapshot-national-loan-level-dataset}
+
 The Snapshot files contain the national HMDA datasets as of May 1, 2023 for all HMDA reporters, as modified by the Bureau to protect applicant and borrower privacy. The snapshot files are available to download in both .csv and pipe delimited text file formats at the following link: <https://ffiec.cfpb.gov/data-publication/snapshot-national-loan-level-dataset/>. One of the issues with these files however is that they are quite large, so we will be working with a subset of the data for Nevada in 2022.
 
 The subset of the data for Nevada in 2022 can be downloaded from the following link: [Nevada 2022 HMDA Data](https://ffiec.cfpb.gov/v2/data-browser-api/view/csv?states=NV&years=2022).
@@ -37,7 +41,7 @@ R provides several functions for importing CSV files. The most commonly used fun
 
 The `read.csv()` function is straightforward to use. Here’s how you can import a CSV file using this function:
 
-```r
+``` r
 # Importing a CSV file using read.csv()
 data <- read.csv("downloads/state_NV.csv")
 
@@ -58,7 +62,7 @@ install.packages("readr")
 
 Once the package is installed, you can use the `read_csv()` function to import the CSV file:
 
-```{r}
+``` r
 # Load the readr package
 library(readr)
 
@@ -69,7 +73,44 @@ data <- read_csv("downloads/state_NV.csv")
 head(data,50)
 ```
 
-Similar to `read.csv()`, replace `"downloads/state_NV.csv"` with the actual path to your CSV file. The `read_csv()` function also automatically parses the data types of the columns, which can save you time and effort.
+Similar to `read.csv()`, replace `"downloads/state_NV.csv"` with the actual path to your CSV file. The `read_csv()` function also automatically parses the data types of the columns, which can save you time and effort, [you need to be carefull as sometimes read_csv() may guess the column type wrong!]{style="color:red;"}
+
+#### Handling Parsing Issues
+
+If you been following along, when you ran `data <- read_csv("downloads/state_NV.csv")` you have probably encountered a [warning]{style="color:orange"} similar to:
+
+![](images/clipboard-3586307356.png)
+
+The warning is letting us know that `read_csv()` ran into some parsing issues, and its recommending that we run `problems()` to see what the issues are. Let's run `problems()` to see what the issues are:
+
+``` r
+# Display the problems encountered during parsing
+problems(data)
+```
+![](images/clipboard-1927136276.png)
+
+The `problems()` function displays the issues encountered during parsing. The **'row'** column indicates the row number where the issue occurred, and the **'col'** column indicates the column number. The **'expected'** column shows the expected data type, and the **'actual'** column shows the actual value.
+
+There are two main ways to handle parsing issues in `read_csv()`:
+
+-   **Manually Specify Column Types**: You can manually specify the column types using the `col_types` argument in `read_csv()`. This approach is useful when you know the data types of the columns in advance, but might be cumbersome for large datasets with many columns.
+-   **Increase the `guess_max` Argument**: You can increase the `guess_max` argument in `read_csv()` to allow the function to guess the column types for a larger number of rows. This approach isn't perfect, but this way you can avoid having to manually specify the column types.
+
+Below is the code to manually specify the column types:
+``` r
+# Manually specify the column types
+data <- read_csv(
+  "C:\\Users\\anton\\Desktop\\Code Projects\\Using R to Work with Data\\downloads\\state_NV.csv",
+  col_types = cols(
+    loan_amount = col_double(),
+    total_units = col_character(),
+    .default = col_character(),
+  ),
+  na = c("", "NA") # This is to specify what is considered a missing value
+  )
+```
+
+
 
 ### Handling File Paths
 
@@ -98,4 +139,6 @@ setwd("path/to/your/directory")
 -   **Incorrect Data Parsing**: If columns are not parsed correctly, you can specify the column types manually using the `col_types` argument in `read_csv()`.
 -   **Missing Values**: R automatically handles missing values as `NA`. You can customize the handling of missing values using the `na` argument.
 
-By understanding how to import CSV files in R, you can easily load your data and start your data analysis process. In the next sections, we will explore how to clean and manipulate the imported data to prepare it for analysis. [\^1]
+By understanding how to import CSV files in R, you can easily load your data and start your data analysis process. In the next sections, we will explore how to clean and manipulate the imported data to prepare it for analysis.
+
+\newpage

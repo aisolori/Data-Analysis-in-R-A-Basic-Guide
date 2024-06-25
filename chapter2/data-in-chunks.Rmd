@@ -1,0 +1,28 @@
+## Importing Data in Chunks
+
+When working with large datasets, it is often necessary to import the data in chunks. This is especially true when working with data that is too large to fit into memory. In this case, we can use the `readr` package to import the data in chunks.
+
+The `readr` package provides the `read_csv_chunked()` function, which allows us to read a CSV file in chunks. This function is similar to `read_csv()`, but it reads the data in smaller chunks, making it easier to work with large datasets.
+
+Here's an example of how to import a CSV file in chunks using the `read_csv_chunked()` function applying a callback function to each chunk to filter the data for state_code "NV":
+
+```r
+# Load the readr package
+library(readr)
+
+# Creating callback function to filter data for state_code "NV"
+filter_data <- function(data) {
+  data[data$state_code == "NV", ]
+}
+
+# Importing a CSV file in chunks using read_csv_chunked()
+chunked_data <- read_csv_chunked(
+  "downloads/state_data.csv", # specify the path to the CSV file
+  callback = filter_data, # specify the callback function
+  chunk_size = 1000 # specify the chunk size
+)
+```
+
+In this example, replace `"downloads/state_data.csv"` with the actual path to your CSV file. The `filter_data()` function is used as a callback function to filter the data for the state code "NV". A callback function is a function that is passed as an argument to another function and is executed by that function. In this case, the `filter_data()` function is applied to each chunk of data read by `read_csv_chunked()`. This allows us to filter the data for the state code "NV" as it is read in chunks.
+
+

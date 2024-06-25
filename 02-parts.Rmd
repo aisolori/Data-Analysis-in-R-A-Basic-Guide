@@ -1,0 +1,7 @@
+## Importing Data in Chunks
+
+When working with large datasets, it is often necessary to import the data in chunks. This is especially true when working with data that is too large to fit into memory. In this case, we can use the `readr` package to import the data in chunks.
+
+
+
+

@@ -23,7 +23,7 @@
 <meta name="author" content="Antonio Solorio" />
 
 
-<meta name="date" content="2024-06-17" />
+<meta name="date" content="2024-06-24" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -123,29 +123,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   
   div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 </style>
-<style type="text/css">
-/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
-div.csl-bib-body { }
-div.csl-entry {
-  clear: both;
-  margin-bottom: 0em;
-}
-.hanging div.csl-entry {
-  margin-left:2em;
-  text-indent:-2em;
-}
-div.csl-left-margin {
-  min-width:2em;
-  float:left;
-}
-div.csl-right-inline {
-  margin-left:2em;
-  padding-left:1em;
-}
-div.csl-indent {
-  margin-left: 2em;
-}
-</style>
 
 <link rel="stylesheet" href="style.css" type="text/css" />
 </head>
@@ -160,14 +137,13 @@ div.csl-indent {
       <nav role="navigation">
 
 <ul class="summary">
-<li><a href="./">A Minimal Book Example</a></li>
+<li><a href="./">Data Analysis in R: A Basic Guide</a></li>
 
 <li class="divider"></li>
 <li class="chapter" data-level="1" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>1</b> Introduction</a>
 <ul>
-<li class="chapter" data-level="1.1" data-path="introduction.html"><a href="introduction.html#about-this-book"><i class="fa fa-check"></i><b>1.1</b> About This Book</a></li>
-<li class="chapter" data-level="1.2" data-path="introduction.html"><a href="introduction.html#what-is-hmda-data"><i class="fa fa-check"></i><b>1.2</b> What is HMDA Data?</a></li>
-<li class="chapter" data-level="1.3" data-path="introduction.html"><a href="introduction.html#why-use-hmda-data"><i class="fa fa-check"></i><b>1.3</b> Why Use HMDA Data?</a></li>
+<li class="chapter" data-level="1.1" data-path="introduction.html"><a href="introduction.html#what-is-hmda-data"><i class="fa fa-check"></i><b>1.1</b> What is HMDA Data?</a></li>
+<li class="chapter" data-level="1.2" data-path="introduction.html"><a href="introduction.html#why-use-hmda-data"><i class="fa fa-check"></i><b>1.2</b> Why Use HMDA Data?</a></li>
 </ul></li>
 <li class="chapter" data-level="2" data-path="data-importing.html"><a href="data-importing.html"><i class="fa fa-check"></i><b>2</b> Data Importing</a>
 <ul>
@@ -182,30 +158,15 @@ div.csl-indent {
 <li class="chapter" data-level="2.3" data-path="data-importing.html"><a href="data-importing.html#importing-csv-files-in-r"><i class="fa fa-check"></i><b>2.3</b> Importing CSV Files in R</a>
 <ul>
 <li class="chapter" data-level="2.3.1" data-path="data-importing.html"><a href="data-importing.html#using-read.csv"><i class="fa fa-check"></i><b>2.3.1</b> Using <code>read.csv()</code></a></li>
-<li class="chapter" data-level="2.3.2" data-path="data-importing.html"><a href="data-importing.html#using-read_csv-from-the-readr-package"><i class="fa fa-check"></i><b>2.3.2</b> Using <code>read_csv()</code> from the <code>readr</code> Package</a></li>
+<li class="chapter" data-level="2.3.2" data-path="data-importing.html"><a href="data-importing.html#using-read_csv-from-the-readr-package"><i class="fa fa-check"></i><b>2.3.2</b> Using <code>read_csv()</code> from the <code>readr</code> Package</a>
+<ul>
+<li class="chapter" data-level="2.3.2.1" data-path="data-importing.html"><a href="data-importing.html#handling-parsing-issues"><i class="fa fa-check"></i><b>2.3.2.1</b> Handling Parsing Issues</a></li>
+</ul></li>
 <li class="chapter" data-level="2.3.3" data-path="data-importing.html"><a href="data-importing.html#handling-file-paths"><i class="fa fa-check"></i><b>2.3.3</b> Handling File Paths</a></li>
 <li class="chapter" data-level="2.3.4" data-path="data-importing.html"><a href="data-importing.html#common-issues-and-solutions"><i class="fa fa-check"></i><b>2.3.4</b> Common Issues and Solutions</a></li>
 </ul></li>
+<li class="chapter" data-level="2.4" data-path="data-importing.html"><a href="data-importing.html#importing-data-in-chunks"><i class="fa fa-check"></i><b>2.4</b> Importing Data in Chunks</a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="parts.html"><a href="parts.html"><i class="fa fa-check"></i><b>3</b> Parts</a></li>
-<li class="chapter" data-level="4" data-path="footnotes-and-citations.html"><a href="footnotes-and-citations.html"><i class="fa fa-check"></i><b>4</b> Footnotes and citations</a>
-<ul>
-<li class="chapter" data-level="4.1" data-path="footnotes-and-citations.html"><a href="footnotes-and-citations.html#footnotes"><i class="fa fa-check"></i><b>4.1</b> Footnotes</a></li>
-<li class="chapter" data-level="4.2" data-path="footnotes-and-citations.html"><a href="footnotes-and-citations.html#citations"><i class="fa fa-check"></i><b>4.2</b> Citations</a></li>
-</ul></li>
-<li class="chapter" data-level="5" data-path="blocks.html"><a href="blocks.html"><i class="fa fa-check"></i><b>5</b> Blocks</a>
-<ul>
-<li class="chapter" data-level="5.1" data-path="blocks.html"><a href="blocks.html#equations"><i class="fa fa-check"></i><b>5.1</b> Equations</a></li>
-<li class="chapter" data-level="5.2" data-path="blocks.html"><a href="blocks.html#theorems-and-proofs"><i class="fa fa-check"></i><b>5.2</b> Theorems and proofs</a></li>
-<li class="chapter" data-level="5.3" data-path="blocks.html"><a href="blocks.html#callout-blocks"><i class="fa fa-check"></i><b>5.3</b> Callout blocks</a></li>
-</ul></li>
-<li class="chapter" data-level="6" data-path="sharing-your-book.html"><a href="sharing-your-book.html"><i class="fa fa-check"></i><b>6</b> Sharing your book</a>
-<ul>
-<li class="chapter" data-level="6.1" data-path="sharing-your-book.html"><a href="sharing-your-book.html#publishing"><i class="fa fa-check"></i><b>6.1</b> Publishing</a></li>
-<li class="chapter" data-level="6.2" data-path="sharing-your-book.html"><a href="sharing-your-book.html#pages"><i class="fa fa-check"></i><b>6.2</b> 404 pages</a></li>
-<li class="chapter" data-level="6.3" data-path="sharing-your-book.html"><a href="sharing-your-book.html#metadata-for-sharing"><i class="fa fa-check"></i><b>6.3</b> Metadata for sharing</a></li>
-</ul></li>
-<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
 
@@ -286,7 +247,8 @@ gitbook.start({
 "options": null
 },
 "toc": {
-"collapse": "subsection"
+"collapse": "section",
+"scroll_highlight": true
 }
 });
 });

@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 5 Blocks | Data Analysis in R: A Comprehensive Guide</title>
+  <title>Chapter 5 Blocks | Data Analysis in R: A Basic Guide</title>
   <meta name="description" content="This book provides a comprehensive guide to data analysis using R, with a focus on the Home Mortgage Disclosure Act (HMDA) data as a practical example. It covers the essential techniques and tools needed to perform effective data analysis, offering step-by-step instructions and detailed explanations. The HTML output format for this book is bookdown::gitbook, as set in the _output.yml file." />
   <meta name="generator" content="bookdown 0.39 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 5 Blocks | Data Analysis in R: A Comprehensive Guide" />
+  <meta property="og:title" content="Chapter 5 Blocks | Data Analysis in R: A Basic Guide" />
   <meta property="og:type" content="book" />
   
   <meta property="og:description" content="This book provides a comprehensive guide to data analysis using R, with a focus on the Home Mortgage Disclosure Act (HMDA) data as a practical example. It covers the essential techniques and tools needed to perform effective data analysis, offering step-by-step instructions and detailed explanations. The HTML output format for this book is bookdown::gitbook, as set in the _output.yml file." />
   <meta name="github-repo" content="rstudio/bookdown-demo" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 5 Blocks | Data Analysis in R: A Comprehensive Guide" />
+  <meta name="twitter:title" content="Chapter 5 Blocks | Data Analysis in R: A Basic Guide" />
   
   <meta name="twitter:description" content="This book provides a comprehensive guide to data analysis using R, with a focus on the Home Mortgage Disclosure Act (HMDA) data as a practical example. It covers the essential techniques and tools needed to perform effective data analysis, offering step-by-step instructions and detailed explanations. The HTML output format for this book is bookdown::gitbook, as set in the _output.yml file." />
   
@@ -23,7 +23,7 @@
 <meta name="author" content="Antonio Solorio" />
 
 
-<meta name="date" content="2024-06-17" />
+<meta name="date" content="2024-06-24" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -160,22 +160,40 @@ div.csl-indent {
       <nav role="navigation">
 
 <ul class="summary">
-<li><a href="./">A Minimal Book Example</a></li>
+<li><a href="./">Data Analysis in R: A Basic Guide</a></li>
 
 <li class="divider"></li>
-<li class="chapter" data-level="1" data-path="hello-bookdown.html"><a href="hello-bookdown.html"><i class="fa fa-check"></i><b>1</b> Hello bookdown</a>
+<li class="chapter" data-level="1" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>1</b> Introduction</a>
 <ul>
-<li class="chapter" data-level="1.1" data-path="hello-bookdown.html"><a href="hello-bookdown.html#a-section"><i class="fa fa-check"></i><b>1.1</b> A section</a>
+<li class="chapter" data-level="1.1" data-path="introduction.html"><a href="introduction.html#about-this-book"><i class="fa fa-check"></i><b>1.1</b> About This Book</a></li>
+<li class="chapter" data-level="1.2" data-path="introduction.html"><a href="introduction.html#what-is-hmda-data"><i class="fa fa-check"></i><b>1.2</b> What is HMDA Data?</a></li>
+<li class="chapter" data-level="1.3" data-path="introduction.html"><a href="introduction.html#why-use-hmda-data"><i class="fa fa-check"></i><b>1.3</b> Why Use HMDA Data?</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="data-importing.html"><a href="data-importing.html"><i class="fa fa-check"></i><b>2</b> Data Importing</a>
 <ul>
-<li class="chapter" data-level="" data-path="hello-bookdown.html"><a href="hello-bookdown.html#an-unnumbered-section"><i class="fa fa-check"></i>An unnumbered section</a></li>
+<li class="chapter" data-level="2.1" data-path="data-importing.html"><a href="data-importing.html#different-types-of-data"><i class="fa fa-check"></i><b>2.1</b> Different Types of Data</a>
+<ul>
+<li class="chapter" data-level="2.1.1" data-path="data-importing.html"><a href="data-importing.html#why-start-with-csv-files"><i class="fa fa-check"></i><b>2.1.1</b> Why Start with CSV Files?</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="data-importing.html"><a href="data-importing.html#downloading-hmda-data-in-csv-format"><i class="fa fa-check"></i><b>2.2</b> Downloading HMDA Data in CSV Format</a>
+<ul>
+<li class="chapter" data-level="2.2.1" data-path="data-importing.html"><a href="data-importing.html#snapshot-national-loan-level-dataset"><i class="fa fa-check"></i><b>2.2.1</b> Snapshot National Loan Level Dataset</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="data-importing.html"><a href="data-importing.html#importing-csv-files-in-r"><i class="fa fa-check"></i><b>2.3</b> Importing CSV Files in R</a>
+<ul>
+<li class="chapter" data-level="2.3.1" data-path="data-importing.html"><a href="data-importing.html#using-read.csv"><i class="fa fa-check"></i><b>2.3.1</b> Using <code>read.csv()</code></a></li>
+<li class="chapter" data-level="2.3.2" data-path="data-importing.html"><a href="data-importing.html#using-read_csv-from-the-readr-package"><i class="fa fa-check"></i><b>2.3.2</b> Using <code>read_csv()</code> from the <code>readr</code> Package</a>
+<ul>
+<li class="chapter" data-level="2.3.2.1" data-path="data-importing.html"><a href="data-importing.html#handling-parsing-issues"><i class="fa fa-check"></i><b>2.3.2.1</b> Handling Parsing Issues</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3.3" data-path="data-importing.html"><a href="data-importing.html#handling-file-paths"><i class="fa fa-check"></i><b>2.3.3</b> Handling File Paths</a></li>
+<li class="chapter" data-level="2.3.4" data-path="data-importing.html"><a href="data-importing.html#common-issues-and-solutions"><i class="fa fa-check"></i><b>2.3.4</b> Common Issues and Solutions</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="2" data-path="cross.html"><a href="cross.html"><i class="fa fa-check"></i><b>2</b> Cross-references</a>
+<li class="chapter" data-level="3" data-path="data-importing-1.html"><a href="data-importing-1.html"><i class="fa fa-check"></i><b>3</b> Data Importing</a>
 <ul>
-<li class="chapter" data-level="2.1" data-path="cross.html"><a href="cross.html#chapters-and-sub-chapters"><i class="fa fa-check"></i><b>2.1</b> Chapters and sub-chapters</a></li>
-<li class="chapter" data-level="2.2" data-path="cross.html"><a href="cross.html#captioned-figures-and-tables"><i class="fa fa-check"></i><b>2.2</b> Captioned figures and tables</a></li>
+<li class="chapter" data-level="3.1" data-path="data-importing-1.html"><a href="data-importing-1.html#importing-data-in-chunks"><i class="fa fa-check"></i><b>3.1</b> Importing Data in Chunks</a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="parts.html"><a href="parts.html"><i class="fa fa-check"></i><b>3</b> Parts</a></li>
 <li class="chapter" data-level="4" data-path="footnotes-and-citations.html"><a href="footnotes-and-citations.html"><i class="fa fa-check"></i><b>4</b> Footnotes and citations</a>
 <ul>
 <li class="chapter" data-level="4.1" data-path="footnotes-and-citations.html"><a href="footnotes-and-citations.html#footnotes"><i class="fa fa-check"></i><b>4.1</b> Footnotes</a></li>
@@ -206,7 +224,7 @@ div.csl-indent {
       <div class="body-inner">
         <div class="book-header" role="navigation">
           <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Data Analysis in R: A Comprehensive Guide</a>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Data Analysis in R: A Basic Guide</a>
           </h1>
         </div>
 
@@ -295,7 +313,8 @@ gitbook.start({
 "options": null
 },
 "toc": {
-"collapse": "subsection"
+"collapse": "section",
+"scroll_highlight": true
 }
 });
 });
