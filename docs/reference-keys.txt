@@ -1,10 +1,9 @@
-introduction
 what-is-hmda-data
 why-use-hmda-data
 data-importing
 different-types-of-data
 why-start-with-csv-files
-downloading-hmda-data-in-csv-format
+downloading-and-importing-hmda-data-in-csv-format
 snapshot-national-loan-level-dataset
 importing-csv-files-in-r
 using-read.csv

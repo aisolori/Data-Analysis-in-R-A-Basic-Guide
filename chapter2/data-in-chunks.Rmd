@@ -1,28 +1,46 @@
 ## Importing Data in Chunks
 
-When working with large datasets, it is often necessary to import the data in chunks. This is especially true when working with data that is too large to fit into memory. In this case, we can use the `readr` package to import the data in chunks.
+When working with large datasets, it's often necessary to import data in chunks, especially when the dataset is too large to fit into memory or cannot be opened by standard software like Excel. The readr package in R provides a solution with the **`read_delim_chunked()`** function, which allows for reading a delimited file in manageable chunks.
 
-The `readr` package provides the `read_csv_chunked()` function, which allows us to read a CSV file in chunks. This function is similar to `read_csv()`, but it reads the data in smaller chunks, making it easier to work with large datasets.
+The **`read_delim_chunked()`** function operates similarly to **`read_delim()`**, but it processes data in smaller portions, making it easier to handle large datasets. A practical approach is to use a callback function to filter data as each chunk is processed.
 
-Here's an example of how to import a CSV file in chunks using the `read_csv_chunked()` function applying a callback function to each chunk to filter the data for state_code "NV":
+Here's an example demonstrating how to import a delimited file in chunks and apply a callback function to filter the data for state_code "NV":
+
 
 ```r
 # Load the readr package
 library(readr)
+library(dplyr)
 
-# Creating callback function to filter data for state_code "NV"
-filter_data <- function(data) {
-  data[data$state_code == "NV", ]
+# Define the callback function to filter data for state_code "NV"
+filter_data <- function(data_chunk, pos) {
+  # Filters data chunk for only rows where state_code == "NV"
+  data_chunk <- data_chunk%>%filter(state_code == "NV")
 }
 
-# Importing a CSV file in chunks using read_csv_chunked()
-chunked_data <- read_csv_chunked(
-  "downloads/state_data.csv", # specify the path to the CSV file
-  callback = filter_data, # specify the callback function
-  chunk_size = 1000 # specify the chunk size
+# Import a CSV file in chunks using read_csv_chunked()
+chunked_data <- read_delim_chunked(
+  "downloads/2023_combined_mlar_header.txt", # specify the path to the CSV file
+  callback = DataFrameCallback$new(filter_data), # specify the callback function
+  chunk_size = 10000, # specify the chunk size,
+  delim = "|",
+  escape_double = FALSE,
+  trim_ws = TRUE,
+  col_names = TRUE,
+  col_types = cols(.default = col_character())
 )
 ```
 
-In this example, replace `"downloads/state_data.csv"` with the actual path to your CSV file. The `filter_data()` function is used as a callback function to filter the data for the state code "NV". A callback function is a function that is passed as an argument to another function and is executed by that function. In this case, the `filter_data()` function is applied to each chunk of data read by `read_csv_chunked()`. This allows us to filter the data for the state code "NV" as it is read in chunks.
+In this example:
+
+*   **`"downloads/2023_combined_mlar_header.txt"`** should be replaced with the actual path to your delimited file.
+*   **`delim = "|"`** specifies the delimiter used in the file.
+*   **`escape_double = FALSE`** specifies whether double quotes should be escaped.
+*   **`trim_ws = TRUE`** indicates that whitespace should be trimmed from the beginning and end of each field.
+*   **`col_names = TRUE`** specifies that the file contains column names.
+*   **`col_types = cols(.default = col_character())`** sets all columns to be read as character data types.
+
+The **`filter_data()`** function is used as a callback to filter the data for the state code "NV". A callback function is a function passed as an argument to another function, which is then executed within that function. Here, the **`filter_data()`** function is applied to each chunk of data read by **`read_delim_chunked()`**, enabling the filtering of data for the state code "NV" as it is read in chunks.
+
 
 
