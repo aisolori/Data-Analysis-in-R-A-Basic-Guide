@@ -4,8 +4,9 @@ In this section we will utilize the HMDA Snapshot data for 2022 in Nevada to pra
 
 ``` r
 # Load the data
-hmda_data <- read_csv("data/hmda_2022_nv.csv", guess_max = Inf)
+hmda_data <- read_csv("downloads/state_NV.csv", guess_max = Inf)
 ```
+Where **`"downloads/state_NV.csv"`** would be the path to the downloaded dataset.
 
 ### Exploring Data Structure
 
@@ -22,7 +23,9 @@ The **str()** function provides a summary of the data frame, including the numbe
 
 ### Changing Data Types
 
-As we saw in the previous section, some of the columns were assigned incorrect data types by **`read_csv()`**. We can fix this by changing the data types of the columns using the **`mutate()`** function from the **dplyr** package. The **dplyr** package provides a set of functions for data manipulation, and the **`mutate()`** function is used to create new columns or modify existing columns. Below we utilize the **`mutate()`** function to change the data type of the **county_code** column to character:
+As we saw in the previous section, some of the columns were assigned incorrect data types by **`read_csv()`**. We can fix this by changing the data types of the columns using the **`mutate()`** function from the **dplyr** package. The **dplyr** package provides a set of functions for data manipulation, and the **`mutate()`** function is used to create new columns or modify existing columns.[^2] Below we utilize the **`mutate()`** function to change the data type of the **county_code** column to character:
+
+[^2]: You can learn more about the **`dplyr`** package at: <https://dplyr.tidyverse.org/>
 
 ``` r
 # Change the data types of the columns
@@ -31,3 +34,21 @@ hmda_data <- hmda_data %>%
 ```
 
 In the code above, we used the **`mutate()`** function to change the data type of the **county_code** column to character. **`as.character()`** is a function that converts the input to a character type, there are other functions like **`as.numeric()`** and **`as.factor()`** that can be used to convert the input to numeric and factor types respectively.
+
+### Using across() to Change Data Types for Multiple Columns
+
+When you need to change the data types of multiple columns simultaneously, the **`across()`** function in **`dplyr`** can be particularly useful. The **`across()`** function allows you to apply a function to multiple columns in a **`mutate()`** call.
+
+For example, if you want to change the data types of the **`census_tract`**, **`action_taken`**, **`loan_type`**, and loan_purpose columns to character, you can use the **`across()`** function as follows:
+
+```r
+# Change the data types of multiple columns to character
+hmda_data <- hmda_data %>%
+  mutate(across(c(census_tract, action_taken, loan_type, loan_purpose), as.character))
+```
+In this code: 
+
+-   **`across(c(census_tract, action_taken, loan_type, loan_purpose), as.character)`** applies the **`as.character()`** function to each of the columns listed inside the **`across()`** function.
+-   This approach makes the code more concise and easier to read, especially when dealing with multiple columns.
+
+By using **`across()`**, you can efficiently change the data types of multiple columns in one step, ensuring that your data is properly formatted for subsequent analysis.

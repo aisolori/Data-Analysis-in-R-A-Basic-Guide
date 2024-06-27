@@ -1,7 +1,7 @@
 # Data Exploration and Cleaning
 Once you have data loaded into your R environment, now comes one of the most important parts of the data processing stage, data exploration and cleaning. 
 
-## Data Exploration {-}
+## Data Exploration {.unlisted .unnumbered} 
 
 Data exploration is the initial step in data analysis, where you get a sense of the structure, contents, and characteristics of the dataset. This step involves:
 
@@ -20,7 +20,7 @@ Checking the data types of each column to ensure they are as expected (e.g., num
 -   **Detecting Anomalies**
 Identifying any anomalies, such as missing values, outliers, or inconsistencies that might need to be addressed.
 
-## Data Cleaning {-}
+## Data Cleaning {.unlisted .unnumbered} 
 
 Data cleaning, also known as data cleansing or scrubbing, involves correcting or removing inaccuracies and inconsistencies in the data to improve its quality. Key steps include:
 
@@ -42,7 +42,7 @@ Identifying and handling outliers, which may involve removing them or transformi
 -   **Consistent Formatting**
 Ensuring consistent formatting across the dataset, such as consistent date formats, uniform case for text data, and standardized units for numerical data.
 
-## Importance of Data Exploration and Cleaning {-}
+## Importance of Data Exploration and Cleaning {.unlisted .unnumbered} 
 
 - **Improves Data Quality:** Ensures the data is accurate, complete, and reliable, which is essential for drawing valid conclusions and making accurate predictions.
 - **Enhances Analysis:** Clean and well-understood data allows for more effective and insightful analysis.
