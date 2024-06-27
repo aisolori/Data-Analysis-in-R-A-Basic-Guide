@@ -13,6 +13,6 @@ handling-file-paths
 common-issues-and-solutions
 importing-data-in-chunks
 data-exploration-and-cleaning
-exploring-hmda-data
+exploring-and-cleaning-hmda-data
 exploring-data-structure
 changing-data-types
