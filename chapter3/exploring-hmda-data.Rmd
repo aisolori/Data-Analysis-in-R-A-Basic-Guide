@@ -1,0 +1,33 @@
+## Exploring and Cleaning HMDA Data
+
+In this section we will utilize the HMDA Snapshot data for 2022 in Nevada to practice data exploration and cleaning. The data is available at the following link: <https://ffiec.cfpb.gov/v2/data-browser-api/view/csv?states=NV&years=2022>. We have downloaded the data and read it into R using the following:
+
+``` r
+# Load the data
+hmda_data <- read_csv("data/hmda_2022_nv.csv", guess_max = Inf)
+```
+
+### Exploring Data Structure
+
+One of the first things we should do is to take a look at the structure of the data. This will help us understand the variables and their types. We can do this using the following code:
+
+``` r
+# Display the structure of the data
+str(hmda_data)
+```
+
+![](images/structure_printout.png)
+
+The **str()** function provides a summary of the data frame, including the number of observations and variables, the names of the variables, and the type of each variable. This information is useful for understanding the structure of the data and planning the analysis. In the attached image of the output above, we can see that the data frame has 180204 observations and 99 variables. We can also see that a couple of the columns got assigned incorrect data types by **`read_csv()`**, one of these being **county_code** which represents the Federal Information Processing Standards (FIPS) code for the county.
+
+### Changing Data Types
+
+As we saw in the previous section, some of the columns were assigned incorrect data types by **`read_csv()`**. We can fix this by changing the data types of the columns using the **`mutate()`** function from the **dplyr** package. The **dplyr** package provides a set of functions for data manipulation, and the **`mutate()`** function is used to create new columns or modify existing columns. Below we utilize the **`mutate()`** function to change the data type of the **county_code** column to character:
+
+``` r
+# Change the data types of the columns
+hmda_data <- hmda_data %>%
+  mutate(county_code = as.character(county_code))
+```
+
+In the code above, we used the **`mutate()`** function to change the data type of the **county_code** column to character. **`as.character()`** is a function that converts the input to a character type, there are other functions like **`as.numeric()`** and **`as.factor()`** that can be used to convert the input to numeric and factor types respectively.

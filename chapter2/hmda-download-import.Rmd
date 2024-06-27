@@ -26,24 +26,24 @@ head(data)
 
 In this example, replace **`"downloads/state_NV.csv"`** with the actual path to your CSV file. The **`head()`** function is used to display the first few rows of the imported data.
 
-#### Details on `read.csv()` {-}
+#### Details on `read.csv()` {.unnumbered}
 
 The **`read.csv()`** function is a simplified wrapper around **`read.table()`**, with pre-set arguments tailored for reading comma-separated files. Specifically, it sets the following default arguments:
 
-- **`sep = ","`** sets the field separator to a comma.
-- **`header = TRUE`** indicates that the first line of the file contains column names.
-- **`stringsAsFactors = default.stringsAsFactors()`** specifies whether character vectors should be converted to factors (default behavior depends on the R version).
+-   **`sep = ","`** sets the field separator to a comma.
+-   **`header = TRUE`** indicates that the first line of the file contains column names.
+-   **`stringsAsFactors = default.stringsAsFactors()`** specifies whether character vectors should be converted to factors (default behavior depends on the R version).
 
 Here's an equivalent way to use `read.table()` to achieve the same result as `read.csv()`:
 
-```r
+``` r
 # Importing a CSV file using read.table()
 data <- read.table("downloads/state_NV.csv", sep = ",", header = TRUE, stringsAsFactors = FALSE)
 
 # Display the first few rows of the data
 head(data)
-
 ```
+
 As you can see, read.csv() simplifies the process by encapsulating these common settings, making it easier and quicker to read CSV files.
 
 ### Using `read_csv()` from the `readr` Package
@@ -70,19 +70,19 @@ head(data,50)
 
 Similar to **`read.csv()`**, replace **`"downloads/state_NV.csv"`** with the actual path to your CSV file. The **`read_csv()`** function also automatically parses the data types of the columns, which can save you time and effort, [you need to be carefull as sometimes read_csv() may guess the column type wrong!]{style="color:red;"}
 
-### Details on `read_csv()` {-}
+### Details on `read_csv()` {.unnumbered}
 
 The **`read_csv()`** function is a special case of the more general **`read_delim()`** function from the **`readr`** package, with default parameters set for reading comma-separated files. Specifically, it sets the following default arguments:
 
-- **`delim = ","`** sets the field separator to a comma.
-- **`col_types = cols()`** automatically detects the data types of columns unless specified otherwise.
-- **`trim_ws = TRUE`** indicates that whitespace should be trimmed from the beginning and end of each field.
+-   **`delim = ","`** sets the field separator to a comma.
+-   **`col_types = cols()`** automatically detects the data types of columns unless specified otherwise.
+-   **`trim_ws = TRUE`** indicates that whitespace should be trimmed from the beginning and end of each field.
 
 These defaults make **`read_csv()`** particularly convenient for reading CSV files without needing to manually specify these common options.
 
 Here's an equivalent way to use **`read_delim()`** to achieve the same result as **`read_csv()`**:
 
-```r
+``` r
 # Importing a CSV file using read_delim()
 data <- read_delim(
   "downloads/state_NV.csv",
@@ -94,6 +94,7 @@ data <- read_delim(
 # Display the first few rows of the data
 head(data, 50)
 ```
+
 As you can see, **read_csv()** simplifies the process by encapsulating these common settings, making it easier and quicker to read CSV files.
 
 #### Handling Parsing Issues
@@ -108,16 +109,20 @@ The warning is letting us know that **`read_csv()`** ran into some parsing issue
 # Display the problems encountered during parsing
 problems(data)
 ```
+
 ![](images/clipboard-1927136276.png)
 
 The **`problems()`** function displays the issues encountered during parsing. The **'row'** column indicates the row number where the issue occurred, and the **'col'** column indicates the column number. The **'expected'** column shows the expected data type, and the **'actual'** column shows the actual value.
+
+In the example above in row 59, column 44 expected a double but the cell contains **"\>149"**, which is a character type. A double is a numeric data type that can represent decimal numbers, while a character is a text data type. The issue here is that **`read_csv()`** expected a double but found a character. Even though you can't see it in the table above Column 44 is the **total_units** column, which should contain the total number of units for the property. The value **"\>149"** lets us know that the property has more than 149 units. Therefore the correct column type should be character and not double.
 
 There are two main ways to handle parsing issues in `read_csv()`:
 
 -   **Manually Specify Column Types**: You can manually specify the column types using the `col_types` argument in **`read_csv()`**. This approach is useful when you know the data types of the columns in advance, but might be cumbersome for large datasets with many columns.
 -   **Increase the `guess_max` Argument**: You can increase the `guess_max` argument in `read_csv()` to allow the function to guess the column types for a larger number of rows. This approach isn't perfect, but this way you can avoid having to manually specify the column types.
 
-Below is the code to manually specify the column types:
+Below is a code example to manually specify the column types:
+
 ``` r
 # Manually specify the column types
 data <- read_csv(
@@ -131,7 +136,14 @@ data <- read_csv(
   )
 ```
 
+In this code, we manually specify the column types for the **`loan_amount`** and **`total_units`** columns. We also set the default column type to **`col_character()`** to ensure that all other columns are treated as character columns. The **`na`** argument specifies the values that should be treated as missing values, which in this case we have set to an empty string and **"NA"**.
 
+It's also possible to set the **`guess_max`** argument to a higher value to allow **`read_csv()`** to guess the column types for a larger number of rows. This can be useful when you have a large dataset and want to avoid manually specifying the column types. You can even set it to **`Inf`** to allow **`read_csv()`** to guess the column types by using all the rows in the dataset.
+
+``` r
+# Increase the guess_max argument
+data <- read_csv("downloads/state_NV.csv", guess_max = Inf)
+```
 
 ### Handling File Paths
 
@@ -161,5 +173,3 @@ setwd("path/to/your/directory")
 -   **Missing Values**: R automatically handles missing values as `NA`. You can customize the handling of missing values using the `na` argument.
 
 By understanding how to import CSV files in R, you can easily load your data and start your data analysis process. In the next sections, we will explore how to clean and manipulate the imported data to prepare it for analysis.
-
-\newpage

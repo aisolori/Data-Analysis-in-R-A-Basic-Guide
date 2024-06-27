@@ -170,6 +170,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="data-exploration-and-cleaning.html"><a href="data-exploration-and-cleaning.html#data-exploration"><i class="fa fa-check"></i>Data Exploration</a></li>
 <li class="chapter" data-level="" data-path="data-exploration-and-cleaning.html"><a href="data-exploration-and-cleaning.html#data-cleaning"><i class="fa fa-check"></i>Data Cleaning</a></li>
 <li class="chapter" data-level="" data-path="data-exploration-and-cleaning.html"><a href="data-exploration-and-cleaning.html#importance-of-data-exploration-and-cleaning"><i class="fa fa-check"></i>Importance of Data Exploration and Cleaning</a></li>
+<li class="chapter" data-level="3.1" data-path="exploring-hmda-data.html"><a href="exploring-hmda-data.html"><i class="fa fa-check"></i><b>3.1</b> Exploring HMDA Data</a>
+<ul>
+<li class="chapter" data-level="3.1.1" data-path="exploring-hmda-data.html"><a href="exploring-hmda-data.html#exploring-data-structure"><i class="fa fa-check"></i><b>3.1.1</b> Exploring Data Structure</a></li>
+<li class="chapter" data-level="3.1.2" data-path="exploring-hmda-data.html"><a href="exploring-hmda-data.html#changing-data-types"><i class="fa fa-check"></i><b>3.1.2</b> Changing Data Types</a></li>
+</ul></li>
 </ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -275,12 +280,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb6-2"><a href="hmda-download-import.html#cb6-2" tabindex="-1"></a><span class="fu">problems</span>(data)</span></code></pre></div>
 <p><img src="images/clipboard-1927136276.png" /></p>
 <p>The <strong><code>problems()</code></strong> function displays the issues encountered during parsing. The <strong>‘row’</strong> column indicates the row number where the issue occurred, and the <strong>‘col’</strong> column indicates the column number. The <strong>‘expected’</strong> column shows the expected data type, and the <strong>‘actual’</strong> column shows the actual value.</p>
+<p>In the example above in row 59, column 44 expected a double but the cell contains <strong>“&gt;149”</strong>, which is a character type. A double is a numeric data type that can represent decimal numbers, while a character is a text data type. The issue here is that <strong><code>read_csv()</code></strong> expected a double but found a character. Even though you can’t see it in the table above Column 44 is the <strong>total_units</strong> column, which should contain the total number of units for the property. The value <strong>“&gt;149”</strong> lets us know that the property has more than 149 units. Therefore the correct column type should be character and not double.</p>
 <p>There are two main ways to handle parsing issues in <code>read_csv()</code>:</p>
 <ul>
 <li><strong>Manually Specify Column Types</strong>: You can manually specify the column types using the <code>col_types</code> argument in <strong><code>read_csv()</code></strong>. This approach is useful when you know the data types of the columns in advance, but might be cumbersome for large datasets with many columns.</li>
 <li><strong>Increase the <code>guess_max</code> Argument</strong>: You can increase the <code>guess_max</code> argument in <code>read_csv()</code> to allow the function to guess the column types for a larger number of rows. This approach isn’t perfect, but this way you can avoid having to manually specify the column types.</li>
 </ul>
-<p>Below is the code to manually specify the column types:</p>
+<p>Below is a code example to manually specify the column types:</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="hmda-download-import.html#cb7-1" tabindex="-1"></a><span class="co"># Manually specify the column types</span></span>
 <span id="cb7-2"><a href="hmda-download-import.html#cb7-2" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(</span>
 <span id="cb7-3"><a href="hmda-download-import.html#cb7-3" tabindex="-1"></a>  <span class="st">&quot;downloads/state_NV.csv&quot;</span>,</span>
@@ -291,6 +297,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb7-8"><a href="hmda-download-import.html#cb7-8" tabindex="-1"></a>  ),</span>
 <span id="cb7-9"><a href="hmda-download-import.html#cb7-9" tabindex="-1"></a>  <span class="at">na =</span> <span class="fu">c</span>(<span class="st">&quot;&quot;</span>, <span class="st">&quot;NA&quot;</span>) <span class="co"># This is to specify what is considered a missing value</span></span>
 <span id="cb7-10"><a href="hmda-download-import.html#cb7-10" tabindex="-1"></a>  )</span></code></pre></div>
+<p>In this code, we manually specify the column types for the <strong><code>loan_amount</code></strong> and <strong><code>total_units</code></strong> columns. We also set the default column type to <strong><code>col_character()</code></strong> to ensure that all other columns are treated as character columns. The <strong><code>na</code></strong> argument specifies the values that should be treated as missing values, which in this case we have set to an empty string and <strong>“NA”</strong>.</p>
+<p>It’s also possible to set the <strong><code>guess_max</code></strong> argument to a higher value to allow <strong><code>read_csv()</code></strong> to guess the column types for a larger number of rows. This can be useful when you have a large dataset and want to avoid manually specifying the column types. You can even set it to <strong><code>Inf</code></strong> to allow <strong><code>read_csv()</code></strong> to guess the column types by using all the rows in the dataset.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="hmda-download-import.html#cb8-1" tabindex="-1"></a><span class="co"># Increase the guess_max argument</span></span>
+<span id="cb8-2"><a href="hmda-download-import.html#cb8-2" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;downloads/state_NV.csv&quot;</span>, <span class="at">guess_max =</span> <span class="cn">Inf</span>)</span></code></pre></div>
 </div>
 </div>
 <div id="handling-file-paths" class="section level3 hasAnchor" number="2.3.3">
@@ -301,11 +311,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><strong>Relative Path</strong>: A relative path specifies the path relative to your current working directory. For example, if your current working directory is <code>"C:/Users/YourName/Documents"</code>, you can use <code>"data.csv"</code>.</li>
 </ul>
 <p>You can check your current working directory in R using the <code>getwd()</code> function:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="hmda-download-import.html#cb8-1" tabindex="-1"></a><span class="co"># Get the current working directory</span></span>
-<span id="cb8-2"><a href="hmda-download-import.html#cb8-2" tabindex="-1"></a><span class="fu">getwd</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="hmda-download-import.html#cb9-1" tabindex="-1"></a><span class="co"># Get the current working directory</span></span>
+<span id="cb9-2"><a href="hmda-download-import.html#cb9-2" tabindex="-1"></a><span class="fu">getwd</span>()</span></code></pre></div>
 <p>You can also set the working directory using the <code>setwd()</code> function:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="hmda-download-import.html#cb9-1" tabindex="-1"></a><span class="co"># Set the working directory</span></span>
-<span id="cb9-2"><a href="hmda-download-import.html#cb9-2" tabindex="-1"></a><span class="fu">setwd</span>(<span class="st">&quot;path/to/your/directory&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="hmda-download-import.html#cb10-1" tabindex="-1"></a><span class="co"># Set the working directory</span></span>
+<span id="cb10-2"><a href="hmda-download-import.html#cb10-2" tabindex="-1"></a><span class="fu">setwd</span>(<span class="st">&quot;path/to/your/directory&quot;</span>)</span></code></pre></div>
 </div>
 <div id="common-issues-and-solutions" class="section level3 hasAnchor" number="2.3.4">
 <h3><span class="header-section-number">2.3.4</span> Common Issues and Solutions<a href="hmda-download-import.html#common-issues-and-solutions" class="anchor-section" aria-label="Anchor link to header"></a></h3>
@@ -315,7 +325,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><strong>Missing Values</strong>: R automatically handles missing values as <code>NA</code>. You can customize the handling of missing values using the <code>na</code> argument.</li>
 </ul>
 <p>By understanding how to import CSV files in R, you can easily load your data and start your data analysis process. In the next sections, we will explore how to clean and manipulate the imported data to prepare it for analysis.</p>
-<div style="page-break-after: always;"></div>
 
 </div>
 </div>

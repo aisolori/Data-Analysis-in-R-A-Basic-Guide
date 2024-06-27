@@ -356,6 +356,8 @@ The warning is letting us know that \textbf{\texttt{read\_csv()}} ran into some 
 
 The \textbf{\texttt{problems()}} function displays the issues encountered during parsing. The \textbf{`row'} column indicates the row number where the issue occurred, and the \textbf{`col'} column indicates the column number. The \textbf{`expected'} column shows the expected data type, and the \textbf{`actual'} column shows the actual value.
 
+In the example above in row 59, column 44 expected a double but the cell contains \textbf{``\textgreater149''}, which is a character type. A double is a numeric data type that can represent decimal numbers, while a character is a text data type. The issue here is that \textbf{\texttt{read\_csv()}} expected a double but found a character. Even though you can't see it in the table above Column 44 is the \textbf{total\_units} column, which should contain the total number of units for the property. The value \textbf{``\textgreater149''} lets us know that the property has more than 149 units. Therefore the correct column type should be character and not double.
+
 There are two main ways to handle parsing issues in \texttt{read\_csv()}:
 
 \begin{itemize}
@@ -366,7 +368,7 @@ There are two main ways to handle parsing issues in \texttt{read\_csv()}:
   \textbf{Increase the \texttt{guess\_max} Argument}: You can increase the \texttt{guess\_max} argument in \texttt{read\_csv()} to allow the function to guess the column types for a larger number of rows. This approach isn't perfect, but this way you can avoid having to manually specify the column types.
 \end{itemize}
 
-Below is the code to manually specify the column types:
+Below is a code example to manually specify the column types:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -380,6 +382,17 @@ Below is the code to manually specify the column types:
 \NormalTok{  ),}
   \AttributeTok{na =} \FunctionTok{c}\NormalTok{(}\StringTok{""}\NormalTok{, }\StringTok{"NA"}\NormalTok{) }\CommentTok{\# This is to specify what is considered a missing value}
 \NormalTok{  )}
+\end{Highlighting}
+\end{Shaded}
+
+In this code, we manually specify the column types for the \textbf{\texttt{loan\_amount}} and \textbf{\texttt{total\_units}} columns. We also set the default column type to \textbf{\texttt{col\_character()}} to ensure that all other columns are treated as character columns. The \textbf{\texttt{na}} argument specifies the values that should be treated as missing values, which in this case we have set to an empty string and \textbf{``NA''}.
+
+It's also possible to set the \textbf{\texttt{guess\_max}} argument to a higher value to allow \textbf{\texttt{read\_csv()}} to guess the column types for a larger number of rows. This can be useful when you have a large dataset and want to avoid manually specifying the column types. You can even set it to \textbf{\texttt{Inf}} to allow \textbf{\texttt{read\_csv()}} to guess the column types by using all the rows in the dataset.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Increase the guess\_max argument}
+\NormalTok{data }\OtherTok{\textless{}{-}} \FunctionTok{read\_csv}\NormalTok{(}\StringTok{"downloads/state\_NV.csv"}\NormalTok{, }\AttributeTok{guess\_max =} \ConstantTok{Inf}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -426,8 +439,6 @@ You can also set the working directory using the \texttt{setwd()} function:
 \end{itemize}
 
 By understanding how to import CSV files in R, you can easily load your data and start your data analysis process. In the next sections, we will explore how to clean and manipulate the imported data to prepare it for analysis.
-
-\newpage
 
 \section{Importing Data in Chunks}\label{importing-data-in-chunks}
 
@@ -552,6 +563,46 @@ Data cleaning, also known as data cleansing or scrubbing, involves correcting or
 \end{itemize}
 
 Overall, data exploration and cleaning are foundational steps that set the stage for successful data analysis and machine learning projects. In this chapter we will go over some of the most common ways to both explore and clean data.
+
+\section{Exploring HMDA Data}\label{exploring-hmda-data}
+
+In this section we will utilize the HMDA Snapshot data for 2022 in Nevada to practice data exploration and cleaning. The data is available at the following link: \url{https://ffiec.cfpb.gov/v2/data-browser-api/view/csv?states=NV&years=2022}. We have downloaded the data and read it into R using the following:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Load the data}
+\NormalTok{hmda\_data }\OtherTok{\textless{}{-}} \FunctionTok{read\_csv}\NormalTok{(}\StringTok{"data/hmda\_2022\_nv.csv"}\NormalTok{, }\AttributeTok{guess\_max =} \ConstantTok{Inf}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{Exploring Data Structure}\label{exploring-data-structure}
+
+One of the first things we should do is to take a look at the structure of the data. This will help us understand the variables and their types. We can do this using the following code:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Display the structure of the data}
+\FunctionTok{str}\NormalTok{(hmda\_data)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{images/structure_printout.png}
+
+The \textbf{str()} function provides a summary of the data frame, including the number of observations and variables, the names of the variables, and the type of each variable. This information is useful for understanding the structure of the data and planning the analysis. In the attached image of the output above, we can see that the data frame has 180204 observations and 99 variables. We can also see that a couple of the columns got assigned incorrect data types by \textbf{\texttt{read\_csv()}}, one of these being \textbf{county\_code} which represents the Federal Information Processing Standards (FIPS) code for the county.
+
+\subsection{Changing Data Types}\label{changing-data-types}
+
+As we saw in the previous section, some of the columns were assigned incorrect data types by \textbf{\texttt{read\_csv()}}. We can fix this by changing the data types of the columns using the \textbf{\texttt{mutate()}} function from the \textbf{dplyr} package. The \textbf{dplyr} package provides a set of functions for data manipulation, and the \textbf{\texttt{mutate()}} function is used to create new columns or modify existing columns. Below we utilize the \textbf{\texttt{mutate()}} function to change the data type of the \textbf{county\_code} column to character:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Change the data types of the columns}
+\NormalTok{hmda\_data }\OtherTok{\textless{}{-}}\NormalTok{ hmda\_data }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{county\_code =} \FunctionTok{as.character}\NormalTok{(county\_code))}
+\end{Highlighting}
+\end{Shaded}
+
+In the code above, we used the \textbf{\texttt{mutate()}} function to change the data type of the \textbf{county\_code} column to character. \textbf{\texttt{as.character()}} is a function that converts the input to a character type, there are other functions like \textbf{\texttt{as.numeric()}} and \textbf{\texttt{as.factor()}} that can be used to convert the input to numeric and factor types respectively.
 
   \bibliography{book.bib,packages.bib}
 
