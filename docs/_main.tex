@@ -109,7 +109,7 @@
 \fi
 \usepackage[]{natbib}
 \bibliographystyle{plainnat}
-\usepackage{bookmark}
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
 \urlstyle{same}
 \hypersetup{
@@ -120,7 +120,7 @@
 
 \title{Data Analysis in R: A Basic Guide}
 \author{Antonio Solorio}
-\date{2024-06-26}
+\date{2024-06-27}
 
 \begin{document}
 \maketitle
@@ -129,14 +129,16 @@
 \setcounter{tocdepth}{1}
 \tableofcontents
 }
-\chapter*{Introduction}\label{introduction}
+\hypertarget{introduction}{%
+\chapter*{Introduction}\label{introduction}}
 \addcontentsline{toc}{chapter}{Introduction}
 
 Welcome to ``Data Analysis in R: A Basic Guide.'' This book aims to provide you with a basic foundation in data analysis using R, a powerful and versatile programming language. Throughout this book, you will learn various techniques and tools essential for effective data analysis.
 
 To illustrate these concepts, we will use the Home Mortgage Disclosure Act (HMDA) data as a practical example. This real-world dataset will help you understand how to apply data analysis methods in a meaningful context.
 
-\chapter{What is HMDA Data?}\label{what-is-hmda-data}
+\hypertarget{what-is-hmda-data}{%
+\chapter{What is HMDA Data?}\label{what-is-hmda-data}}
 
 The Home Mortgage Disclosure Act (HMDA) was enacted by Congress in 1975 and is implemented by the Consumer Financial Protection Bureau (CFPB). The HMDA requires many financial institutions to maintain, report, and publicly disclose information about mortgages. This information is crucial for understanding and monitoring trends in housing finance, and for ensuring compliance with fair lending laws. \footnote{If you would like to learn more about HMDA data please see: \url{https://www.consumerfinance.gov/data-research/hmda/}}
 
@@ -154,7 +156,8 @@ HMDA data includes information on loan applications, loan originations, loan pur
   \textbf{Action Taken}: The outcome of the loan application, whether it was approved, denied, or withdrawn.
 \end{itemize}
 
-\section{Why Use HMDA Data?}\label{why-use-hmda-data}
+\hypertarget{why-use-hmda-data}{%
+\section{Why Use HMDA Data?}\label{why-use-hmda-data}}
 
 While this book is focused on teaching data analysis in R, the HMDA dataset serves as an excellent example for several reasons:
 
@@ -173,11 +176,13 @@ By the end of this book, you will not only have a solid understanding of data an
 
 Let's get started on this journey of exploring data analysis with R, using the HMDA data as our guide!
 
-\chapter{Data Importing}\label{data-importing}
+\hypertarget{data-importing}{%
+\chapter{Data Importing}\label{data-importing}}
 
 In this chapter, we will explore the process of importing data into R for analysis. Data import is a crucial step in the data analysis workflow, as it allows you to load external data into R for further processing and analysis. We will focus on importing data from CSV files, which are one of the most common data formats used in data analysis. We will also discuss common issues encountered during data import and how to handle them, and how to handle the importation of large datasets in chunks.
 
-\section{Different Types of Data}\label{different-types-of-data}
+\hypertarget{different-types-of-data}{%
+\section{Different Types of Data}\label{different-types-of-data}}
 
 In the realm of data analysis, you will encounter various types of data formats. Here are some common ones:
 
@@ -197,7 +202,8 @@ In the realm of data analysis, you will encounter various types of data formats.
   \textbf{API Data}: Data fetched from web APIs, which often come in formats like JSON or XML.
 \end{itemize}
 
-\subsection{Why Start with CSV Files?}\label{why-start-with-csv-files}
+\hypertarget{why-start-with-csv-files}{%
+\subsection{Why Start with CSV Files?}\label{why-start-with-csv-files}}
 
 We will start with CSV files for several reasons:
 
@@ -214,21 +220,25 @@ We will start with CSV files for several reasons:
 
 By mastering the import of CSV files, you'll build a strong foundation that will make it easier to work with other data formats as you progress in your data analysis journey.
 
-\section{Downloading and Importing HMDA Data in CSV Format}\label{downloading-and-importing-hmda-data-in-csv-format}
+\hypertarget{downloading-and-importing-hmda-data-in-csv-format}{%
+\section{Downloading and Importing HMDA Data in CSV Format}\label{downloading-and-importing-hmda-data-in-csv-format}}
 
 To practice importing CSV files in R, we will use the Home Mortgage Disclosure Act (HMDA) data in CSV format. This data can be found at the \href{https://ffiec.cfpb.gov/}{Consumer Financial Protection Bureau (CFPB) website}. In particular we will be working with the Snapshot National Loan Level Dataset, specifically for that in 2022 for Nevada.
 
-\subsection{Snapshot National Loan Level Dataset}\label{snapshot-national-loan-level-dataset}
+\hypertarget{snapshot-national-loan-level-dataset}{%
+\subsection{Snapshot National Loan Level Dataset}\label{snapshot-national-loan-level-dataset}}
 
 The Snapshot files contain the national HMDA datasets as of May 1, 2023 for all HMDA reporters, as modified by the Bureau to protect applicant and borrower privacy. The snapshot files are available to download in both .csv and pipe delimited text file formats at the following link: \url{https://ffiec.cfpb.gov/data-publication/snapshot-national-loan-level-dataset/}. One of the issues with these files however is that they are quite large, so we will be working with a subset of the data for Nevada in 2022.
 
-The subset of the data for Nevada in 2022 can be downloaded from the following link: \href{https://ffiec.cfpb.gov/v2/data-browser-api/view/csv?states=NV&years=2022}{Nevada 2022 HMDA Data}.
+The subset of the data for Nevada in 2022 can be downloaded from the following link: \href{https://ffiec.cfpb.gov/v2/data-browser-api/view/csv?states=NV\&years=2022}{Nevada 2022 HMDA Data}.
 
-\section{Importing CSV Files in R}\label{importing-csv-files-in-r}
+\hypertarget{importing-csv-files-in-r}{%
+\section{Importing CSV Files in R}\label{importing-csv-files-in-r}}
 
 R provides several functions for importing CSV files. The most commonly used function is \textbf{\texttt{read.csv()}}, which is part of the base R package. Additionally, the \textbf{\texttt{readr}} package offers the \textbf{\texttt{read\_csv()}} function, which is optimized for faster performance and easier handling of large datasets.
 
-\subsection{\texorpdfstring{Using \texttt{read.csv()}}{Using read.csv()}}\label{using-read.csv}
+\hypertarget{using-read.csv}{%
+\subsection{\texorpdfstring{Using \texttt{read.csv()}}{Using read.csv()}}\label{using-read.csv}}
 
 The \textbf{\texttt{read.csv()}} function is straightforward to use. It is actually a special case of the more general \textbf{\texttt{read.table()}} function, with default parameters set for reading CSV files Here's how you can import a CSV file using this function:
 
@@ -244,7 +254,8 @@ The \textbf{\texttt{read.csv()}} function is straightforward to use. It is actua
 
 In this example, replace \textbf{\texttt{"downloads/state\_NV.csv"}} with the actual path to your CSV file. The \textbf{\texttt{head()}} function is used to display the first few rows of the imported data.
 
-\subsubsection*{\texorpdfstring{Details on \texttt{read.csv()}}{Details on read.csv()}}\label{details-on-read.csv}
+\hypertarget{details-on-read.csv}{%
+\subsubsection*{\texorpdfstring{Details on \texttt{read.csv()}}{Details on read.csv()}}\label{details-on-read.csv}}
 \addcontentsline{toc}{subsubsection}{Details on \texttt{read.csv()}}
 
 The \textbf{\texttt{read.csv()}} function is a simplified wrapper around \textbf{\texttt{read.table()}}, with pre-set arguments tailored for reading comma-separated files. Specifically, it sets the following default arguments:
@@ -273,7 +284,8 @@ Here's an equivalent way to use \texttt{read.table()} to achieve the same result
 
 As you can see, read.csv() simplifies the process by encapsulating these common settings, making it easier and quicker to read CSV files.
 
-\subsection{\texorpdfstring{Using \texttt{read\_csv()} from the \texttt{readr} Package}{Using read\_csv() from the readr Package}}\label{using-read_csv-from-the-readr-package}
+\hypertarget{using-read_csv-from-the-readr-package}{%
+\subsection{\texorpdfstring{Using \texttt{read\_csv()} from the \texttt{readr} Package}{Using read\_csv() from the readr Package}}\label{using-read_csv-from-the-readr-package}}
 
 The \textbf{\texttt{readr}} package provides a faster and more convenient way to import CSV files with the \textbf{\texttt{read\_csv()}} function. First, you need to install and load the \textbf{\texttt{readr}} package:
 
@@ -301,7 +313,8 @@ Once the package is installed, you can use the \textbf{\texttt{read\_csv()}} fun
 
 Similar to \textbf{\texttt{read.csv()}}, replace \textbf{\texttt{"downloads/state\_NV.csv"}} with the actual path to your CSV file. The \textbf{\texttt{read\_csv()}} function also automatically parses the data types of the columns, which can save you time and effort, {you need to be carefull as sometimes read\_csv() may guess the column type wrong!}
 
-\subsection*{\texorpdfstring{Details on \texttt{read\_csv()}}{Details on read\_csv()}}\label{details-on-read_csv}
+\hypertarget{details-on-read_csv}{%
+\subsection*{\texorpdfstring{Details on \texttt{read\_csv()}}{Details on read\_csv()}}\label{details-on-read_csv}}
 \addcontentsline{toc}{subsection}{Details on \texttt{read\_csv()}}
 
 The \textbf{\texttt{read\_csv()}} function is a special case of the more general \textbf{\texttt{read\_delim()}} function from the \textbf{\texttt{readr}} package, with default parameters set for reading comma-separated files. Specifically, it sets the following default arguments:
@@ -337,7 +350,8 @@ Here's an equivalent way to use \textbf{\texttt{read\_delim()}} to achieve the s
 
 As you can see, \textbf{read\_csv()} simplifies the process by encapsulating these common settings, making it easier and quicker to read CSV files.
 
-\subsubsection{Handling Parsing Issues}\label{handling-parsing-issues}
+\hypertarget{handling-parsing-issues}{%
+\subsubsection{Handling Parsing Issues}\label{handling-parsing-issues}}
 
 If you been following along, when you ran \textbf{\texttt{data\ \textless{}-\ read\_csv("downloads/state\_NV.csv")}} you have probably encountered a {warning} similar to:
 
@@ -396,7 +410,8 @@ It's also possible to set the \textbf{\texttt{guess\_max}} argument to a higher 
 \end{Highlighting}
 \end{Shaded}
 
-\subsection{Handling File Paths}\label{handling-file-paths}
+\hypertarget{handling-file-paths}{%
+\subsection{Handling File Paths}\label{handling-file-paths}}
 
 When specifying the path to your CSV file, it's important to ensure that the path is correct. You can use absolute paths or relative paths. Here are some examples:
 
@@ -426,7 +441,8 @@ You can also set the working directory using the \texttt{setwd()} function:
 \end{Highlighting}
 \end{Shaded}
 
-\subsection{Common Issues and Solutions}\label{common-issues-and-solutions}
+\hypertarget{common-issues-and-solutions}{%
+\subsection{Common Issues and Solutions}\label{common-issues-and-solutions}}
 
 \begin{itemize}
 \tightlist
@@ -440,7 +456,8 @@ You can also set the working directory using the \texttt{setwd()} function:
 
 By understanding how to import CSV files in R, you can easily load your data and start your data analysis process. In the next sections, we will explore how to clean and manipulate the imported data to prepare it for analysis.
 
-\section{Importing Data in Chunks}\label{importing-data-in-chunks}
+\hypertarget{importing-data-in-chunks}{%
+\section{Importing Data in Chunks}\label{importing-data-in-chunks}}
 
 When working with large datasets, it's often necessary to import data in chunks, especially when the dataset is too large to fit into memory or cannot be opened by standard software like Excel. The readr package in R provides a solution with the \textbf{\texttt{read\_delim\_chunked()}} function, which allows for reading a delimited file in manageable chunks.
 
@@ -494,12 +511,13 @@ In this example:
 
 The \textbf{\texttt{filter\_data()}} function is used as a callback to filter the data for the state code ``NV''. A callback function is a function passed as an argument to another function, which is then executed within that function. Here, the \textbf{\texttt{filter\_data()}} function is applied to each chunk of data read by \textbf{\texttt{read\_delim\_chunked()}}, enabling the filtering of data for the state code ``NV'' as it is read in chunks.
 
-\chapter{Data Exploration and Cleaning}\label{data-exploration-and-cleaning}
+\hypertarget{data-exploration-and-cleaning}{%
+\chapter{Data Exploration and Cleaning}\label{data-exploration-and-cleaning}}
 
 Once you have data loaded into your R environment, now comes one of the most important parts of the data processing stage, data exploration and cleaning.
 
-\section*{Data Exploration}\label{data-exploration}
-\addcontentsline{toc}{section}{Data Exploration}
+\hypertarget{data-exploration}{%
+\section*{Data Exploration}\label{data-exploration}}
 
 Data exploration is the initial step in data analysis, where you get a sense of the structure, contents, and characteristics of the dataset. This step involves:
 
@@ -521,8 +539,8 @@ Data exploration is the initial step in data analysis, where you get a sense of 
   Identifying any anomalies, such as missing values, outliers, or inconsistencies that might need to be addressed.
 \end{itemize}
 
-\section*{Data Cleaning}\label{data-cleaning}
-\addcontentsline{toc}{section}{Data Cleaning}
+\hypertarget{data-cleaning}{%
+\section*{Data Cleaning}\label{data-cleaning}}
 
 Data cleaning, also known as data cleansing or scrubbing, involves correcting or removing inaccuracies and inconsistencies in the data to improve its quality. Key steps include:
 
@@ -547,8 +565,8 @@ Data cleaning, also known as data cleansing or scrubbing, involves correcting or
   Ensuring consistent formatting across the dataset, such as consistent date formats, uniform case for text data, and standardized units for numerical data.
 \end{itemize}
 
-\section*{Importance of Data Exploration and Cleaning}\label{importance-of-data-exploration-and-cleaning}
-\addcontentsline{toc}{section}{Importance of Data Exploration and Cleaning}
+\hypertarget{importance-of-data-exploration-and-cleaning}{%
+\section*{Importance of Data Exploration and Cleaning}\label{importance-of-data-exploration-and-cleaning}}
 
 \begin{itemize}
 \tightlist
@@ -564,18 +582,22 @@ Data cleaning, also known as data cleansing or scrubbing, involves correcting or
 
 Overall, data exploration and cleaning are foundational steps that set the stage for successful data analysis and machine learning projects. In this chapter we will go over some of the most common ways to both explore and clean data.
 
-\section{Exploring and Cleaning HMDA Data}\label{exploring-and-cleaning-hmda-data}
+\hypertarget{exploring-and-cleaning-hmda-data}{%
+\section{Exploring and Cleaning HMDA Data}\label{exploring-and-cleaning-hmda-data}}
 
-In this section we will utilize the HMDA Snapshot data for 2022 in Nevada to practice data exploration and cleaning. The data is available at the following link: \url{https://ffiec.cfpb.gov/v2/data-browser-api/view/csv?states=NV&years=2022}. We have downloaded the data and read it into R using the following:
+In this section we will utilize the HMDA Snapshot data for 2022 in Nevada to practice data exploration and cleaning. The data is available at the following link: \url{https://ffiec.cfpb.gov/v2/data-browser-api/view/csv?states=NV\&years=2022}. We have downloaded the data and read it into R using the following:
 
 \begin{Shaded}
 \begin{Highlighting}[]
 \CommentTok{\# Load the data}
-\NormalTok{hmda\_data }\OtherTok{\textless{}{-}} \FunctionTok{read\_csv}\NormalTok{(}\StringTok{"data/hmda\_2022\_nv.csv"}\NormalTok{, }\AttributeTok{guess\_max =} \ConstantTok{Inf}\NormalTok{)}
+\NormalTok{hmda\_data }\OtherTok{\textless{}{-}} \FunctionTok{read\_csv}\NormalTok{(}\StringTok{"downloads/state\_NV.csv"}\NormalTok{, }\AttributeTok{guess\_max =} \ConstantTok{Inf}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
-\subsection{Exploring Data Structure}\label{exploring-data-structure}
+Where \textbf{\texttt{"downloads/state\_NV.csv"}} would be the path to the downloaded dataset.
+
+\hypertarget{exploring-data-structure}{%
+\subsection{Exploring Data Structure}\label{exploring-data-structure}}
 
 One of the first things we should do is to take a look at the structure of the data. This will help us understand the variables and their types. We can do this using the following code:
 
@@ -590,9 +612,10 @@ One of the first things we should do is to take a look at the structure of the d
 
 The \textbf{str()} function provides a summary of the data frame, including the number of observations and variables, the names of the variables, and the type of each variable. This information is useful for understanding the structure of the data and planning the analysis. In the attached image of the output above, we can see that the data frame has 180204 observations and 99 variables. We can also see that a couple of the columns got assigned incorrect data types by \textbf{\texttt{read\_csv()}}, one of these being \textbf{county\_code} which represents the Federal Information Processing Standards (FIPS) code for the county.
 
-\subsection{Changing Data Types}\label{changing-data-types}
+\hypertarget{changing-data-types}{%
+\subsection{Changing Data Types}\label{changing-data-types}}
 
-As we saw in the previous section, some of the columns were assigned incorrect data types by \textbf{\texttt{read\_csv()}}. We can fix this by changing the data types of the columns using the \textbf{\texttt{mutate()}} function from the \textbf{dplyr} package. The \textbf{dplyr} package provides a set of functions for data manipulation, and the \textbf{\texttt{mutate()}} function is used to create new columns or modify existing columns. Below we utilize the \textbf{\texttt{mutate()}} function to change the data type of the \textbf{county\_code} column to character:
+As we saw in the previous section, some of the columns were assigned incorrect data types by \textbf{\texttt{read\_csv()}}. We can fix this by changing the data types of the columns using the \textbf{\texttt{mutate()}} function from the \textbf{dplyr} package. The \textbf{dplyr} package provides a set of functions for data manipulation, and the \textbf{\texttt{mutate()}} function is used to create new columns or modify existing columns.\footnote{You can learn more about the \textbf{\texttt{dplyr}} package at: \url{https://dplyr.tidyverse.org/}} Below we utilize the \textbf{\texttt{mutate()}} function to change the data type of the \textbf{county\_code} column to character:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -603,6 +626,33 @@ As we saw in the previous section, some of the columns were assigned incorrect d
 \end{Shaded}
 
 In the code above, we used the \textbf{\texttt{mutate()}} function to change the data type of the \textbf{county\_code} column to character. \textbf{\texttt{as.character()}} is a function that converts the input to a character type, there are other functions like \textbf{\texttt{as.numeric()}} and \textbf{\texttt{as.factor()}} that can be used to convert the input to numeric and factor types respectively.
+
+\hypertarget{using-across-to-change-data-types-for-multiple-columns}{%
+\subsection{Using across() to Change Data Types for Multiple Columns}\label{using-across-to-change-data-types-for-multiple-columns}}
+
+When you need to change the data types of multiple columns simultaneously, the \textbf{\texttt{across()}} function in \textbf{\texttt{dplyr}} can be particularly useful. The \textbf{\texttt{across()}} function allows you to apply a function to multiple columns in a \textbf{\texttt{mutate()}} call.
+
+For example, if you want to change the data types of the \textbf{\texttt{census\_tract}}, \textbf{\texttt{action\_taken}}, \textbf{\texttt{loan\_type}}, and loan\_purpose columns to character, you can use the \textbf{\texttt{across()}} function as follows:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Change the data types of multiple columns to character}
+\NormalTok{hmda\_data }\OtherTok{\textless{}{-}}\NormalTok{ hmda\_data }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\FunctionTok{across}\NormalTok{(}\FunctionTok{c}\NormalTok{(census\_tract, action\_taken, loan\_type, loan\_purpose), as.character))}
+\end{Highlighting}
+\end{Shaded}
+
+In this code:
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\texttt{across(c(census\_tract,\ action\_taken,\ loan\_type,\ loan\_purpose),\ as.character)}} applies the \textbf{\texttt{as.character()}} function to each of the columns listed inside the \textbf{\texttt{across()}} function.
+\item
+  This approach makes the code more concise and easier to read, especially when dealing with multiple columns.
+\end{itemize}
+
+By using \textbf{\texttt{across()}}, you can efficiently change the data types of multiple columns in one step, ensuring that your data is properly formatted for subsequent analysis.
 
   \bibliography{book.bib,packages.bib}
 

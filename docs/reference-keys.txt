@@ -16,3 +16,4 @@ data-exploration-and-cleaning
 exploring-and-cleaning-hmda-data
 exploring-data-structure
 changing-data-types
+using-across-to-change-data-types-for-multiple-columns
