@@ -10,4 +10,5 @@ rmd_files:
   - chapter2/data-importing.Rmd
   - chapter2/hmda-download-import.Rmd
   - chapter2/data-in-chunks.rmd
+  - chapter3/data-exploration-and-cleaning.rmd
   

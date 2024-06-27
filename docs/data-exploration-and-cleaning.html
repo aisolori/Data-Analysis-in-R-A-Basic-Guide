@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 1 What is HMDA Data? | Data Analysis in R: A Basic Guide</title>
+  <title>Chapter 3 Data Exploration and Cleaning | Data Analysis in R: A Basic Guide</title>
   <meta name="description" content="This book provides a comprehensive guide to data analysis using R, with a focus on the Home Mortgage Disclosure Act (HMDA) data as a practical example. It covers the essential techniques and tools needed to perform effective data analysis, offering step-by-step instructions and detailed explanations. The HTML output format for this book is bookdown::gitbook, as set in the _output.yml file." />
   <meta name="generator" content="bookdown 0.35 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 1 What is HMDA Data? | Data Analysis in R: A Basic Guide" />
+  <meta property="og:title" content="Chapter 3 Data Exploration and Cleaning | Data Analysis in R: A Basic Guide" />
   <meta property="og:type" content="book" />
   
   <meta property="og:description" content="This book provides a comprehensive guide to data analysis using R, with a focus on the Home Mortgage Disclosure Act (HMDA) data as a practical example. It covers the essential techniques and tools needed to perform effective data analysis, offering step-by-step instructions and detailed explanations. The HTML output format for this book is bookdown::gitbook, as set in the _output.yml file." />
   <meta name="github-repo" content="rstudio/bookdown-demo" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 1 What is HMDA Data? | Data Analysis in R: A Basic Guide" />
+  <meta name="twitter:title" content="Chapter 3 Data Exploration and Cleaning | Data Analysis in R: A Basic Guide" />
   
   <meta name="twitter:description" content="This book provides a comprehensive guide to data analysis using R, with a focus on the Home Mortgage Disclosure Act (HMDA) data as a practical example. It covers the essential techniques and tools needed to perform effective data analysis, offering step-by-step instructions and detailed explanations. The HTML output format for this book is bookdown::gitbook, as set in the _output.yml file." />
   
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="index.html"/>
-<link rel="next" href="data-importing.html"/>
+<link rel="prev" href="data-in-chunks.html"/>
+
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -191,42 +191,68 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="what-is-hmda-data" class="section level1 hasAnchor" number="1">
-<h1><span class="header-section-number">Chapter 1</span> What is HMDA Data?<a href="hmda-data-intro.html#what-is-hmda-data" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<p>The Home Mortgage Disclosure Act (HMDA) was enacted by Congress in 1975 and is implemented by the Consumer Financial Protection Bureau (CFPB). The HMDA requires many financial institutions to maintain, report, and publicly disclose information about mortgages. This information is crucial for understanding and monitoring trends in housing finance, and for ensuring compliance with fair lending laws. <a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></p>
-<p>HMDA data includes information on loan applications, loan originations, loan purchases, and denied applications. The data encompasses various aspects such as:</p>
+<div id="data-exploration-and-cleaning" class="section level1 hasAnchor" number="3">
+<h1><span class="header-section-number">Chapter 3</span> Data Exploration and Cleaning<a href="data-exploration-and-cleaning.html#data-exploration-and-cleaning" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>Once you have data loaded into your R environment, now comes one of the most important parts of the data processing stage, data exploration and cleaning.</p>
+<div id="data-exploration" class="section level2 unnumbered hasAnchor">
+<h2>Data Exploration<a href="data-exploration-and-cleaning.html#data-exploration" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Data exploration is the initial step in data analysis, where you get a sense of the structure, contents, and characteristics of the dataset. This step involves:</p>
 <ul>
-<li><strong>Loan Characteristics</strong>: Information about the loan amount, type of loan, and purpose of the loan (e.g., home purchase, refinance).</li>
-<li><strong>Applicant Information</strong>: Demographic details of the loan applicants including race, ethnicity, gender, and income.</li>
-<li><strong>Property Information</strong>: Data about the location and type of property being financed.</li>
-<li><strong>Action Taken</strong>: The outcome of the loan application, whether it was approved, denied, or withdrawn.</li>
+<li><p><strong>Understanding the Dataset:</strong>
+Reviewing the dataset to understand its structure, the types of data it contains, and the relationships between different variables.</p></li>
+<li><p><strong>Summary Statistics:</strong>
+Calculating basic statistics such as mean, median, standard deviation, and percentiles to understand the distribution and spread of the data.</p></li>
+<li><p><strong>Visualization</strong>
+Creating visual representations of the data, such as histograms, box plots, scatter plots, and correlation matrices, to identify patterns, trends, and outliers.</p></li>
+<li><p><strong>Identifying Data Types</strong>
+Checking the data types of each column to ensure they are as expected (e.g., numerical, categorical, date/time).</p></li>
+<li><p><strong>Detecting Anomalies</strong>
+Identifying any anomalies, such as missing values, outliers, or inconsistencies that might need to be addressed.</p></li>
 </ul>
-<div id="why-use-hmda-data" class="section level2 hasAnchor" number="1.1">
-<h2><span class="header-section-number">1.1</span> Why Use HMDA Data?<a href="hmda-data-intro.html#why-use-hmda-data" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>While this book is focused on teaching data analysis in R, the HMDA dataset serves as an excellent example for several reasons:</p>
-<ol style="list-style-type: decimal">
-<li><strong>Real-World Relevance</strong>: HMDA data provides a real-world context that makes the learning process more engaging and practical.</li>
-<li><strong>Comprehensive Dataset</strong>: The dataset includes a wide range of variables, making it suitable for demonstrating various data analysis techniques.</li>
-<li><strong>Publicly Available</strong>: HMDA data is publicly accessible, allowing you to follow along with the examples and practice on your own.</li>
-</ol>
-<p>By the end of this book, you will not only have a solid understanding of data analysis in R but also be equipped with practical skills that can be applied to other datasets and domains.</p>
-<p>Let’s get started on this journey of exploring data analysis with R, using the HMDA data as our guide!</p>
+</div>
+<div id="data-cleaning" class="section level2 unnumbered hasAnchor">
+<h2>Data Cleaning<a href="data-exploration-and-cleaning.html#data-cleaning" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Data cleaning, also known as data cleansing or scrubbing, involves correcting or removing inaccuracies and inconsistencies in the data to improve its quality. Key steps include:</p>
+<ul>
+<li><p><strong>Handling Missing Values</strong>
+Dealing with missing data by either removing rows/columns with missing values, imputing missing values using statistical methods, or using algorithms that can handle missing data.</p></li>
+<li><p><strong>Removing Duplicates</strong>
+Identifying and removing duplicate entries to ensure each record is unique.</p></li>
+<li><p><strong>Correcting Errors</strong>
+Fixing errors such as typos, incorrect data entries, and inconsistent formatting.</p></li>
+<li><p><strong>Data Transformation</strong>
+Converting data into the appropriate format or structure, such as normalizing or standardizing numerical data, encoding categorical variables, and creating new derived features.</p></li>
+<li><p><strong>Outlier Treatment</strong>
+Identifying and handling outliers, which may involve removing them or transforming them to reduce their impact.</p></li>
+<li><p><strong>Consistent Formatting</strong>
+Ensuring consistent formatting across the dataset, such as consistent date formats, uniform case for text data, and standardized units for numerical data.</p></li>
+</ul>
+</div>
+<div id="importance-of-data-exploration-and-cleaning" class="section level2 hasAnchor" number="3.1">
+<h2><span class="header-section-number">3.1</span> Importance of Data Exploration and Cleaning<a href="data-exploration-and-cleaning.html#importance-of-data-exploration-and-cleaning" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ul>
+<li><strong>Improves Data Quality:</strong> Ensures the data is accurate, complete, and reliable, which is essential for drawing valid conclusions and making accurate predictions.</li>
+<li><strong>Enhances Analysis:</strong> Clean and well-understood data allows for more effective and insightful analysis.</li>
+<li><strong>Reduces Errors:</strong> Minimizes the risk of errors and biases in the data, leading to more robust and trustworthy results.</li>
+<li><strong>Facilitates Model Building:</strong> Prepares the data in a way that is suitable for building machine learning models, improving their performance and reliability.</li>
+</ul>
+<p>Overall, data exploration and cleaning are foundational steps that set the stage for successful data analysis and machine learning projects.</p>
 
 </div>
 </div>
-<div class="footnotes">
-<hr />
-<ol start="1">
-<li id="fn1"><p>If you would like to learn more about HMDA data please see: <a href="https://www.consumerfinance.gov/data-research/hmda/" class="uri">https://www.consumerfinance.gov/data-research/hmda/</a><a href="hmda-data-intro.html#fnref1" class="footnote-back">↩︎</a></p></li>
-</ol>
-</div>
+
+
+
+
+
+
             </section>
 
           </div>
         </div>
       </div>
-<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="data-importing.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="data-in-chunks.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -257,7 +283,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/USERNAME/REPO/edit/BRANCH/chapter1/hmda-data-intro.Rmd",
+"link": "https://github.com/USERNAME/REPO/edit/BRANCH/chapter3/data-exploration-and-cleaning.rmd",
 "text": "Edit"
 },
 "history": {
