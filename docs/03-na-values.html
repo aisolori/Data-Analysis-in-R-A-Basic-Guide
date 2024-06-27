@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 1 What is HMDA Data? | Data Analysis in R: A Basic Guide</title>
+  <title>3.2 Spotting and Handling NA Values | Data Analysis in R: A Basic Guide</title>
   <meta name="description" content="This book provides a basic guide to data analysis using R, with a focus on the Home Mortgage Disclosure Act (HMDA) data as a practical example. It covers the essential techniques and tools needed to perform effective data analysis, offering step-by-step instructions and detailed explanations. The HTML output format for this book is bookdown::gitbook, as set in the _output.yml file." />
   <meta name="generator" content="bookdown 0.35 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 1 What is HMDA Data? | Data Analysis in R: A Basic Guide" />
+  <meta property="og:title" content="3.2 Spotting and Handling NA Values | Data Analysis in R: A Basic Guide" />
   <meta property="og:type" content="book" />
   
   <meta property="og:description" content="This book provides a basic guide to data analysis using R, with a focus on the Home Mortgage Disclosure Act (HMDA) data as a practical example. It covers the essential techniques and tools needed to perform effective data analysis, offering step-by-step instructions and detailed explanations. The HTML output format for this book is bookdown::gitbook, as set in the _output.yml file." />
   <meta name="github-repo" content="aisolori/Data-Analysis-in-R-A-Basic-Guide" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 1 What is HMDA Data? | Data Analysis in R: A Basic Guide" />
+  <meta name="twitter:title" content="3.2 Spotting and Handling NA Values | Data Analysis in R: A Basic Guide" />
   
   <meta name="twitter:description" content="This book provides a basic guide to data analysis using R, with a focus on the Home Mortgage Disclosure Act (HMDA) data as a practical example. It covers the essential techniques and tools needed to perform effective data analysis, offering step-by-step instructions and detailed explanations. The HTML output format for this book is bookdown::gitbook, as set in the _output.yml file." />
   
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="index.html"/>
-<link rel="next" href="data-importing.html"/>
+<link rel="prev" href="exploring-hmda-data.html"/>
+
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -213,42 +213,99 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="what-is-hmda-data" class="section level1 hasAnchor" number="1">
-<h1><span class="header-section-number">Chapter 1</span> What is HMDA Data?<a href="hmda-data-intro.html#what-is-hmda-data" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<p>The Home Mortgage Disclosure Act (HMDA) was enacted by Congress in 1975 and is implemented by the Consumer Financial Protection Bureau (CFPB). The HMDA requires many financial institutions to maintain, report, and publicly disclose information about mortgages. This information is crucial for understanding and monitoring trends in housing finance, and for ensuring compliance with fair lending laws. <a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></p>
-<p>HMDA data includes information on loan applications, loan originations, loan purchases, and denied applications. The data encompasses various aspects such as:</p>
+<div id="spotting-and-handling-na-values" class="section level2 hasAnchor" number="3.2">
+<h2><span class="header-section-number">3.2</span> Spotting and Handling NA Values<a href="03-na-values.html#spotting-and-handling-na-values" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Missing values, represented as <strong><code>NA</code></strong> in R, are a common occurrence in datasets and can significantly impact the results of your data analysis. Therefore, identifying and understanding the extent of missing values is a crucial step in data exploration.</p>
+<div id="understanding-na-values" class="section level4 unlisted unnumbered hasAnchor">
+<h4>Understanding NA Values<a href="03-na-values.html#understanding-na-values" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>In R, <strong><code>NA</code></strong> (Not Available) is used to represent missing or undefined data. Missing values can arise due to various reasons such as data entry errors, data collection issues, or intentional omissions.</p>
+<p>In the HMDA data that we have been working with, all of the reasons above apply. Sometimes financial institutions make errors when submitting the data, they are unable to collect the data for one reason or another, or certain data fields don’t apply to certain loan applications.</p>
+</div>
+<div id="why-spotting-na-values-is-important" class="section level4 unlisted unnumbered hasAnchor">
+<h4>Why Spotting NA Values is Important<a href="03-na-values.html#why-spotting-na-values-is-important" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <ul>
-<li><strong>Loan Characteristics</strong>: Information about the loan amount, type of loan, and purpose of the loan (e.g., home purchase, refinance).</li>
-<li><strong>Applicant Information</strong>: Demographic details of the loan applicants including race, ethnicity, gender, and income.</li>
-<li><strong>Property Information</strong>: Data about the location and type of property being financed.</li>
-<li><strong>Action Taken</strong>: The outcome of the loan application, whether it was approved, denied, or withdrawn.</li>
+<li><strong>Data Integrity:</strong> Missing values can lead to incorrect conclusions if not handled properly.</li>
+<li><strong>Analysis Readiness:</strong> Many statistical and machine learning methods cannot handle missing values directly.</li>
+<li><strong>Decision Making:</strong> Identifying the pattern and extent of missing values can inform your strategy for handling them (e.g., imputation, removal).</li>
 </ul>
-<div id="why-use-hmda-data" class="section level2 hasAnchor" number="1.1">
-<h2><span class="header-section-number">1.1</span> Why Use HMDA Data?<a href="hmda-data-intro.html#why-use-hmda-data" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>While this book is focused on teaching data analysis in R, the HMDA dataset serves as an excellent example for several reasons:</p>
-<ol style="list-style-type: decimal">
-<li><strong>Real-World Relevance</strong>: HMDA data provides a real-world context that makes the learning process more engaging and practical.</li>
-<li><strong>Comprehensive Dataset</strong>: The dataset includes a wide range of variables, making it suitable for demonstrating various data analysis techniques.</li>
-<li><strong>Publicly Available</strong>: HMDA data is publicly accessible, allowing you to follow along with the examples and practice on your own.</li>
-</ol>
-<p>By the end of this book, you will not only have a solid understanding of data analysis in R but also be equipped with practical skills that can be applied to other datasets and domains.</p>
-<p>Let’s get started on this journey of exploring data analysis with R, using the HMDA data as our guide!</p>
+</div>
+<div id="common-ways-to-spot-na-values" class="section level3 hasAnchor" number="3.2.1">
+<h3><span class="header-section-number">3.2.1</span> Common Ways to Spot NA Values<a href="03-na-values.html#common-ways-to-spot-na-values" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Identifying missing values is a critical part of data exploration. Here are some common ways to spot NA values using the <strong><code>hmda_data</code></strong> dataset that we loaded in.</p>
+<div id="checking-for-any-na-values" class="section level4 unnumbered hasAnchor">
+<h4>Checking for Any NA Values<a href="03-na-values.html#checking-for-any-na-values" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>You can use the <code>anyNA()</code> function to check if there are any NA values in the entire dataset.</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="03-na-values.html#cb16-1" tabindex="-1"></a><span class="co"># Check if there are any NA values in the entire dataset</span></span>
+<span id="cb16-2"><a href="03-na-values.html#cb16-2" tabindex="-1"></a>any_na <span class="ot">&lt;-</span> <span class="fu">anyNA</span>(hmda_data)</span>
+<span id="cb16-3"><a href="03-na-values.html#cb16-3" tabindex="-1"></a><span class="fu">print</span>(any_na) <span class="co"># Returns TRUE if there are any NA values, otherwise FALSE</span></span></code></pre></div>
+</div>
+<div id="counting-na-values-per-column" class="section level4 unnumbered hasAnchor">
+<h4>Counting NA Values Per Column<a href="03-na-values.html#counting-na-values-per-column" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>To understand which columns contain NA values and how many, you can use <strong><code>colSums(is.na())</code></strong>.</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="03-na-values.html#cb17-1" tabindex="-1"></a><span class="co"># Count the number of NA values in each column </span></span>
+<span id="cb17-2"><a href="03-na-values.html#cb17-2" tabindex="-1"></a>na_per_column <span class="ot">&lt;-</span> <span class="fu">colSums</span>(<span class="fu">is.na</span>(hmda_data)) <span class="sc">%&gt;%</span></span>
+<span id="cb17-3"><a href="03-na-values.html#cb17-3" tabindex="-1"></a>  <span class="fu">as.data.frame</span>()</span></code></pre></div>
+<p><img src="images/na_per_column.PNG" /></p>
+<p>In the script above, the following steps are performed:</p>
+<p><strong><code>is.na(hmda_data)</code></strong>: This function checks each element of the <strong><code>hmda_data</code></strong> dataset to see if it is an NA value. It returns a logical matrix of the same dimensions as <strong><code>hmda_data</code></strong>, where each element is <strong><code>TRUE</code></strong> if the corresponding element in <strong><code>hmda_data</code></strong> is NA, and <strong><code>FALSE</code></strong> otherwise.</p>
+<p><strong><code>colSums(is.na(hmda_data))</code></strong>: This function calculates the sum of <strong><code>TRUE</code></strong> values (which are treated as 1) for each column in the logical matrix. As a result, it provides a named vector where each name corresponds to a column in <strong><code>hmda_data</code></strong>, and each value represents the count of NA values in that column.</p>
+<p><strong><code>as.data.frame()</code></strong>: This function converts the named vector into a data frame. This step is useful for better readability and further manipulation of the results. The resulting data frame has two columns: one for the column names from the original dataset and one for the corresponding counts of NA values.</p>
+<p>By running this script, you will obtain a data frame (<strong><code>na_per_column</code></strong>) that lists each column in <strong><code>hmda_data</code></strong> along with the number of NA values it contains. This information is crucial for understanding the extent of missing data in each column, which can guide your decisions on how to handle these missing values in subsequent analysis steps.</p>
+</div>
+</div>
+<div id="visualizing-na-values-using-visdat-package" class="section level3 hasAnchor" number="3.2.2">
+<h3><span class="header-section-number">3.2.2</span> Visualizing NA Values Using <code>visdat</code> Package<a href="03-na-values.html#visualizing-na-values-using-visdat-package" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Visualizing missing values can provide a quick and intuitive understanding of the extent and distribution of NA values in your dataset. The <strong><code>visdat</code></strong> package in R offers a suite of tools for this purpose. In this section, we’ll demonstrate how to visualize NA values using a subsample of the hmda_data dataset, focusing specifically on the “property_value” and “loan_amount” columns, we do this because the hmda_data is quite large and <strong><code>visdat</code></strong> can’t handle large dataframes well.</p>
+<div id="installing-and-loading-the-visdat-package" class="section level4 unnumbered hasAnchor">
+<h4>Installing and Loading the <code>visdat</code> Package<a href="03-na-values.html#installing-and-loading-the-visdat-package" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>First, ensure that the <strong><code>visdat</code></strong> package is installed and loaded. If you haven’t installed it yet, you can do so with the following command:</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="03-na-values.html#cb18-1" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;visdat&quot;</span>)</span></code></pre></div>
+</div>
+<div id="visualizing-na-values" class="section level4 unnumbered hasAnchor">
+<h4>Visualizing NA Values<a href="03-na-values.html#visualizing-na-values" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>To visualize the NA values in the <strong>“property_value”</strong> and <strong>“loan_amount”</strong> columns of the <strong>hmda_data</strong> dataset, you can use the <strong><code>vis_dat()</code></strong> function. Here’s the script to create the visualization:</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="03-na-values.html#cb19-1" tabindex="-1"></a><span class="co"># Loading libraries</span></span>
+<span id="cb19-2"><a href="03-na-values.html#cb19-2" tabindex="-1"></a><span class="fu">library</span>(visdat)</span>
+<span id="cb19-3"><a href="03-na-values.html#cb19-3" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb19-4"><a href="03-na-values.html#cb19-4" tabindex="-1"></a></span>
+<span id="cb19-5"><a href="03-na-values.html#cb19-5" tabindex="-1"></a><span class="co"># Visualizing NA values</span></span>
+<span id="cb19-6"><a href="03-na-values.html#cb19-6" tabindex="-1"></a><span class="fu">vis_dat</span>(hmda_data <span class="sc">%&gt;%</span></span>
+<span id="cb19-7"><a href="03-na-values.html#cb19-7" tabindex="-1"></a>          <span class="fu">select</span>(loan_amount, property_value), <span class="at">warn_large_data =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<p><img src="images/na_visualization.PNG" /></p>
+<p>In this script:</p>
+<ul>
+<li><strong><code>hmda_data %&gt;% select(loan_amount, property_value)</code></strong>: This line uses the <code>select()</code> function from the <code>dplyr</code> package to create a subsample of the <code>hmda_data</code> dataset, containing only the “loan_amount” and “property_value” columns.</li>
+<li><strong><code>vis_dat()</code></strong>: This function from the <code>visdat</code> package generates a visualization of the dataset, highlighting the NA values.</li>
+<li><strong><code>warn_large_data = FALSE</code></strong>: This argument suppresses warnings related to large datasets, which is useful when working with large data frames.</li>
+</ul>
+</div>
+<div id="understanding-the-visualization" class="section level4 unlisted unnumbered hasAnchor">
+<h4>Understanding the Visualization<a href="03-na-values.html#understanding-the-visualization" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>The visualization generated by <strong><code>vis_dat()</code></strong> provides a color-coded barchart where each bar represents a value in the dataset. The colors indicate different data types or the presence of NA values:</p>
+<ul>
+<li><strong>Gray cells</strong>: Represent NA values.</li>
+<li><strong>Other colors</strong>: Represent different data types (e.g., numeric, character, etc.).</li>
+</ul>
+<p>This visual representation makes it easy to spot patterns and concentrations of missing data. For example, you can quickly see if NA values are clustered in certain rows or columns, which might suggest specific reasons for the missing data.</p>
 
 </div>
 </div>
-<div class="footnotes">
-<hr />
-<ol start="1">
-<li id="fn1"><p>If you would like to learn more about HMDA data please see: <a href="https://www.consumerfinance.gov/data-research/hmda/" class="uri">https://www.consumerfinance.gov/data-research/hmda/</a><a href="hmda-data-intro.html#fnref1" class="footnote-back">↩︎</a></p></li>
-</ol>
 </div>
+</div>
+
+
+
+
+
+
+
             </section>
 
           </div>
         </div>
       </div>
-<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="data-importing.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="exploring-hmda-data.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -279,7 +336,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/aisolori/Data-Analysis-in-R-A-Basic-Guide/edit/main/chapter1/hmda-data-intro.Rmd",
+"link": "https://github.com/aisolori/Data-Analysis-in-R-A-Basic-Guide/edit/main/chapter3/03-na-values.Rmd",
 "text": "Edit"
 },
 "history": {

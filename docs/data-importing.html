@@ -5,19 +5,19 @@
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 2 Data Importing | Data Analysis in R: A Basic Guide</title>
-  <meta name="description" content="This book provides a comprehensive guide to data analysis using R, with a focus on the Home Mortgage Disclosure Act (HMDA) data as a practical example. It covers the essential techniques and tools needed to perform effective data analysis, offering step-by-step instructions and detailed explanations. The HTML output format for this book is bookdown::gitbook, as set in the _output.yml file." />
+  <meta name="description" content="This book provides a basic guide to data analysis using R, with a focus on the Home Mortgage Disclosure Act (HMDA) data as a practical example. It covers the essential techniques and tools needed to perform effective data analysis, offering step-by-step instructions and detailed explanations. The HTML output format for this book is bookdown::gitbook, as set in the _output.yml file." />
   <meta name="generator" content="bookdown 0.35 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 2 Data Importing | Data Analysis in R: A Basic Guide" />
   <meta property="og:type" content="book" />
   
-  <meta property="og:description" content="This book provides a comprehensive guide to data analysis using R, with a focus on the Home Mortgage Disclosure Act (HMDA) data as a practical example. It covers the essential techniques and tools needed to perform effective data analysis, offering step-by-step instructions and detailed explanations. The HTML output format for this book is bookdown::gitbook, as set in the _output.yml file." />
-  <meta name="github-repo" content="rstudio/bookdown-demo" />
+  <meta property="og:description" content="This book provides a basic guide to data analysis using R, with a focus on the Home Mortgage Disclosure Act (HMDA) data as a practical example. It covers the essential techniques and tools needed to perform effective data analysis, offering step-by-step instructions and detailed explanations. The HTML output format for this book is bookdown::gitbook, as set in the _output.yml file." />
+  <meta name="github-repo" content="aisolori/Data-Analysis-in-R-A-Basic-Guide" />
 
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:title" content="Chapter 2 Data Importing | Data Analysis in R: A Basic Guide" />
   
-  <meta name="twitter:description" content="This book provides a comprehensive guide to data analysis using R, with a focus on the Home Mortgage Disclosure Act (HMDA) data as a practical example. It covers the essential techniques and tools needed to perform effective data analysis, offering step-by-step instructions and detailed explanations. The HTML output format for this book is bookdown::gitbook, as set in the _output.yml file." />
+  <meta name="twitter:description" content="This book provides a basic guide to data analysis using R, with a focus on the Home Mortgage Disclosure Act (HMDA) data as a practical example. It covers the essential techniques and tools needed to perform effective data analysis, offering step-by-step instructions and detailed explanations. The HTML output format for this book is bookdown::gitbook, as set in the _output.yml file." />
   
 
 <meta name="author" content="Antonio Solorio" />
@@ -157,9 +157,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="2.3" data-path="hmda-download-import.html"><a href="hmda-download-import.html#importing-csv-files-in-r"><i class="fa fa-check"></i><b>2.3</b> Importing CSV Files in R</a>
 <ul>
-<li class="chapter" data-level="2.3.1" data-path="hmda-download-import.html"><a href="hmda-download-import.html#using-read.csv"><i class="fa fa-check"></i><b>2.3.1</b> Using <code>read.csv()</code></a></li>
+<li class="chapter" data-level="2.3.1" data-path="hmda-download-import.html"><a href="hmda-download-import.html#using-read.csv"><i class="fa fa-check"></i><b>2.3.1</b> Using <code>read.csv()</code></a>
+<ul>
+<li class="chapter" data-level="" data-path="hmda-download-import.html"><a href="hmda-download-import.html#details-on-read.csv"><i class="fa fa-check"></i>Details on <code>read.csv()</code></a></li>
+</ul></li>
 <li class="chapter" data-level="2.3.2" data-path="hmda-download-import.html"><a href="hmda-download-import.html#using-read_csv-from-the-readr-package"><i class="fa fa-check"></i><b>2.3.2</b> Using <code>read_csv()</code> from the <code>readr</code> Package</a></li>
-<li class="chapter" data-level="" data-path="hmda-download-import.html"><a href="hmda-download-import.html#details-on-read_csv"><i class="fa fa-check"></i>Details on <code>read_csv()</code></a></li>
+<li class="chapter" data-level="" data-path="hmda-download-import.html"><a href="hmda-download-import.html#details-on-read_csv"><i class="fa fa-check"></i>Details on <code>read_csv()</code></a>
+<ul>
+<li class="chapter" data-level="2.3.2.1" data-path="hmda-download-import.html"><a href="hmda-download-import.html#handling-parsing-issues"><i class="fa fa-check"></i><b>2.3.2.1</b> Handling Parsing Issues</a></li>
+</ul></li>
 <li class="chapter" data-level="2.3.3" data-path="hmda-download-import.html"><a href="hmda-download-import.html#handling-file-paths"><i class="fa fa-check"></i><b>2.3.3</b> Handling File Paths</a></li>
 <li class="chapter" data-level="2.3.4" data-path="hmda-download-import.html"><a href="hmda-download-import.html#common-issues-and-solutions"><i class="fa fa-check"></i><b>2.3.4</b> Common Issues and Solutions</a></li>
 </ul></li>
@@ -172,6 +178,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="3.1.1" data-path="exploring-hmda-data.html"><a href="exploring-hmda-data.html#exploring-data-structure"><i class="fa fa-check"></i><b>3.1.1</b> Exploring Data Structure</a></li>
 <li class="chapter" data-level="3.1.2" data-path="exploring-hmda-data.html"><a href="exploring-hmda-data.html#changing-data-types"><i class="fa fa-check"></i><b>3.1.2</b> Changing Data Types</a></li>
 <li class="chapter" data-level="3.1.3" data-path="exploring-hmda-data.html"><a href="exploring-hmda-data.html#using-across-to-change-data-types-for-multiple-columns"><i class="fa fa-check"></i><b>3.1.3</b> Using across() to Change Data Types for Multiple Columns</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="03-na-values.html"><a href="03-na-values.html"><i class="fa fa-check"></i><b>3.2</b> Spotting and Handling NA Values</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="03-na-values.html"><a href="03-na-values.html#common-ways-to-spot-na-values"><i class="fa fa-check"></i><b>3.2.1</b> Common Ways to Spot NA Values</a>
+<ul>
+<li class="chapter" data-level="" data-path="03-na-values.html"><a href="03-na-values.html#checking-for-any-na-values"><i class="fa fa-check"></i>Checking for Any NA Values</a></li>
+<li class="chapter" data-level="" data-path="03-na-values.html"><a href="03-na-values.html#counting-na-values-per-column"><i class="fa fa-check"></i>Counting NA Values Per Column</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2.2" data-path="03-na-values.html"><a href="03-na-values.html#visualizing-na-values-using-visdat-package"><i class="fa fa-check"></i><b>3.2.2</b> Visualizing NA Values Using <code>visdat</code> Package</a>
+<ul>
+<li class="chapter" data-level="" data-path="03-na-values.html"><a href="03-na-values.html#installing-and-loading-the-visdat-package"><i class="fa fa-check"></i>Installing and Loading the <code>visdat</code> Package</a></li>
+<li class="chapter" data-level="" data-path="03-na-values.html"><a href="03-na-values.html#visualizing-na-values"><i class="fa fa-check"></i>Visualizing NA Values</a></li>
+</ul></li>
 </ul></li>
 </ul></li>
 <li class="divider"></li>

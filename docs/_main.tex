@@ -654,6 +654,140 @@ In this code:
 
 By using \textbf{\texttt{across()}}, you can efficiently change the data types of multiple columns in one step, ensuring that your data is properly formatted for subsequent analysis.
 
+\hypertarget{spotting-and-handling-na-values}{%
+\section{Spotting and Handling NA Values}\label{spotting-and-handling-na-values}}
+
+Missing values, represented as \textbf{\texttt{NA}} in R, are a common occurrence in datasets and can significantly impact the results of your data analysis. Therefore, identifying and understanding the extent of missing values is a crucial step in data exploration.
+
+\hypertarget{understanding-na-values}{%
+\subsubsection*{Understanding NA Values}\label{understanding-na-values}}
+
+In R, \textbf{\texttt{NA}} (Not Available) is used to represent missing or undefined data. Missing values can arise due to various reasons such as data entry errors, data collection issues, or intentional omissions.
+
+In the HMDA data that we have been working with, all of the reasons above apply. Sometimes financial institutions make errors when submitting the data, they are unable to collect the data for one reason or another, or certain data fields don't apply to certain loan applications.
+
+\hypertarget{why-spotting-na-values-is-important}{%
+\subsubsection*{Why Spotting NA Values is Important}\label{why-spotting-na-values-is-important}}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Data Integrity:} Missing values can lead to incorrect conclusions if not handled properly.
+\item
+  \textbf{Analysis Readiness:} Many statistical and machine learning methods cannot handle missing values directly.
+\item
+  \textbf{Decision Making:} Identifying the pattern and extent of missing values can inform your strategy for handling them (e.g., imputation, removal).
+\end{itemize}
+
+\hypertarget{common-ways-to-spot-na-values}{%
+\subsection{Common Ways to Spot NA Values}\label{common-ways-to-spot-na-values}}
+
+Identifying missing values is a critical part of data exploration. Here are some common ways to spot NA values using the \textbf{\texttt{hmda\_data}} dataset that we loaded in.
+
+\hypertarget{checking-for-any-na-values}{%
+\subsubsection*{Checking for Any NA Values}\label{checking-for-any-na-values}}
+\addcontentsline{toc}{subsubsection}{Checking for Any NA Values}
+
+You can use the \texttt{anyNA()} function to check if there are any NA values in the entire dataset.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Check if there are any NA values in the entire dataset}
+\NormalTok{any\_na }\OtherTok{\textless{}{-}} \FunctionTok{anyNA}\NormalTok{(hmda\_data)}
+\FunctionTok{print}\NormalTok{(any\_na) }\CommentTok{\# Returns TRUE if there are any NA values, otherwise FALSE}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{counting-na-values-per-column}{%
+\subsubsection*{Counting NA Values Per Column}\label{counting-na-values-per-column}}
+\addcontentsline{toc}{subsubsection}{Counting NA Values Per Column}
+
+To understand which columns contain NA values and how many, you can use \textbf{\texttt{colSums(is.na())}}.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Count the number of NA values in each column }
+\NormalTok{na\_per\_column }\OtherTok{\textless{}{-}} \FunctionTok{colSums}\NormalTok{(}\FunctionTok{is.na}\NormalTok{(hmda\_data)) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{as.data.frame}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{images/na_per_column.PNG}
+
+In the script above, the following steps are performed:
+
+\textbf{\texttt{is.na(hmda\_data)}}: This function checks each element of the \textbf{\texttt{hmda\_data}} dataset to see if it is an NA value. It returns a logical matrix of the same dimensions as \textbf{\texttt{hmda\_data}}, where each element is \textbf{\texttt{TRUE}} if the corresponding element in \textbf{\texttt{hmda\_data}} is NA, and \textbf{\texttt{FALSE}} otherwise.
+
+\textbf{\texttt{colSums(is.na(hmda\_data))}}: This function calculates the sum of \textbf{\texttt{TRUE}} values (which are treated as 1) for each column in the logical matrix. As a result, it provides a named vector where each name corresponds to a column in \textbf{\texttt{hmda\_data}}, and each value represents the count of NA values in that column.
+
+\textbf{\texttt{as.data.frame()}}: This function converts the named vector into a data frame. This step is useful for better readability and further manipulation of the results. The resulting data frame has two columns: one for the column names from the original dataset and one for the corresponding counts of NA values.
+
+By running this script, you will obtain a data frame (\textbf{\texttt{na\_per\_column}}) that lists each column in \textbf{\texttt{hmda\_data}} along with the number of NA values it contains. This information is crucial for understanding the extent of missing data in each column, which can guide your decisions on how to handle these missing values in subsequent analysis steps.
+
+\hypertarget{visualizing-na-values-using-visdat-package}{%
+\subsection{\texorpdfstring{Visualizing NA Values Using \texttt{visdat} Package}{Visualizing NA Values Using visdat Package}}\label{visualizing-na-values-using-visdat-package}}
+
+Visualizing missing values can provide a quick and intuitive understanding of the extent and distribution of NA values in your dataset. The \textbf{\texttt{visdat}} package in R offers a suite of tools for this purpose. In this section, we'll demonstrate how to visualize NA values using a subsample of the hmda\_data dataset, focusing specifically on the ``property\_value'' and ``loan\_amount'' columns, we do this because the hmda\_data is quite large and \textbf{\texttt{visdat}} can't handle large dataframes well.
+
+\hypertarget{installing-and-loading-the-visdat-package}{%
+\subsubsection*{\texorpdfstring{Installing and Loading the \texttt{visdat} Package}{Installing and Loading the visdat Package}}\label{installing-and-loading-the-visdat-package}}
+\addcontentsline{toc}{subsubsection}{Installing and Loading the \texttt{visdat} Package}
+
+First, ensure that the \textbf{\texttt{visdat}} package is installed and loaded. If you haven't installed it yet, you can do so with the following command:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{install.packages}\NormalTok{(}\StringTok{"visdat"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{visualizing-na-values}{%
+\subsubsection*{Visualizing NA Values}\label{visualizing-na-values}}
+\addcontentsline{toc}{subsubsection}{Visualizing NA Values}
+
+To visualize the NA values in the \textbf{``property\_value''} and \textbf{``loan\_amount''} columns of the \textbf{hmda\_data} dataset, you can use the \textbf{\texttt{vis\_dat()}} function. Here's the script to create the visualization:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Loading libraries}
+\FunctionTok{library}\NormalTok{(visdat)}
+\FunctionTok{library}\NormalTok{(dplyr)}
+
+\CommentTok{\# Visualizing NA values}
+\FunctionTok{vis\_dat}\NormalTok{(hmda\_data }\SpecialCharTok{\%\textgreater{}\%}
+          \FunctionTok{select}\NormalTok{(loan\_amount, property\_value), }\AttributeTok{warn\_large\_data =} \ConstantTok{FALSE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{images/na_visualization.PNG}
+
+In this script:
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\texttt{hmda\_data\ \%\textgreater{}\%\ select(loan\_amount,\ property\_value)}}: This line uses the \texttt{select()} function from the \texttt{dplyr} package to create a subsample of the \texttt{hmda\_data} dataset, containing only the ``loan\_amount'' and ``property\_value'' columns.
+\item
+  \textbf{\texttt{vis\_dat()}}: This function from the \texttt{visdat} package generates a visualization of the dataset, highlighting the NA values.
+\item
+  \textbf{\texttt{warn\_large\_data\ =\ FALSE}}: This argument suppresses warnings related to large datasets, which is useful when working with large data frames.
+\end{itemize}
+
+\hypertarget{understanding-the-visualization}{%
+\subsubsection*{Understanding the Visualization}\label{understanding-the-visualization}}
+
+The visualization generated by \textbf{\texttt{vis\_dat()}} provides a color-coded barchart where each bar represents a value in the dataset. The colors indicate different data types or the presence of NA values:
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Gray cells}: Represent NA values.
+\item
+  \textbf{Other colors}: Represent different data types (e.g., numeric, character, etc.).
+\end{itemize}
+
+This visual representation makes it easy to spot patterns and concentrations of missing data. For example, you can quickly see if NA values are clustered in certain rows or columns, which might suggest specific reasons for the missing data.
+
   \bibliography{book.bib,packages.bib}
 
 \end{document}

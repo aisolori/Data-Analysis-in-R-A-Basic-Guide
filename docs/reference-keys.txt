@@ -17,3 +17,6 @@ exploring-and-cleaning-hmda-data
 exploring-data-structure
 changing-data-types
 using-across-to-change-data-types-for-multiple-columns
+spotting-and-handling-na-values
+common-ways-to-spot-na-values
+visualizing-na-values-using-visdat-package
