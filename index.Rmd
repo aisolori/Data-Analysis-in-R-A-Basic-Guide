@@ -5,12 +5,12 @@ date: "`r Sys.Date()`"
 site: bookdown::bookdown_site
 documentclass: book
 bibliography: [book.bib, packages.bib]
-# url: your book url like https://bookdown.org/yihui/bookdown
+url: https://aisolori.github.io/Data-Analysis-in-R-A-Basic-Guide/
 # cover-image: path to the social sharing image like images/cover.jpg
 description: |
   This book provides a basic guide to data analysis using R, with a focus on the Home Mortgage Disclosure Act (HMDA) data as a practical example. It covers the essential techniques and tools needed to perform effective data analysis, offering step-by-step instructions and detailed explanations. The HTML output format for this book is bookdown::gitbook, as set in the _output.yml file.
 link-citations: yes
-github-repo: rstudio/bookdown-demo
+github-repo: aisolori/Data-Analysis-in-R-A-Basic-Guide
 ---
 
 # Introduction {-}

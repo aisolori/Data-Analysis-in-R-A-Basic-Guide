@@ -3,7 +3,6 @@ output_dir: "docs"
 language:
   ui:
     chapter_name: "Chapter "
-number_depth: 2
 rmd_files:
   - index.Rmd
   - chapter1/hmda-data-intro.Rmd
@@ -12,4 +11,5 @@ rmd_files:
   - chapter2/data-in-chunks.rmd
   - chapter3/data-exploration-and-cleaning.rmd
   - chapter3/exploring-hmda-data.Rmd
+  - chapter3/03-na-values.Rmd
   

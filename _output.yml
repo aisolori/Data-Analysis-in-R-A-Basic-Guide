@@ -1,5 +1,5 @@
 bookdown::gitbook:
-  toc_depth: 3
+  toc_depth: 4
   css: style.css
   split_by: rmd
   config:
@@ -10,8 +10,14 @@ bookdown::gitbook:
         <li><a href="./">Data Analysis in R: A Basic Guide</a></li>
       after: |
         <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
-    edit: https://github.com/USERNAME/REPO/edit/BRANCH/%s
+    edit: https://github.com/aisolori/Data-Analysis-in-R-A-Basic-Guide/edit/main/%s
+    repo: https://github.com/aisolori/Data-Analysis-in-R-A-Basic-Guide
     download: ["pdf", "epub"]
+    sharing:
+      github: yes
+      facebook : no
+      twitter: no
+      all: ['github']
 bookdown::pdf_book:
   includes:
     in_header: preamble.tex
