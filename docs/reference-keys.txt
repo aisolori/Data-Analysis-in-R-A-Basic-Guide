@@ -1,0 +1,16 @@
+what-is-hmda-data
+why-use-hmda-data
+data-importing
+different-types-of-data
+why-start-with-csv-files
+downloading-and-importing-hmda-data-in-csv-format
+snapshot-national-loan-level-dataset
+importing-csv-files-in-r
+using-read.csv
+using-read_csv-from-the-readr-package
+handling-parsing-issues
+handling-file-paths
+common-issues-and-solutions
+importing-data-in-chunks
+data-exploration-and-cleaning
+importance-of-data-exploration-and-cleaning

@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>2.2 Downloading and Importing HMDA Data in CSV Format | Data Analysis in R: A Basic Guide</title>
+  <meta name="description" content="This book provides a comprehensive guide to data analysis using R, with a focus on the Home Mortgage Disclosure Act (HMDA) data as a practical example. It covers the essential techniques and tools needed to perform effective data analysis, offering step-by-step instructions and detailed explanations. The HTML output format for this book is bookdown::gitbook, as set in the _output.yml file." />
+  <meta name="generator" content="bookdown 0.35 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="2.2 Downloading and Importing HMDA Data in CSV Format | Data Analysis in R: A Basic Guide" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="This book provides a comprehensive guide to data analysis using R, with a focus on the Home Mortgage Disclosure Act (HMDA) data as a practical example. It covers the essential techniques and tools needed to perform effective data analysis, offering step-by-step instructions and detailed explanations. The HTML output format for this book is bookdown::gitbook, as set in the _output.yml file." />
+  <meta name="github-repo" content="rstudio/bookdown-demo" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="2.2 Downloading and Importing HMDA Data in CSV Format | Data Analysis in R: A Basic Guide" />
+  
+  <meta name="twitter:description" content="This book provides a comprehensive guide to data analysis using R, with a focus on the Home Mortgage Disclosure Act (HMDA) data as a practical example. It covers the essential techniques and tools needed to perform effective data analysis, offering step-by-step instructions and detailed explanations. The HTML output format for this book is bookdown::gitbook, as set in the _output.yml file." />
+  
+
+<meta name="author" content="Antonio Solorio" />
+
+
+<meta name="date" content="2024-06-26" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="data-importing.html"/>
+<link rel="next" href="data-in-chunks.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Data Analysis in R: A Basic Guide</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Introduction</a></li>
+<li class="chapter" data-level="1" data-path="hmda-data-intro.html"><a href="hmda-data-intro.html"><i class="fa fa-check"></i><b>1</b> What is HMDA Data?</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="hmda-data-intro.html"><a href="hmda-data-intro.html#why-use-hmda-data"><i class="fa fa-check"></i><b>1.1</b> Why Use HMDA Data?</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="data-importing.html"><a href="data-importing.html"><i class="fa fa-check"></i><b>2</b> Data Importing</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="data-importing.html"><a href="data-importing.html#different-types-of-data"><i class="fa fa-check"></i><b>2.1</b> Different Types of Data</a>
+<ul>
+<li class="chapter" data-level="2.1.1" data-path="data-importing.html"><a href="data-importing.html#why-start-with-csv-files"><i class="fa fa-check"></i><b>2.1.1</b> Why Start with CSV Files?</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="hmda-download-import.html"><a href="hmda-download-import.html"><i class="fa fa-check"></i><b>2.2</b> Downloading and Importing HMDA Data in CSV Format</a>
+<ul>
+<li class="chapter" data-level="2.2.1" data-path="hmda-download-import.html"><a href="hmda-download-import.html#snapshot-national-loan-level-dataset"><i class="fa fa-check"></i><b>2.2.1</b> Snapshot National Loan Level Dataset</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="hmda-download-import.html"><a href="hmda-download-import.html#importing-csv-files-in-r"><i class="fa fa-check"></i><b>2.3</b> Importing CSV Files in R</a>
+<ul>
+<li class="chapter" data-level="2.3.1" data-path="hmda-download-import.html"><a href="hmda-download-import.html#using-read.csv"><i class="fa fa-check"></i><b>2.3.1</b> Using <code>read.csv()</code></a></li>
+<li class="chapter" data-level="2.3.2" data-path="hmda-download-import.html"><a href="hmda-download-import.html#using-read_csv-from-the-readr-package"><i class="fa fa-check"></i><b>2.3.2</b> Using <code>read_csv()</code> from the <code>readr</code> Package</a></li>
+<li class="chapter" data-level="" data-path="hmda-download-import.html"><a href="hmda-download-import.html#details-on-read_csv"><i class="fa fa-check"></i>Details on <code>read_csv()</code></a></li>
+<li class="chapter" data-level="2.3.3" data-path="hmda-download-import.html"><a href="hmda-download-import.html#handling-file-paths"><i class="fa fa-check"></i><b>2.3.3</b> Handling File Paths</a></li>
+<li class="chapter" data-level="2.3.4" data-path="hmda-download-import.html"><a href="hmda-download-import.html#common-issues-and-solutions"><i class="fa fa-check"></i><b>2.3.4</b> Common Issues and Solutions</a></li>
+</ul></li>
+<li class="chapter" data-level="2.4" data-path="data-in-chunks.html"><a href="data-in-chunks.html"><i class="fa fa-check"></i><b>2.4</b> Importing Data in Chunks</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="data-exploration-and-cleaning.html"><a href="data-exploration-and-cleaning.html"><i class="fa fa-check"></i><b>3</b> Data Exploration and Cleaning</a>
+<ul>
+<li class="chapter" data-level="" data-path="data-exploration-and-cleaning.html"><a href="data-exploration-and-cleaning.html#data-exploration"><i class="fa fa-check"></i>Data Exploration</a></li>
+<li class="chapter" data-level="" data-path="data-exploration-and-cleaning.html"><a href="data-exploration-and-cleaning.html#data-cleaning"><i class="fa fa-check"></i>Data Cleaning</a></li>
+<li class="chapter" data-level="3.1" data-path="data-exploration-and-cleaning.html"><a href="data-exploration-and-cleaning.html#importance-of-data-exploration-and-cleaning"><i class="fa fa-check"></i><b>3.1</b> Importance of Data Exploration and Cleaning</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Data Analysis in R: A Basic Guide</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="downloading-and-importing-hmda-data-in-csv-format" class="section level2 hasAnchor" number="2.2">
+<h2><span class="header-section-number">2.2</span> Downloading and Importing HMDA Data in CSV Format<a href="hmda-download-import.html#downloading-and-importing-hmda-data-in-csv-format" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>To practice importing CSV files in R, we will use the Home Mortgage Disclosure Act (HMDA) data in CSV format. This data can be found at the <a href="https://ffiec.cfpb.gov/">Consumer Financial Protection Bureau (CFPB) website</a>. In particular we will be working with the Snapshot National Loan Level Dataset, specifically for that in 2022 for Nevada.</p>
+<div id="snapshot-national-loan-level-dataset" class="section level3 hasAnchor" number="2.2.1">
+<h3><span class="header-section-number">2.2.1</span> Snapshot National Loan Level Dataset<a href="hmda-download-import.html#snapshot-national-loan-level-dataset" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The Snapshot files contain the national HMDA datasets as of May 1, 2023 for all HMDA reporters, as modified by the Bureau to protect applicant and borrower privacy. The snapshot files are available to download in both .csv and pipe delimited text file formats at the following link: <a href="https://ffiec.cfpb.gov/data-publication/snapshot-national-loan-level-dataset/" class="uri">https://ffiec.cfpb.gov/data-publication/snapshot-national-loan-level-dataset/</a>. One of the issues with these files however is that they are quite large, so we will be working with a subset of the data for Nevada in 2022.</p>
+<p>The subset of the data for Nevada in 2022 can be downloaded from the following link: <a href="https://ffiec.cfpb.gov/v2/data-browser-api/view/csv?states=NV&amp;years=2022">Nevada 2022 HMDA Data</a>.</p>
+</div>
+</div>
+<div id="importing-csv-files-in-r" class="section level2 hasAnchor" number="2.3">
+<h2><span class="header-section-number">2.3</span> Importing CSV Files in R<a href="hmda-download-import.html#importing-csv-files-in-r" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>R provides several functions for importing CSV files. The most commonly used function is <strong><code>read.csv()</code></strong>, which is part of the base R package. Additionally, the <strong><code>readr</code></strong> package offers the <strong><code>read_csv()</code></strong> function, which is optimized for faster performance and easier handling of large datasets.</p>
+<div id="using-read.csv" class="section level3 hasAnchor" number="2.3.1">
+<h3><span class="header-section-number">2.3.1</span> Using <code>read.csv()</code><a href="hmda-download-import.html#using-read.csv" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The <strong><code>read.csv()</code></strong> function is straightforward to use. It is actually a special case of the more general <strong><code>read.table()</code></strong> function, with default parameters set for reading CSV files Here’s how you can import a CSV file using this function:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="hmda-download-import.html#cb1-1" tabindex="-1"></a><span class="co"># Importing a CSV file using read.csv()</span></span>
+<span id="cb1-2"><a href="hmda-download-import.html#cb1-2" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;downloads/state_NV.csv&quot;</span>)</span>
+<span id="cb1-3"><a href="hmda-download-import.html#cb1-3" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="hmda-download-import.html#cb1-4" tabindex="-1"></a><span class="co"># Display the first few rows of the data</span></span>
+<span id="cb1-5"><a href="hmda-download-import.html#cb1-5" tabindex="-1"></a><span class="fu">head</span>(data)</span></code></pre></div>
+<p>In this example, replace <strong><code>"downloads/state_NV.csv"</code></strong> with the actual path to your CSV file. The <strong><code>head()</code></strong> function is used to display the first few rows of the imported data.</p>
+<div id="details-on-read.csv" class="section level4 unnumbered hasAnchor">
+<h4>Details on <code>read.csv()</code><a href="hmda-download-import.html#details-on-read.csv" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>The <strong><code>read.csv()</code></strong> function is a simplified wrapper around <strong><code>read.table()</code></strong>, with pre-set arguments tailored for reading comma-separated files. Specifically, it sets the following default arguments:</p>
+<ul>
+<li><strong><code>sep = ","</code></strong> sets the field separator to a comma.</li>
+<li><strong><code>header = TRUE</code></strong> indicates that the first line of the file contains column names.</li>
+<li><strong><code>stringsAsFactors = default.stringsAsFactors()</code></strong> specifies whether character vectors should be converted to factors (default behavior depends on the R version).</li>
+</ul>
+<p>Here’s an equivalent way to use <code>read.table()</code> to achieve the same result as <code>read.csv()</code>:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="hmda-download-import.html#cb2-1" tabindex="-1"></a><span class="co"># Importing a CSV file using read.table()</span></span>
+<span id="cb2-2"><a href="hmda-download-import.html#cb2-2" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">read.table</span>(<span class="st">&quot;downloads/state_NV.csv&quot;</span>, <span class="at">sep =</span> <span class="st">&quot;,&quot;</span>, <span class="at">header =</span> <span class="cn">TRUE</span>, <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb2-3"><a href="hmda-download-import.html#cb2-3" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="hmda-download-import.html#cb2-4" tabindex="-1"></a><span class="co"># Display the first few rows of the data</span></span>
+<span id="cb2-5"><a href="hmda-download-import.html#cb2-5" tabindex="-1"></a><span class="fu">head</span>(data)</span></code></pre></div>
+<p>As you can see, read.csv() simplifies the process by encapsulating these common settings, making it easier and quicker to read CSV files.</p>
+</div>
+</div>
+<div id="using-read_csv-from-the-readr-package" class="section level3 hasAnchor" number="2.3.2">
+<h3><span class="header-section-number">2.3.2</span> Using <code>read_csv()</code> from the <code>readr</code> Package<a href="hmda-download-import.html#using-read_csv-from-the-readr-package" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The <strong><code>readr</code></strong> package provides a faster and more convenient way to import CSV files with the <strong><code>read_csv()</code></strong> function. First, you need to install and load the <strong><code>readr</code></strong> package:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="hmda-download-import.html#cb3-1" tabindex="-1"></a><span class="co"># Install the readr package</span></span>
+<span id="cb3-2"><a href="hmda-download-import.html#cb3-2" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;readr&quot;</span>)</span></code></pre></div>
+<p>Once the package is installed, you can use the <strong><code>read_csv()</code></strong> function to import the CSV file:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="hmda-download-import.html#cb4-1" tabindex="-1"></a><span class="co"># Load the readr package</span></span>
+<span id="cb4-2"><a href="hmda-download-import.html#cb4-2" tabindex="-1"></a><span class="fu">library</span>(readr)</span>
+<span id="cb4-3"><a href="hmda-download-import.html#cb4-3" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="hmda-download-import.html#cb4-4" tabindex="-1"></a><span class="co"># Importing a CSV file using read_csv()</span></span>
+<span id="cb4-5"><a href="hmda-download-import.html#cb4-5" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;downloads/state_NV.csv&quot;</span>)</span>
+<span id="cb4-6"><a href="hmda-download-import.html#cb4-6" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="hmda-download-import.html#cb4-7" tabindex="-1"></a><span class="co"># Display the first few rows of the data</span></span>
+<span id="cb4-8"><a href="hmda-download-import.html#cb4-8" tabindex="-1"></a><span class="fu">head</span>(data,<span class="dv">50</span>)</span></code></pre></div>
+<p>Similar to <strong><code>read.csv()</code></strong>, replace <strong><code>"downloads/state_NV.csv"</code></strong> with the actual path to your CSV file. The <strong><code>read_csv()</code></strong> function also automatically parses the data types of the columns, which can save you time and effort, <span style="color:red;">you need to be carefull as sometimes read_csv() may guess the column type wrong!</span></p>
+</div>
+<div id="details-on-read_csv" class="section level3 unnumbered hasAnchor">
+<h3>Details on <code>read_csv()</code><a href="hmda-download-import.html#details-on-read_csv" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The <strong><code>read_csv()</code></strong> function is a special case of the more general <strong><code>read_delim()</code></strong> function from the <strong><code>readr</code></strong> package, with default parameters set for reading comma-separated files. Specifically, it sets the following default arguments:</p>
+<ul>
+<li><strong><code>delim = ","</code></strong> sets the field separator to a comma.</li>
+<li><strong><code>col_types = cols()</code></strong> automatically detects the data types of columns unless specified otherwise.</li>
+<li><strong><code>trim_ws = TRUE</code></strong> indicates that whitespace should be trimmed from the beginning and end of each field.</li>
+</ul>
+<p>These defaults make <strong><code>read_csv()</code></strong> particularly convenient for reading CSV files without needing to manually specify these common options.</p>
+<p>Here’s an equivalent way to use <strong><code>read_delim()</code></strong> to achieve the same result as <strong><code>read_csv()</code></strong>:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="hmda-download-import.html#cb5-1" tabindex="-1"></a><span class="co"># Importing a CSV file using read_delim()</span></span>
+<span id="cb5-2"><a href="hmda-download-import.html#cb5-2" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">read_delim</span>(</span>
+<span id="cb5-3"><a href="hmda-download-import.html#cb5-3" tabindex="-1"></a>  <span class="st">&quot;downloads/state_NV.csv&quot;</span>,</span>
+<span id="cb5-4"><a href="hmda-download-import.html#cb5-4" tabindex="-1"></a>  <span class="at">delim =</span> <span class="st">&quot;,&quot;</span>,</span>
+<span id="cb5-5"><a href="hmda-download-import.html#cb5-5" tabindex="-1"></a>  <span class="at">col_types =</span> <span class="fu">cols</span>(),</span>
+<span id="cb5-6"><a href="hmda-download-import.html#cb5-6" tabindex="-1"></a>  <span class="at">trim_ws =</span> <span class="cn">TRUE</span></span>
+<span id="cb5-7"><a href="hmda-download-import.html#cb5-7" tabindex="-1"></a>)</span>
+<span id="cb5-8"><a href="hmda-download-import.html#cb5-8" tabindex="-1"></a></span>
+<span id="cb5-9"><a href="hmda-download-import.html#cb5-9" tabindex="-1"></a><span class="co"># Display the first few rows of the data</span></span>
+<span id="cb5-10"><a href="hmda-download-import.html#cb5-10" tabindex="-1"></a><span class="fu">head</span>(data, <span class="dv">50</span>)</span></code></pre></div>
+<p>As you can see, <strong>read_csv()</strong> simplifies the process by encapsulating these common settings, making it easier and quicker to read CSV files.</p>
+<div id="handling-parsing-issues" class="section level4 hasAnchor" number="2.3.2.1">
+<h4><span class="header-section-number">2.3.2.1</span> Handling Parsing Issues<a href="hmda-download-import.html#handling-parsing-issues" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>If you been following along, when you ran <strong><code>data &lt;- read_csv("downloads/state_NV.csv")</code></strong> you have probably encountered a <span style="color:orange">warning</span> similar to:</p>
+<p><img src="images/clipboard-3586307356.png" /></p>
+<p>The warning is letting us know that <strong><code>read_csv()</code></strong> ran into some parsing issues, and its recommending that we run <strong><code>problems()</code></strong> to see what the issues are. Let’s run <strong><code>problems()</code></strong> to see what the issues are:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="hmda-download-import.html#cb6-1" tabindex="-1"></a><span class="co"># Display the problems encountered during parsing</span></span>
+<span id="cb6-2"><a href="hmda-download-import.html#cb6-2" tabindex="-1"></a><span class="fu">problems</span>(data)</span></code></pre></div>
+<p><img src="images/clipboard-1927136276.png" /></p>
+<p>The <strong><code>problems()</code></strong> function displays the issues encountered during parsing. The <strong>‘row’</strong> column indicates the row number where the issue occurred, and the <strong>‘col’</strong> column indicates the column number. The <strong>‘expected’</strong> column shows the expected data type, and the <strong>‘actual’</strong> column shows the actual value.</p>
+<p>There are two main ways to handle parsing issues in <code>read_csv()</code>:</p>
+<ul>
+<li><strong>Manually Specify Column Types</strong>: You can manually specify the column types using the <code>col_types</code> argument in <strong><code>read_csv()</code></strong>. This approach is useful when you know the data types of the columns in advance, but might be cumbersome for large datasets with many columns.</li>
+<li><strong>Increase the <code>guess_max</code> Argument</strong>: You can increase the <code>guess_max</code> argument in <code>read_csv()</code> to allow the function to guess the column types for a larger number of rows. This approach isn’t perfect, but this way you can avoid having to manually specify the column types.</li>
+</ul>
+<p>Below is the code to manually specify the column types:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="hmda-download-import.html#cb7-1" tabindex="-1"></a><span class="co"># Manually specify the column types</span></span>
+<span id="cb7-2"><a href="hmda-download-import.html#cb7-2" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(</span>
+<span id="cb7-3"><a href="hmda-download-import.html#cb7-3" tabindex="-1"></a>  <span class="st">&quot;C:</span><span class="sc">\\</span><span class="st">Users</span><span class="sc">\\</span><span class="st">anton</span><span class="sc">\\</span><span class="st">Desktop</span><span class="sc">\\</span><span class="st">Code Projects</span><span class="sc">\\</span><span class="st">Using R to Work with Data</span><span class="sc">\\</span><span class="st">downloads</span><span class="sc">\\</span><span class="st">state_NV.csv&quot;</span>,</span>
+<span id="cb7-4"><a href="hmda-download-import.html#cb7-4" tabindex="-1"></a>  <span class="at">col_types =</span> <span class="fu">cols</span>(</span>
+<span id="cb7-5"><a href="hmda-download-import.html#cb7-5" tabindex="-1"></a>    <span class="at">loan_amount =</span> <span class="fu">col_double</span>(),</span>
+<span id="cb7-6"><a href="hmda-download-import.html#cb7-6" tabindex="-1"></a>    <span class="at">total_units =</span> <span class="fu">col_character</span>(),</span>
+<span id="cb7-7"><a href="hmda-download-import.html#cb7-7" tabindex="-1"></a>    <span class="at">.default =</span> <span class="fu">col_character</span>(),</span>
+<span id="cb7-8"><a href="hmda-download-import.html#cb7-8" tabindex="-1"></a>  ),</span>
+<span id="cb7-9"><a href="hmda-download-import.html#cb7-9" tabindex="-1"></a>  <span class="at">na =</span> <span class="fu">c</span>(<span class="st">&quot;&quot;</span>, <span class="st">&quot;NA&quot;</span>) <span class="co"># This is to specify what is considered a missing value</span></span>
+<span id="cb7-10"><a href="hmda-download-import.html#cb7-10" tabindex="-1"></a>  )</span></code></pre></div>
+</div>
+</div>
+<div id="handling-file-paths" class="section level3 hasAnchor" number="2.3.3">
+<h3><span class="header-section-number">2.3.3</span> Handling File Paths<a href="hmda-download-import.html#handling-file-paths" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>When specifying the path to your CSV file, it’s important to ensure that the path is correct. You can use absolute paths or relative paths. Here are some examples:</p>
+<ul>
+<li><strong>Absolute Path</strong>: An absolute path specifies the complete path from the root directory. For example, on Windows: <code>"C:/Users/YourName/Documents/data.csv"</code>, or on macOS/Linux: <code>"/Users/YourName/Documents/data.csv"</code>.</li>
+<li><strong>Relative Path</strong>: A relative path specifies the path relative to your current working directory. For example, if your current working directory is <code>"C:/Users/YourName/Documents"</code>, you can use <code>"data.csv"</code>.</li>
+</ul>
+<p>You can check your current working directory in R using the <code>getwd()</code> function:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="hmda-download-import.html#cb8-1" tabindex="-1"></a><span class="co"># Get the current working directory</span></span>
+<span id="cb8-2"><a href="hmda-download-import.html#cb8-2" tabindex="-1"></a><span class="fu">getwd</span>()</span></code></pre></div>
+<p>You can also set the working directory using the <code>setwd()</code> function:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="hmda-download-import.html#cb9-1" tabindex="-1"></a><span class="co"># Set the working directory</span></span>
+<span id="cb9-2"><a href="hmda-download-import.html#cb9-2" tabindex="-1"></a><span class="fu">setwd</span>(<span class="st">&quot;path/to/your/directory&quot;</span>)</span></code></pre></div>
+</div>
+<div id="common-issues-and-solutions" class="section level3 hasAnchor" number="2.3.4">
+<h3><span class="header-section-number">2.3.4</span> Common Issues and Solutions<a href="hmda-download-import.html#common-issues-and-solutions" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li><strong>File Not Found Error</strong>: Ensure the file path is correct and the file exists at the specified location.</li>
+<li><strong>Incorrect Data Parsing</strong>: If columns are not parsed correctly, you can specify the column types manually using the <code>col_types</code> argument in <code>read_csv()</code>.</li>
+<li><strong>Missing Values</strong>: R automatically handles missing values as <code>NA</code>. You can customize the handling of missing values using the <code>na</code> argument.</li>
+</ul>
+<p>By understanding how to import CSV files in R, you can easily load your data and start your data analysis process. In the next sections, we will explore how to clean and manipulate the imported data to prepare it for analysis.</p>
+<div style="page-break-after: always;"></div>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="data-importing.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="data-in-chunks.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/USERNAME/REPO/edit/BRANCH/chapter2/hmda-download-import.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["_main.pdf", "_main.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "section",
+"scroll_highlight": true
+}
+});
+});
+</script>
+
+</body>
+
+</html>

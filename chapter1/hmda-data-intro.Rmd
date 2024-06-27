@@ -1,0 +1,39 @@
+---
+title: "Data Analysis in R: A Basic Guide"
+author: "Antonio Solorio"
+date: "`r Sys.Date()`"
+site: bookdown::bookdown_site
+documentclass: book
+bibliography: [book.bib, packages.bib]
+# url: your book url like https://bookdown.org/yihui/bookdown
+# cover-image: path to the social sharing image like images/cover.jpg
+description: |
+  This book provides a comprehensive guide to data analysis using R, with a focus on the Home Mortgage Disclosure Act (HMDA) data as a practical example. It covers the essential techniques and tools needed to perform effective data analysis, offering step-by-step instructions and detailed explanations. The HTML output format for this book is bookdown::gitbook, as set in the _output.yml file.
+link-citations: yes
+github-repo: rstudio/bookdown-demo
+---
+
+# What is HMDA Data?
+
+The Home Mortgage Disclosure Act (HMDA) was enacted by Congress in 1975 and is implemented by the Consumer Financial Protection Bureau (CFPB). The HMDA requires many financial institutions to maintain, report, and publicly disclose information about mortgages. This information is crucial for understanding and monitoring trends in housing finance, and for ensuring compliance with fair lending laws. [^1]
+
+HMDA data includes information on loan applications, loan originations, loan purchases, and denied applications. The data encompasses various aspects such as:
+
+- **Loan Characteristics**: Information about the loan amount, type of loan, and purpose of the loan (e.g., home purchase, refinance).
+- **Applicant Information**: Demographic details of the loan applicants including race, ethnicity, gender, and income.
+- **Property Information**: Data about the location and type of property being financed.
+- **Action Taken**: The outcome of the loan application, whether it was approved, denied, or withdrawn.
+
+## Why Use HMDA Data?
+
+While this book is focused on teaching data analysis in R, the HMDA dataset serves as an excellent example for several reasons:
+
+1. **Real-World Relevance**: HMDA data provides a real-world context that makes the learning process more engaging and practical.
+2. **Comprehensive Dataset**: The dataset includes a wide range of variables, making it suitable for demonstrating various data analysis techniques.
+3. **Publicly Available**: HMDA data is publicly accessible, allowing you to follow along with the examples and practice on your own.
+
+By the end of this book, you will not only have a solid understanding of data analysis in R but also be equipped with practical skills that can be applied to other datasets and domains.
+
+Let's get started on this journey of exploring data analysis with R, using the HMDA data as our guide!
+
+[^1]: If you would like to learn more about HMDA data please see: <https://www.consumerfinance.gov/data-research/hmda/>
