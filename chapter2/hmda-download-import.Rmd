@@ -121,7 +121,7 @@ Below is the code to manually specify the column types:
 ``` r
 # Manually specify the column types
 data <- read_csv(
-  "C:\\Users\\anton\\Desktop\\Code Projects\\Using R to Work with Data\\downloads\\state_NV.csv",
+  "downloads/state_NV.csv",
   col_types = cols(
     loan_amount = col_double(),
     total_units = col_character(),
