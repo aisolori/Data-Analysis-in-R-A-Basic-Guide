@@ -1,0 +1,79 @@
+# Data Visualization
+
+## Data Visualization Using `ggplot2`
+
+### Introduction {.unlisted .unumbered}
+
+Data visualization is a crucial step in data analysis as it helps in understanding the underlying patterns, trends, and relationships in the data. In this chapter, we will explore how to create various types of visualizations using the ggplot2 package in R, focusing on HMDA (Home Mortgage Disclosure Act) data.
+
+### Getting Started with ggplot2
+
+First, ensure you have ggplot2 installed. If not, you can install it using:
+
+``` r
+install.packages("ggplot2")
+```
+
+This will download the latest version of `ggplot2` from the CRAN repository.
+
+Load the package along with with the HMDA data:
+
+``` r
+library(ggplot2)
+library(dplyr)  # For data manipulation
+options(scipen = 999) # To prevent R from printing in scientific notation
+
+# Load HMDA data
+hmda_data <- read_csv("downloads/state_NV.csv", guess_max = Inf)
+```
+
+Once we have the data loaded, we proceed to do some preliminary prep and cleanup. The schema for the different data fields avaialable can be found at: <https://ffiec.cfpb.gov/documentation/publications/modified-lar/modified-lar-schema>
+
+``` r
+# Filter and prep HMDA data for plotting
+filtered_hmda_data <- hmda_data%>%
+  filter(
+    # Filter for only originated transactions
+    action_taken == 1,
+    # Filter for only for home purchases
+    loan_purpose == 1,
+    # Filter for only primary homss
+    occupancy_type == 1,
+    # Filter for primary liens
+    lien_status == 1,
+    # Filter for single unit homes
+    total_units == "1",
+    # Filter propery value 
+    !property_value %in% c("Exempt", NA),
+    # Filter income for values below 250 but above 0
+    income <=250 & income>0,
+    # Filter for Clark County
+    county_code == "32003"
+    
+  )%>%
+  mutate(
+    property_value = as.numeric(property_value),
+    loan_type = as.character(loan_type))%>%
+    # Only keep property values under $1 million
+  filter(property_value<1000000)
+```
+
+### Basic Plot Structure {.unlisted .unumbered}
+
+The structure of a ggplot2 plot is built around the **`ggplot()`** function and the **`+`** operator to add layers. Here's a simple example of a scatter pplot:
+
+``` r
+ggplot(data = filtered_hmda_data, aes(x = income, y = property_value))+
+  geom_point()
+```
+
+![](images/basic_plot_structure_img_1.PNG)
+
+In this example, `ggplot()` is the initial function call to create a new plot. The function takes the following primary arguments:
+
+-   **`data`**: This argument specifies the dataset to be used in the plot. In this case, **`filtered_hmda_data`** is the dataset containing the HMDA data.
+-   **`aes()`**: Short for aesthetics, this function defines the mapping of variables in your data to visual properties (aesthetics) such as x and y axes, colors, shapes, and sizes of points or lines. In the example, **`x = income`** maps the **`income`** variable to the x-axis, and **`y = property_value`** maps the **`property_value`** variable to the y-axis.
+
+After the initial **`ggplot()`** function, we add layers to the plot using the **`+`** operator. Each layer represents a specific component of the plot, such as points, lines, bars, etc.
+
+-   **`geom_point()`**: This is a geometric object (geom) layer that adds a scatter plot layer to the plot. Each point represents an observation in the dataset.

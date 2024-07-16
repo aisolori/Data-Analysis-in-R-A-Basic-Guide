@@ -233,47 +233,49 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="getting-started-with-ggplot2" class="section level3 hasAnchor" number="4.1.2">
 <h3><span class="header-section-number">4.1.2</span> Getting Started with ggplot2<a href="data-visualization-ggplot.html#getting-started-with-ggplot2" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>First, ensure you have ggplot2 installed. If not, you can install it using:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="data-visualization-ggplot.html#cb1-1" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;ggplot2&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="data-visualization-ggplot.html#cb20-1" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;ggplot2&quot;</span>)</span></code></pre></div>
 <p>This will download the latest version of <code>ggplot2</code> from the CRAN repository.</p>
 <p>Load the package along with with the HMDA data:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="data-visualization-ggplot.html#cb2-1" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb2-2"><a href="data-visualization-ggplot.html#cb2-2" tabindex="-1"></a><span class="fu">library</span>(dplyr)  <span class="co"># For data manipulation</span></span>
-<span id="cb2-3"><a href="data-visualization-ggplot.html#cb2-3" tabindex="-1"></a><span class="fu">options</span>(<span class="at">scipen =</span> <span class="dv">999</span>) <span class="co"># To prevent R from printing in scientific notation</span></span>
-<span id="cb2-4"><a href="data-visualization-ggplot.html#cb2-4" tabindex="-1"></a></span>
-<span id="cb2-5"><a href="data-visualization-ggplot.html#cb2-5" tabindex="-1"></a><span class="co"># Load HMDA data</span></span>
-<span id="cb2-6"><a href="data-visualization-ggplot.html#cb2-6" tabindex="-1"></a>hmda_data <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;downloads/state_NV.csv&quot;</span>, <span class="at">guess_max =</span> <span class="cn">Inf</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="data-visualization-ggplot.html#cb21-1" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb21-2"><a href="data-visualization-ggplot.html#cb21-2" tabindex="-1"></a><span class="fu">library</span>(dplyr)  <span class="co"># For data manipulation</span></span>
+<span id="cb21-3"><a href="data-visualization-ggplot.html#cb21-3" tabindex="-1"></a><span class="fu">options</span>(<span class="at">scipen =</span> <span class="dv">999</span>) <span class="co"># To prevent R from printing in scientific notation</span></span>
+<span id="cb21-4"><a href="data-visualization-ggplot.html#cb21-4" tabindex="-1"></a></span>
+<span id="cb21-5"><a href="data-visualization-ggplot.html#cb21-5" tabindex="-1"></a><span class="co"># Load HMDA data</span></span>
+<span id="cb21-6"><a href="data-visualization-ggplot.html#cb21-6" tabindex="-1"></a>hmda_data <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;downloads/state_NV.csv&quot;</span>, <span class="at">guess_max =</span> <span class="cn">Inf</span>)</span></code></pre></div>
 <p>Once we have the data loaded, we proceed to do some preliminary prep and cleanup. The schema for the different data fields avaialable can be found at: <a href="https://ffiec.cfpb.gov/documentation/publications/modified-lar/modified-lar-schema" class="uri">https://ffiec.cfpb.gov/documentation/publications/modified-lar/modified-lar-schema</a></p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="data-visualization-ggplot.html#cb3-1" tabindex="-1"></a><span class="co"># Filter and prep HMDA data for plotting</span></span>
-<span id="cb3-2"><a href="data-visualization-ggplot.html#cb3-2" tabindex="-1"></a>filtered_hmda_data <span class="ot">&lt;-</span> hmda_data<span class="sc">%&gt;%</span></span>
-<span id="cb3-3"><a href="data-visualization-ggplot.html#cb3-3" tabindex="-1"></a>  <span class="fu">filter</span>(</span>
-<span id="cb3-4"><a href="data-visualization-ggplot.html#cb3-4" tabindex="-1"></a>    <span class="co"># Filter for only originated transactions</span></span>
-<span id="cb3-5"><a href="data-visualization-ggplot.html#cb3-5" tabindex="-1"></a>    action_taken <span class="sc">==</span> <span class="dv">1</span>,</span>
-<span id="cb3-6"><a href="data-visualization-ggplot.html#cb3-6" tabindex="-1"></a>    <span class="co"># Filter for only for home purchases</span></span>
-<span id="cb3-7"><a href="data-visualization-ggplot.html#cb3-7" tabindex="-1"></a>    loan_purpose <span class="sc">==</span> <span class="dv">1</span>,</span>
-<span id="cb3-8"><a href="data-visualization-ggplot.html#cb3-8" tabindex="-1"></a>    <span class="co"># Filter for only primary homss</span></span>
-<span id="cb3-9"><a href="data-visualization-ggplot.html#cb3-9" tabindex="-1"></a>    occupancy_type <span class="sc">==</span> <span class="dv">1</span>,</span>
-<span id="cb3-10"><a href="data-visualization-ggplot.html#cb3-10" tabindex="-1"></a>    <span class="co"># Filter for primary liens</span></span>
-<span id="cb3-11"><a href="data-visualization-ggplot.html#cb3-11" tabindex="-1"></a>    lien_status <span class="sc">==</span> <span class="dv">1</span>,</span>
-<span id="cb3-12"><a href="data-visualization-ggplot.html#cb3-12" tabindex="-1"></a>    <span class="co"># Filter for single unit homes</span></span>
-<span id="cb3-13"><a href="data-visualization-ggplot.html#cb3-13" tabindex="-1"></a>    total_units <span class="sc">==</span> <span class="st">&quot;1&quot;</span>,</span>
-<span id="cb3-14"><a href="data-visualization-ggplot.html#cb3-14" tabindex="-1"></a>    <span class="co"># Filter propery value </span></span>
-<span id="cb3-15"><a href="data-visualization-ggplot.html#cb3-15" tabindex="-1"></a>    <span class="sc">!</span>property_value <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;Exempt&quot;</span>, <span class="cn">NA</span>),</span>
-<span id="cb3-16"><a href="data-visualization-ggplot.html#cb3-16" tabindex="-1"></a>    <span class="co"># Filter income for values below 250 but above 0</span></span>
-<span id="cb3-17"><a href="data-visualization-ggplot.html#cb3-17" tabindex="-1"></a>    income <span class="sc">&lt;=</span><span class="dv">250</span> <span class="sc">&amp;</span> income<span class="sc">&gt;</span><span class="dv">0</span>,</span>
-<span id="cb3-18"><a href="data-visualization-ggplot.html#cb3-18" tabindex="-1"></a>    <span class="co"># Filter for Clark County</span></span>
-<span id="cb3-19"><a href="data-visualization-ggplot.html#cb3-19" tabindex="-1"></a>    county_code <span class="sc">==</span> <span class="st">&quot;32003&quot;</span></span>
-<span id="cb3-20"><a href="data-visualization-ggplot.html#cb3-20" tabindex="-1"></a>    </span>
-<span id="cb3-21"><a href="data-visualization-ggplot.html#cb3-21" tabindex="-1"></a>  )<span class="sc">%&gt;%</span></span>
-<span id="cb3-22"><a href="data-visualization-ggplot.html#cb3-22" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb3-23"><a href="data-visualization-ggplot.html#cb3-23" tabindex="-1"></a>    <span class="at">property_value =</span> <span class="fu">as.numeric</span>(property_value),</span>
-<span id="cb3-24"><a href="data-visualization-ggplot.html#cb3-24" tabindex="-1"></a>    <span class="at">loan_type =</span> <span class="fu">as.character</span>(loan_type))<span class="sc">%&gt;%</span></span>
-<span id="cb3-25"><a href="data-visualization-ggplot.html#cb3-25" tabindex="-1"></a>  <span class="fu">filter</span>(property_value<span class="sc">&lt;</span><span class="dv">1000000</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="data-visualization-ggplot.html#cb22-1" tabindex="-1"></a><span class="co"># Filter and prep HMDA data for plotting</span></span>
+<span id="cb22-2"><a href="data-visualization-ggplot.html#cb22-2" tabindex="-1"></a>filtered_hmda_data <span class="ot">&lt;-</span> hmda_data<span class="sc">%&gt;%</span></span>
+<span id="cb22-3"><a href="data-visualization-ggplot.html#cb22-3" tabindex="-1"></a>  <span class="fu">filter</span>(</span>
+<span id="cb22-4"><a href="data-visualization-ggplot.html#cb22-4" tabindex="-1"></a>    <span class="co"># Filter for only originated transactions</span></span>
+<span id="cb22-5"><a href="data-visualization-ggplot.html#cb22-5" tabindex="-1"></a>    action_taken <span class="sc">==</span> <span class="dv">1</span>,</span>
+<span id="cb22-6"><a href="data-visualization-ggplot.html#cb22-6" tabindex="-1"></a>    <span class="co"># Filter for only for home purchases</span></span>
+<span id="cb22-7"><a href="data-visualization-ggplot.html#cb22-7" tabindex="-1"></a>    loan_purpose <span class="sc">==</span> <span class="dv">1</span>,</span>
+<span id="cb22-8"><a href="data-visualization-ggplot.html#cb22-8" tabindex="-1"></a>    <span class="co"># Filter for only primary homss</span></span>
+<span id="cb22-9"><a href="data-visualization-ggplot.html#cb22-9" tabindex="-1"></a>    occupancy_type <span class="sc">==</span> <span class="dv">1</span>,</span>
+<span id="cb22-10"><a href="data-visualization-ggplot.html#cb22-10" tabindex="-1"></a>    <span class="co"># Filter for primary liens</span></span>
+<span id="cb22-11"><a href="data-visualization-ggplot.html#cb22-11" tabindex="-1"></a>    lien_status <span class="sc">==</span> <span class="dv">1</span>,</span>
+<span id="cb22-12"><a href="data-visualization-ggplot.html#cb22-12" tabindex="-1"></a>    <span class="co"># Filter for single unit homes</span></span>
+<span id="cb22-13"><a href="data-visualization-ggplot.html#cb22-13" tabindex="-1"></a>    total_units <span class="sc">==</span> <span class="st">&quot;1&quot;</span>,</span>
+<span id="cb22-14"><a href="data-visualization-ggplot.html#cb22-14" tabindex="-1"></a>    <span class="co"># Filter propery value </span></span>
+<span id="cb22-15"><a href="data-visualization-ggplot.html#cb22-15" tabindex="-1"></a>    <span class="sc">!</span>property_value <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;Exempt&quot;</span>, <span class="cn">NA</span>),</span>
+<span id="cb22-16"><a href="data-visualization-ggplot.html#cb22-16" tabindex="-1"></a>    <span class="co"># Filter income for values below 250 but above 0</span></span>
+<span id="cb22-17"><a href="data-visualization-ggplot.html#cb22-17" tabindex="-1"></a>    income <span class="sc">&lt;=</span><span class="dv">250</span> <span class="sc">&amp;</span> income<span class="sc">&gt;</span><span class="dv">0</span>,</span>
+<span id="cb22-18"><a href="data-visualization-ggplot.html#cb22-18" tabindex="-1"></a>    <span class="co"># Filter for Clark County</span></span>
+<span id="cb22-19"><a href="data-visualization-ggplot.html#cb22-19" tabindex="-1"></a>    county_code <span class="sc">==</span> <span class="st">&quot;32003&quot;</span></span>
+<span id="cb22-20"><a href="data-visualization-ggplot.html#cb22-20" tabindex="-1"></a>    </span>
+<span id="cb22-21"><a href="data-visualization-ggplot.html#cb22-21" tabindex="-1"></a>  )<span class="sc">%&gt;%</span></span>
+<span id="cb22-22"><a href="data-visualization-ggplot.html#cb22-22" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb22-23"><a href="data-visualization-ggplot.html#cb22-23" tabindex="-1"></a>    <span class="at">property_value =</span> <span class="fu">as.numeric</span>(property_value),</span>
+<span id="cb22-24"><a href="data-visualization-ggplot.html#cb22-24" tabindex="-1"></a>    <span class="at">loan_type =</span> <span class="fu">as.character</span>(loan_type))<span class="sc">%&gt;%</span></span>
+<span id="cb22-25"><a href="data-visualization-ggplot.html#cb22-25" tabindex="-1"></a>    <span class="co"># Only keep property values under $1 million</span></span>
+<span id="cb22-26"><a href="data-visualization-ggplot.html#cb22-26" tabindex="-1"></a>  <span class="fu">filter</span>(property_value<span class="sc">&lt;</span><span class="dv">1000000</span>)</span></code></pre></div>
 </div>
 <div id="basic-plot-structure" class="section level3 unlisted unumbered hasAnchor" number="4.1.3">
 <h3><span class="header-section-number">4.1.3</span> Basic Plot Structure<a href="data-visualization-ggplot.html#basic-plot-structure" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>The structure of a ggplot2 plot is built around the <strong><code>ggplot()</code></strong> function and the <strong><code>+</code></strong> operator to add layers. Here’s a simple example of a scatter pplot:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="data-visualization-ggplot.html#cb4-1" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> filtered_hmda_data, <span class="fu">aes</span>(<span class="at">x =</span> income, <span class="at">y =</span> property_value))<span class="sc">+</span></span>
-<span id="cb4-2"><a href="data-visualization-ggplot.html#cb4-2" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="data-visualization-ggplot.html#cb23-1" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> filtered_hmda_data, <span class="fu">aes</span>(<span class="at">x =</span> income, <span class="at">y =</span> property_value))<span class="sc">+</span></span>
+<span id="cb23-2"><a href="data-visualization-ggplot.html#cb23-2" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code></pre></div>
+<p><img src="images/basic_plot_structure_img_1.PNG" /></p>
 <p>In this example, <code>ggplot()</code> is the initial function call to create a new plot. The function takes the following primary arguments:</p>
 <ul>
 <li><strong><code>data</code></strong>: This argument specifies the dataset to be used in the plot. In this case, <strong><code>filtered_hmda_data</code></strong> is the dataset containing the HMDA data.</li>
@@ -287,6 +289,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </div>
 </div>
+
 
 
 

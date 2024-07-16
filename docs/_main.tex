@@ -820,6 +820,7 @@ Load the package along with with the HMDA data:
 \begin{Highlighting}[]
 \FunctionTok{library}\NormalTok{(ggplot2)}
 \FunctionTok{library}\NormalTok{(dplyr)  }\CommentTok{\# For data manipulation}
+\FunctionTok{options}\NormalTok{(}\AttributeTok{scipen =} \DecValTok{999}\NormalTok{) }\CommentTok{\# To prevent R from printing in scientific notation}
 
 \CommentTok{\# Load HMDA data}
 \NormalTok{hmda\_data }\OtherTok{\textless{}{-}} \FunctionTok{read\_csv}\NormalTok{(}\StringTok{"downloads/state\_NV.csv"}\NormalTok{, }\AttributeTok{guess\_max =} \ConstantTok{Inf}\NormalTok{)}
@@ -854,6 +855,7 @@ Once we have the data loaded, we proceed to do some preliminary prep and cleanup
   \FunctionTok{mutate}\NormalTok{(}
     \AttributeTok{property\_value =} \FunctionTok{as.numeric}\NormalTok{(property\_value),}
     \AttributeTok{loan\_type =} \FunctionTok{as.character}\NormalTok{(loan\_type))}\SpecialCharTok{\%\textgreater{}\%}
+    \CommentTok{\# Only keep property values under $1 million}
   \FunctionTok{filter}\NormalTok{(property\_value}\SpecialCharTok{\textless{}}\DecValTok{1000000}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
@@ -869,6 +871,8 @@ The structure of a ggplot2 plot is built around the \textbf{\texttt{ggplot()}} f
   \FunctionTok{geom\_point}\NormalTok{()}
 \end{Highlighting}
 \end{Shaded}
+
+\includegraphics{images/basic_plot_structure_img_1.PNG}
 
 In this example, \texttt{ggplot()} is the initial function call to create a new plot. The function takes the following primary arguments:
 
