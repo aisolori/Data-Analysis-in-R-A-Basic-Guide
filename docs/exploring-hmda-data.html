@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>3.1 Exploring and Cleaning HMDA Data | Data Analysis in R: A Basic Guide</title>
+  <title>3.1 Exploring and Cleaning the Data Structure | Data Analysis in R: A Basic Guide</title>
   <meta name="description" content="This book provides a basic guide to data analysis using R, with a focus on the Home Mortgage Disclosure Act (HMDA) data as a practical example. It covers the essential techniques and tools needed to perform effective data analysis, offering step-by-step instructions and detailed explanations. The HTML output format for this book is bookdown::gitbook, as set in the _output.yml file." />
   <meta name="generator" content="bookdown 0.35 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="3.1 Exploring and Cleaning HMDA Data | Data Analysis in R: A Basic Guide" />
+  <meta property="og:title" content="3.1 Exploring and Cleaning the Data Structure | Data Analysis in R: A Basic Guide" />
   <meta property="og:type" content="book" />
   
   <meta property="og:description" content="This book provides a basic guide to data analysis using R, with a focus on the Home Mortgage Disclosure Act (HMDA) data as a practical example. It covers the essential techniques and tools needed to perform effective data analysis, offering step-by-step instructions and detailed explanations. The HTML output format for this book is bookdown::gitbook, as set in the _output.yml file." />
   <meta name="github-repo" content="aisolori/Data-Analysis-in-R-A-Basic-Guide" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="3.1 Exploring and Cleaning HMDA Data | Data Analysis in R: A Basic Guide" />
+  <meta name="twitter:title" content="3.1 Exploring and Cleaning the Data Structure | Data Analysis in R: A Basic Guide" />
   
   <meta name="twitter:description" content="This book provides a basic guide to data analysis using R, with a focus on the Home Mortgage Disclosure Act (HMDA) data as a practical example. It covers the essential techniques and tools needed to perform effective data analysis, offering step-by-step instructions and detailed explanations. The HTML output format for this book is bookdown::gitbook, as set in the _output.yml file." />
   
@@ -23,7 +23,7 @@
 <meta name="author" content="Antonio Solorio" />
 
 
-<meta name="date" content="2024-06-27" />
+<meta name="date" content="2024-07-15" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -173,7 +173,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="3" data-path="data-exploration-and-cleaning.html"><a href="data-exploration-and-cleaning.html"><i class="fa fa-check"></i><b>3</b> Data Exploration and Cleaning</a>
 <ul>
-<li class="chapter" data-level="3.1" data-path="exploring-hmda-data.html"><a href="exploring-hmda-data.html"><i class="fa fa-check"></i><b>3.1</b> Exploring and Cleaning HMDA Data</a>
+<li class="chapter" data-level="3.1" data-path="exploring-hmda-data.html"><a href="exploring-hmda-data.html"><i class="fa fa-check"></i><b>3.1</b> Exploring and Cleaning the Data Structure</a>
 <ul>
 <li class="chapter" data-level="3.1.1" data-path="exploring-hmda-data.html"><a href="exploring-hmda-data.html#exploring-data-structure"><i class="fa fa-check"></i><b>3.1.1</b> Exploring Data Structure</a></li>
 <li class="chapter" data-level="3.1.2" data-path="exploring-hmda-data.html"><a href="exploring-hmda-data.html#changing-data-types"><i class="fa fa-check"></i><b>3.1.2</b> Changing Data Types</a></li>
@@ -191,6 +191,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="03-na-values.html"><a href="03-na-values.html#installing-and-loading-the-visdat-package"><i class="fa fa-check"></i>Installing and Loading the <code>visdat</code> Package</a></li>
 <li class="chapter" data-level="" data-path="03-na-values.html"><a href="03-na-values.html#visualizing-na-values"><i class="fa fa-check"></i>Visualizing NA Values</a></li>
 </ul></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="data-visualization-ggplot.html"><a href="data-visualization-ggplot.html"><i class="fa fa-check"></i><b>4</b> Data Visualization</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="data-visualization-ggplot.html"><a href="data-visualization-ggplot.html#data-visualization-using-ggplot2"><i class="fa fa-check"></i><b>4.1</b> Data Visualization Using <code>ggplot2</code></a>
+<ul>
+<li class="chapter" data-level="4.1.1" data-path="data-visualization-ggplot.html"><a href="data-visualization-ggplot.html#introduction-1"><i class="fa fa-check"></i><b>4.1.1</b> Introduction</a></li>
+<li class="chapter" data-level="4.1.2" data-path="data-visualization-ggplot.html"><a href="data-visualization-ggplot.html#getting-started-with-ggplot2"><i class="fa fa-check"></i><b>4.1.2</b> Getting Started with ggplot2</a></li>
+<li class="chapter" data-level="4.1.3" data-path="data-visualization-ggplot.html"><a href="data-visualization-ggplot.html#basic-plot-structure"><i class="fa fa-check"></i><b>4.1.3</b> Basic Plot Structure</a></li>
 </ul></li>
 </ul></li>
 <li class="divider"></li>
@@ -213,9 +222,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="exploring-and-cleaning-hmda-data" class="section level2 hasAnchor" number="3.1">
-<h2><span class="header-section-number">3.1</span> Exploring and Cleaning HMDA Data<a href="exploring-hmda-data.html#exploring-and-cleaning-hmda-data" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>In this section we will utilize the HMDA Snapshot data for 2022 in Nevada to practice data exploration and cleaning. The data is available at the following link: <a href="https://ffiec.cfpb.gov/v2/data-browser-api/view/csv?states=NV&amp;years=2022" class="uri">https://ffiec.cfpb.gov/v2/data-browser-api/view/csv?states=NV&amp;years=2022</a>. We have downloaded the data and read it into R using the following:</p>
+<div id="exploring-and-cleaning-the-data-structure" class="section level2 hasAnchor" number="3.1">
+<h2><span class="header-section-number">3.1</span> Exploring and Cleaning the Data Structure<a href="exploring-hmda-data.html#exploring-and-cleaning-the-data-structure" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>In this section we will utilize the HMDA Snapshot data for 2022 in Nevada to practice data structure exploration and cleaning. The data is available at the following link: <a href="https://ffiec.cfpb.gov/v2/data-browser-api/view/csv?states=NV&amp;years=2022" class="uri">https://ffiec.cfpb.gov/v2/data-browser-api/view/csv?states=NV&amp;years=2022</a>. We have downloaded the data and read it into R using the following:</p>
+<p>When we</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="exploring-hmda-data.html#cb12-1" tabindex="-1"></a><span class="co"># Load the data</span></span>
 <span id="cb12-2"><a href="exploring-hmda-data.html#cb12-2" tabindex="-1"></a>hmda_data <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;downloads/state_NV.csv&quot;</span>, <span class="at">guess_max =</span> <span class="cn">Inf</span>)</span></code></pre></div>
 <p>Where <strong><code>"downloads/state_NV.csv"</code></strong> would be the path to the downloaded dataset.</p>

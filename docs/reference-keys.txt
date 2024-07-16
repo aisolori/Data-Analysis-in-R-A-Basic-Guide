@@ -13,10 +13,15 @@ handling-file-paths
 common-issues-and-solutions
 importing-data-in-chunks
 data-exploration-and-cleaning
-exploring-and-cleaning-hmda-data
+exploring-and-cleaning-the-data-structure
 exploring-data-structure
 changing-data-types
 using-across-to-change-data-types-for-multiple-columns
 spotting-and-handling-na-values
 common-ways-to-spot-na-values
 visualizing-na-values-using-visdat-package
+data-visualization
+data-visualization-using-ggplot2
+introduction-1
+getting-started-with-ggplot2
+basic-plot-structure
