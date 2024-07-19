@@ -24,4 +24,4 @@ data-visualization
 data-visualization-using-ggplot2
 introduction-1
 getting-started-with-ggplot2
-basic-plot-structure
+creating-basic-plot-types-with-ggplot2

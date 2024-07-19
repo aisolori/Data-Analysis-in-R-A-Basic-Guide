@@ -120,7 +120,7 @@
 
 \title{Data Analysis in R: A Basic Guide}
 \author{Antonio Solorio}
-\date{2024-07-15}
+\date{2024-07-19}
 
 \begin{document}
 \maketitle
@@ -854,16 +854,22 @@ Once we have the data loaded, we proceed to do some preliminary prep and cleanup
 \NormalTok{  )}\SpecialCharTok{\%\textgreater{}\%}
   \FunctionTok{mutate}\NormalTok{(}
     \AttributeTok{property\_value =} \FunctionTok{as.numeric}\NormalTok{(property\_value),}
-    \AttributeTok{loan\_type =} \FunctionTok{as.character}\NormalTok{(loan\_type))}\SpecialCharTok{\%\textgreater{}\%}
+    \CommentTok{\# Assigning labels for each loan\_type}
+    \AttributeTok{loan\_type =} \FunctionTok{case\_when}\NormalTok{(}
+\NormalTok{      loan\_type }\SpecialCharTok{==} \DecValTok{1} \SpecialCharTok{\textasciitilde{}} \StringTok{"Conventional"}\NormalTok{,}
+\NormalTok{      loan\_type }\SpecialCharTok{==} \DecValTok{2} \SpecialCharTok{\textasciitilde{}} \StringTok{"FHA"}\NormalTok{,}
+\NormalTok{      loan\_type }\SpecialCharTok{==} \DecValTok{3} \SpecialCharTok{\textasciitilde{}} \StringTok{"VA"}\NormalTok{,}
+\NormalTok{      loan\_type }\SpecialCharTok{==} \DecValTok{4} \SpecialCharTok{\textasciitilde{}} \StringTok{"USDA"}
+\NormalTok{    ))}\SpecialCharTok{\%\textgreater{}\%}
     \CommentTok{\# Only keep property values under $1 million}
   \FunctionTok{filter}\NormalTok{(property\_value}\SpecialCharTok{\textless{}}\DecValTok{1000000}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
 \hypertarget{basic-plot-structure}{%
-\subsection{Basic Plot Structure}\label{basic-plot-structure}}
+\subsection*{Basic Plot Structure}\label{basic-plot-structure}}
 
-The structure of a ggplot2 plot is built around the \textbf{\texttt{ggplot()}} function and the \textbf{\texttt{+}} operator to add layers. Here's a simple example of a scatter pplot:
+The structure of a ggplot2 plot is built around the \texttt{ggplot()}** function and the \texttt{+} operator to add layers. Here's a simple example of a scatter pplot:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -879,17 +885,157 @@ In this example, \texttt{ggplot()} is the initial function call to create a new 
 \begin{itemize}
 \tightlist
 \item
-  \textbf{\texttt{data}}: This argument specifies the dataset to be used in the plot. In this case, \textbf{\texttt{filtered\_hmda\_data}} is the dataset containing the HMDA data.
+  \texttt{data}: This argument specifies the dataset to be used in the plot. In this case, \texttt{filtered\_hmda\_data} is the dataset containing the HMDA data.
 \item
-  \textbf{\texttt{aes()}}: Short for aesthetics, this function defines the mapping of variables in your data to visual properties (aesthetics) such as x and y axes, colors, shapes, and sizes of points or lines. In the example, \textbf{\texttt{x\ =\ income}} maps the \textbf{\texttt{income}} variable to the x-axis, and \textbf{\texttt{y\ =\ property\_value}} maps the \textbf{\texttt{property\_value}} variable to the y-axis.
+  \texttt{aes()}: Short for aesthetics, this function defines the mapping of variables in your data to visual properties (aesthetics) such as x and y axes, colors, shapes, and sizes of points or lines. In the example, \texttt{x\ =\ income} maps the \texttt{income} variable to the x-axis, and \texttt{y\ =\ property\_value} maps the \texttt{property\_value} variable to the y-axis.
 \end{itemize}
 
-After the initial \textbf{\texttt{ggplot()}} function, we add layers to the plot using the \textbf{\texttt{+}} operator. Each layer represents a specific component of the plot, such as points, lines, bars, etc.
+After the initial \texttt{ggplot()} function, we add layers to the plot using the \textbf{\texttt{+}} operator. Each layer represents a specific component of the plot, such as points, lines, bars, etc.
 
 \begin{itemize}
 \tightlist
 \item
-  \textbf{\texttt{geom\_point()}}: This is a geometric object (geom) layer that adds a scatter plot layer to the plot. Each point represents an observation in the dataset.
+  \texttt{geom\_point()}: This is a geometric object (geom) layer that adds a scatter plot layer to the plot. Each point represents an observation in the dataset.
+\end{itemize}
+
+\hypertarget{creating-basic-plot-types-with-ggplot2}{%
+\subsection{Creating Basic Plot Types with ggplot2}\label{creating-basic-plot-types-with-ggplot2}}
+
+In this section, we will explore how to create various types of basic plots using ggplot2. We will start with histograms, bar plots, box plots, and line plots, each serving different purposes in data visualization.
+
+\hypertarget{histogram}{%
+\subsubsection*{Histogram}\label{histogram}}
+\addcontentsline{toc}{subsubsection}{Histogram}
+
+Histograms are useful for visualizing the distribution of a single continuous variable. For example, let's create a histogram to visualize the distribution of property values in our filtered HMDA data.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(}\AttributeTok{data =}\NormalTok{ filtered\_hmda\_data, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ property\_value)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_histogram}\NormalTok{(}\AttributeTok{binwidth =} \DecValTok{50000}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \StringTok{"Distribution of Property Values"}\NormalTok{,}
+       \AttributeTok{x =} \StringTok{"Property Value"}\NormalTok{,}
+       \AttributeTok{y =} \StringTok{"Count"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{images/histogram_plot.PNG}
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{geom\_histogram(binwidth\ =\ 50000,\ fill\ =\ "blue",\ color\ =\ "black")} adds a histogram layer with specified bin width, fill color, and border color.
+\item
+  \texttt{labs()} is used to add titles and labels to the plot.
+\end{itemize}
+
+\hypertarget{bar-plot}{%
+\subsubsection*{Bar Plot}\label{bar-plot}}
+\addcontentsline{toc}{subsubsection}{Bar Plot}
+
+Bar plots are useful for visualizing categorical data. Let's create a bar plot to visualize the count of loans by loan type.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(}\AttributeTok{data =}\NormalTok{ filtered\_hmda\_data, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ loan\_type)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_bar}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \StringTok{"Count of Loans by Loan Type"}\NormalTok{,}
+       \AttributeTok{x =} \StringTok{"Loan Type"}\NormalTok{,}
+       \AttributeTok{y =} \StringTok{"Count"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{ggplot(data\ =\ filtered\_hmda\_data,\ aes(x\ =\ loan\_type))}: This line initializes the ggplot object with the specified dataset (\texttt{filtered\_hmda\_data}) and maps the loan\_type column to the x-axis.
+\item
+  \texttt{geom\_bar()}: This adds a bar plot layer to the ggplot object. By default, geom\_bar() counts the number of occurrences of each loan\_type.
+\item
+  \texttt{labs(title\ =\ "Count\ of\ Loans\ by\ Loan\ Type",\ x\ =\ "Loan\ Type",\ y\ =\ "Count")}: This function is used to add titles and labels to the plot. It specifies the plot title and labels for the x and y axes..
+\end{itemize}
+
+\includegraphics{images/bar_plot.PNG}
+
+\hypertarget{box-plot}{%
+\subsubsection*{Box Plot}\label{box-plot}}
+\addcontentsline{toc}{subsubsection}{Box Plot}
+
+Box plots are useful for visualizing the distribution of a continuous variable across different categories. Let's create a box plot to visualize property values by loan type.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(}\AttributeTok{data =}\NormalTok{ filtered\_hmda\_data, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ loan\_type, }\AttributeTok{y =}\NormalTok{ property\_value)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_boxplot}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \StringTok{"Property Values by Loan Type"}\NormalTok{,}
+       \AttributeTok{x =} \StringTok{"Loan Type"}\NormalTok{,}
+       \AttributeTok{y =} \StringTok{"Property Value"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{images/box_plot.PNG}
+
+In this example:
+
+\begin{itemize}
+\item
+  \texttt{geom\_boxplot()} adds a box plot layer.
+\item
+  \texttt{labs()} is used to add titles and labels to the plot.
+\end{itemize}
+
+\hypertarget{line-plot}{%
+\subsubsection*{Line Plot}\label{line-plot}}
+\addcontentsline{toc}{subsubsection}{Line Plot}
+
+Line plots are useful for visualizing trends over time or ordered categories. Since the HMDA data we have been working with is not historical, we will use one of R's built-in datasets, AirPassengers, to demonstrate creating a line plot. The \texttt{AirPassengers} dataset contains monthly totals of international airline passengers from 1949 to 1960.
+
+First, let's load the dataset and take a look at its structure:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Load the AirPassengers dataset}
+\FunctionTok{data}\NormalTok{(}\StringTok{"AirPassengers"}\NormalTok{)}
+\NormalTok{airpassengers\_data }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}
+  \AttributeTok{Month =} \FunctionTok{time}\NormalTok{(AirPassengers),}
+  \AttributeTok{Passengers =} \FunctionTok{as.numeric}\NormalTok{(AirPassengers)}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{images/airplane_table_head.PNG}
+
+The \texttt{airpassengers\_data} dataframe has two columns: \texttt{Month} and \texttt{Passengers}.
+
+\hypertarget{creating-a-line-plot}{%
+\subsubsection*{Creating a Line Plot}\label{creating-a-line-plot}}
+
+Now, let's create a line plot to visualize the trend of airline passengers over time.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(}\AttributeTok{data =}\NormalTok{ airpassengers\_data, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ Month, }\AttributeTok{y =}\NormalTok{ Passengers)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_line}\NormalTok{(}\AttributeTok{color =} \StringTok{"blue"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \StringTok{"Trend of Airline Passengers Over Time"}\NormalTok{,}
+       \AttributeTok{x =} \StringTok{"Month"}\NormalTok{,}
+       \AttributeTok{y =} \StringTok{"Number of Passengers"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{theme\_minimal}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{images/line_graph_example.PNG}
+
+In this example:
+
+\begin{itemize}
+\item
+  \texttt{ggplot(data\ =\ airpassengers\_data,\ aes(x\ =\ Month,\ y\ =\ Passengers))}: Initializes the ggplot object with the \texttt{airpassengers\_data} dataset and maps the \texttt{Month} column to the x-axis and the \texttt{Passengers} column to the y-axis.
+\item
+  \texttt{geom\_line(color\ =\ "blue")}: Adds a line plot layer with the line color set to blue.
+\item
+  \texttt{labs(title\ =\ "Trend\ of\ Airline\ Passengers\ Over\ Time",\ x\ =\ "Month",\ y\ =\ "Number\ of\ Passengers")}: Adds a title and labels to the plot.
+\item
+  \texttt{theme\_minimal()}: Applies a minimalistic theme to the plot.
 \end{itemize}
 
   \bibliography{book.bib,packages.bib}

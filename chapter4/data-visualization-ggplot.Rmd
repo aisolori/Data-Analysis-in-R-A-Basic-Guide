@@ -53,14 +53,20 @@ filtered_hmda_data <- hmda_data%>%
   )%>%
   mutate(
     property_value = as.numeric(property_value),
-    loan_type = as.character(loan_type))%>%
+    # Assigning labels for each loan_type
+    loan_type = case_when(
+      loan_type == 1 ~ "Conventional",
+      loan_type == 2 ~ "FHA",
+      loan_type == 3 ~ "VA",
+      loan_type == 4 ~ "USDA"
+    ))%>%
     # Only keep property values under $1 million
   filter(property_value<1000000)
 ```
 
-### Basic Plot Structure {.unlisted .unumbered}
+### Basic Plot Structure {.unlisted .unnumbered}
 
-The structure of a ggplot2 plot is built around the **`ggplot()`** function and the **`+`** operator to add layers. Here's a simple example of a scatter pplot:
+The structure of a ggplot2 plot is built around the `ggplot()`\*\* function and the `+` operator to add layers. Here's a simple example of a scatter pplot:
 
 ``` r
 ggplot(data = filtered_hmda_data, aes(x = income, y = property_value))+
@@ -71,9 +77,112 @@ ggplot(data = filtered_hmda_data, aes(x = income, y = property_value))+
 
 In this example, `ggplot()` is the initial function call to create a new plot. The function takes the following primary arguments:
 
--   **`data`**: This argument specifies the dataset to be used in the plot. In this case, **`filtered_hmda_data`** is the dataset containing the HMDA data.
--   **`aes()`**: Short for aesthetics, this function defines the mapping of variables in your data to visual properties (aesthetics) such as x and y axes, colors, shapes, and sizes of points or lines. In the example, **`x = income`** maps the **`income`** variable to the x-axis, and **`y = property_value`** maps the **`property_value`** variable to the y-axis.
+-   `data`: This argument specifies the dataset to be used in the plot. In this case, `filtered_hmda_data` is the dataset containing the HMDA data.
+-   `aes()`: Short for aesthetics, this function defines the mapping of variables in your data to visual properties (aesthetics) such as x and y axes, colors, shapes, and sizes of points or lines. In the example, `x = income` maps the `income` variable to the x-axis, and `y = property_value` maps the `property_value` variable to the y-axis.
 
-After the initial **`ggplot()`** function, we add layers to the plot using the **`+`** operator. Each layer represents a specific component of the plot, such as points, lines, bars, etc.
+After the initial `ggplot()` function, we add layers to the plot using the **`+`** operator. Each layer represents a specific component of the plot, such as points, lines, bars, etc.
 
--   **`geom_point()`**: This is a geometric object (geom) layer that adds a scatter plot layer to the plot. Each point represents an observation in the dataset.
+-   `geom_point()`: This is a geometric object (geom) layer that adds a scatter plot layer to the plot. Each point represents an observation in the dataset.
+
+### Creating Basic Plot Types with ggplot2
+
+In this section, we will explore how to create various types of basic plots using ggplot2. We will start with histograms, bar plots, box plots, and line plots, each serving different purposes in data visualization.
+
+#### Histogram {.unnumbered}
+
+Histograms are useful for visualizing the distribution of a single continuous variable. For example, let's create a histogram to visualize the distribution of property values in our filtered HMDA data.
+
+``` r
+ggplot(data = filtered_hmda_data, aes(x = property_value)) +
+  geom_histogram(binwidth = 50000) +
+  labs(title = "Distribution of Property Values",
+       x = "Property Value",
+       y = "Count")
+```
+
+![](images/histogram_plot.PNG)
+
+-   `geom_histogram(binwidth = 50000, fill = "blue", color = "black")` adds a histogram layer with specified bin width, fill color, and border color.
+-   `labs()` is used to add titles and labels to the plot.
+
+#### Bar Plot {.unnumbered}
+
+Bar plots are useful for visualizing categorical data. Let's create a bar plot to visualize the count of loans by loan type.
+
+``` r
+ggplot(data = filtered_hmda_data, aes(x = loan_type)) +
+  geom_bar() +
+  labs(title = "Count of Loans by Loan Type",
+       x = "Loan Type",
+       y = "Count")
+```
+
+-   `ggplot(data = filtered_hmda_data, aes(x = loan_type))`: This line initializes the ggplot object with the specified dataset (`filtered_hmda_data`) and maps the loan_type column to the x-axis.
+-   `geom_bar()`: This adds a bar plot layer to the ggplot object. By default, geom_bar() counts the number of occurrences of each loan_type.
+-   `labs(title = "Count of Loans by Loan Type", x = "Loan Type", y = "Count")`: This function is used to add titles and labels to the plot. It specifies the plot title and labels for the x and y axes..
+
+![](images/bar_plot.PNG)
+
+#### Box Plot {.unnumbered}
+
+Box plots are useful for visualizing the distribution of a continuous variable across different categories. Let's create a box plot to visualize property values by loan type.
+
+``` r
+ggplot(data = filtered_hmda_data, aes(x = loan_type, y = property_value)) +
+  geom_boxplot() +
+  labs(title = "Property Values by Loan Type",
+       x = "Loan Type",
+       y = "Property Value")
+```
+
+![](images/box_plot.PNG)
+
+In this example:
+
+-   `geom_boxplot()` adds a box plot layer.
+
+-   `labs()` is used to add titles and labels to the plot.
+
+#### Line Plot {.unnumbered}
+
+Line plots are useful for visualizing trends over time or ordered categories. Since the HMDA data we have been working with is not historical, we will use one of R's built-in datasets, AirPassengers, to demonstrate creating a line plot. The `AirPassengers` dataset contains monthly totals of international airline passengers from 1949 to 1960.
+
+First, let's load the dataset and take a look at its structure:
+
+``` r
+# Load the AirPassengers dataset
+data("AirPassengers")
+airpassengers_data <- data.frame(
+  Month = time(AirPassengers),
+  Passengers = as.numeric(AirPassengers)
+)
+```
+
+![](images/airplane_table_head.PNG)
+
+The `airpassengers_data` dataframe has two columns: `Month` and `Passengers`.
+
+#### Creating a Line Plot {.unnumbered .unlisted}
+
+Now, let's create a line plot to visualize the trend of airline passengers over time.
+
+``` r
+ggplot(data = airpassengers_data, aes(x = Month, y = Passengers)) +
+  geom_line(color = "blue") +
+  labs(title = "Trend of Airline Passengers Over Time",
+       x = "Month",
+       y = "Number of Passengers") +
+  theme_minimal()
+```
+
+![](images/line_graph_example.PNG)
+
+In this example:
+
+-   `ggplot(data = airpassengers_data, aes(x = Month, y = Passengers))`: Initializes the ggplot object with the `airpassengers_data` dataset and maps the `Month` column to the x-axis and the `Passengers` column to the y-axis.
+
+-   `geom_line(color = "blue")`: Adds a line plot layer with the line color set to blue.
+
+-   `labs(title = "Trend of Airline Passengers Over Time", x = "Month", y = "Number of Passengers")`: Adds a title and labels to the plot.
+
+-   `theme_minimal()`: Applies a minimalistic theme to the plot.
