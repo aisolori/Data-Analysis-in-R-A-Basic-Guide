@@ -23,7 +23,7 @@
 <meta name="author" content="Antonio Solorio" />
 
 
-<meta name="date" content="2024-07-19" />
+<meta name="date" content="2024-07-23" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -31,7 +31,7 @@
   
   
 <link rel="prev" href="03-na-values.html"/>
-
+<link rel="next" href="advanced-ggplot.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -207,6 +207,42 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="data-visualization-ggplot.html"><a href="data-visualization-ggplot.html#line-plot"><i class="fa fa-check"></i>Line Plot</a></li>
 </ul></li>
 </ul></li>
+<li class="chapter" data-level="4.2" data-path="advanced-ggplot.html"><a href="advanced-ggplot.html"><i class="fa fa-check"></i><b>4.2</b> Advanced ggplot2 Techniques</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="advanced-ggplot.html"><a href="advanced-ggplot.html#faceting"><i class="fa fa-check"></i><b>4.2.1</b> Faceting</a>
+<ul>
+<li class="chapter" data-level="" data-path="advanced-ggplot.html"><a href="advanced-ggplot.html#facet-wrap"><i class="fa fa-check"></i>Facet Wrap</a></li>
+<li class="chapter" data-level="" data-path="advanced-ggplot.html"><a href="advanced-ggplot.html#facet-grid"><i class="fa fa-check"></i>Facet Grid</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2.2" data-path="advanced-ggplot.html"><a href="advanced-ggplot.html#customizing-themes"><i class="fa fa-check"></i><b>4.2.2</b> Customizing Themes</a>
+<ul>
+<li class="chapter" data-level="" data-path="advanced-ggplot.html"><a href="advanced-ggplot.html#using-built-in-themes"><i class="fa fa-check"></i>Using Built-in Themes</a></li>
+<li class="chapter" data-level="" data-path="advanced-ggplot.html"><a href="advanced-ggplot.html#customizing-themes-in-ggplot2"><i class="fa fa-check"></i>Customizing Themes in ggplot2</a></li>
+<li class="chapter" data-level="" data-path="advanced-ggplot.html"><a href="advanced-ggplot.html#customizing-text-elements"><i class="fa fa-check"></i>Customizing Text Elements</a></li>
+<li class="chapter" data-level="" data-path="advanced-ggplot.html"><a href="advanced-ggplot.html#customizing-background-and-grid-lines"><i class="fa fa-check"></i>Customizing Background and Grid Lines</a></li>
+<li class="chapter" data-level="" data-path="advanced-ggplot.html"><a href="advanced-ggplot.html#customizing-legend"><i class="fa fa-check"></i>Customizing Legend</a></li>
+<li class="chapter" data-level="" data-path="advanced-ggplot.html"><a href="advanced-ggplot.html#complete-theme-customization-example"><i class="fa fa-check"></i>Complete Theme Customization Example</a></li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="regressions.html"><a href="regressions.html"><i class="fa fa-check"></i><b>5</b> Basic Regression Analysis in R</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="regressions.html"><a href="regressions.html#introduction-2"><i class="fa fa-check"></i><b>5.1</b> Introduction</a>
+<ul>
+<li class="chapter" data-level="5.1.1" data-path="regressions.html"><a href="regressions.html#preparing-the-data"><i class="fa fa-check"></i><b>5.1.1</b> Preparing the Data</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="regressions.html"><a href="regressions.html#simple-linear-regression"><i class="fa fa-check"></i><b>5.2</b> Simple Linear Regression</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="regressions.html"><a href="regressions.html#fitting-the-model"><i class="fa fa-check"></i><b>5.2.1</b> Fitting the Model</a></li>
+<li class="chapter" data-level="5.2.2" data-path="regressions.html"><a href="regressions.html#interpreting-the-results"><i class="fa fa-check"></i><b>5.2.2</b> Interpreting the Results</a>
+<ul>
+<li class="chapter" data-level="" data-path="regressions.html"><a href="regressions.html#coefficients"><i class="fa fa-check"></i>Coefficients</a></li>
+<li class="chapter" data-level="" data-path="regressions.html"><a href="regressions.html#statistical-significance"><i class="fa fa-check"></i>Statistical Significance</a></li>
+<li class="chapter" data-level="" data-path="regressions.html"><a href="regressions.html#model-fit"><i class="fa fa-check"></i>Model Fit</a></li>
+<li class="chapter" data-level="" data-path="regressions.html"><a href="regressions.html#visualizing-the-regression-line"><i class="fa fa-check"></i>Visualizing the Regression Line</a></li>
+<li class="chapter" data-level="" data-path="regressions.html"><a href="regressions.html#plotting-residuals-using-lm"><i class="fa fa-check"></i>Plotting Residuals Using <code>lm()</code></a></li>
+</ul></li>
+</ul></li>
 </ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -379,21 +415,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </div>
 </div>
-</div>
-
-
-
-
-
-
-
             </section>
 
           </div>
         </div>
       </div>
-<a href="03-na-values.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="03-na-values.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="advanced-ggplot.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

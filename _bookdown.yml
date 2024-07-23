@@ -13,4 +13,6 @@ rmd_files:
   - chapter3/exploring-hmda-data.Rmd
   - chapter3/03-na-values.Rmd
   - chapter4/data-visualization-ggplot.Rmd
+  - chapter4/advanced-ggplot.Rmd
+  - chapter5/regressions.Rmd
   

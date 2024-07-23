@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>2.4 Importing Data in Chunks | Data Analysis in R: A Basic Guide</title>
+  <title>Chapter 5 Basic Regression Analysis in R | Data Analysis in R: A Basic Guide</title>
   <meta name="description" content="This book provides a basic guide to data analysis using R, with a focus on the Home Mortgage Disclosure Act (HMDA) data as a practical example. It covers the essential techniques and tools needed to perform effective data analysis, offering step-by-step instructions and detailed explanations. The HTML output format for this book is bookdown::gitbook, as set in the _output.yml file." />
   <meta name="generator" content="bookdown 0.35 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="2.4 Importing Data in Chunks | Data Analysis in R: A Basic Guide" />
+  <meta property="og:title" content="Chapter 5 Basic Regression Analysis in R | Data Analysis in R: A Basic Guide" />
   <meta property="og:type" content="book" />
   
   <meta property="og:description" content="This book provides a basic guide to data analysis using R, with a focus on the Home Mortgage Disclosure Act (HMDA) data as a practical example. It covers the essential techniques and tools needed to perform effective data analysis, offering step-by-step instructions and detailed explanations. The HTML output format for this book is bookdown::gitbook, as set in the _output.yml file." />
   <meta name="github-repo" content="aisolori/Data-Analysis-in-R-A-Basic-Guide" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="2.4 Importing Data in Chunks | Data Analysis in R: A Basic Guide" />
+  <meta name="twitter:title" content="Chapter 5 Basic Regression Analysis in R | Data Analysis in R: A Basic Guide" />
   
   <meta name="twitter:description" content="This book provides a basic guide to data analysis using R, with a focus on the Home Mortgage Disclosure Act (HMDA) data as a practical example. It covers the essential techniques and tools needed to perform effective data analysis, offering step-by-step instructions and detailed explanations. The HTML output format for this book is bookdown::gitbook, as set in the _output.yml file." />
   
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="hmda-download-import.html"/>
-<link rel="next" href="data-exploration-and-cleaning.html"/>
+<link rel="prev" href="advanced-ggplot.html"/>
+
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -264,52 +264,173 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="importing-data-in-chunks" class="section level2 hasAnchor" number="2.4">
-<h2><span class="header-section-number">2.4</span> Importing Data in Chunks<a href="data-in-chunks.html#importing-data-in-chunks" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>When working with large datasets, it’s often necessary to import data in chunks, especially when the dataset is too large to fit into memory or cannot be opened by standard software like Excel. The readr package in R provides a solution with the <strong><code>read_delim_chunked()</code></strong> function, which allows for reading a delimited file in manageable chunks.</p>
-<p>The <strong><code>read_delim_chunked()</code></strong> function operates similarly to <strong><code>read_delim()</code></strong>, but it processes data in smaller portions, making it easier to handle large datasets. A practical approach is to use a callback function to filter data as each chunk is processed.</p>
-<p>Here’s an example demonstrating how to import a delimited file in chunks and apply a callback function to filter the data for state_code “NV”:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="data-in-chunks.html#cb11-1" tabindex="-1"></a><span class="co"># Load the readr package</span></span>
-<span id="cb11-2"><a href="data-in-chunks.html#cb11-2" tabindex="-1"></a><span class="fu">library</span>(readr)</span>
-<span id="cb11-3"><a href="data-in-chunks.html#cb11-3" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb11-4"><a href="data-in-chunks.html#cb11-4" tabindex="-1"></a></span>
-<span id="cb11-5"><a href="data-in-chunks.html#cb11-5" tabindex="-1"></a><span class="co"># Define the callback function to filter data for state_code &quot;NV&quot;</span></span>
-<span id="cb11-6"><a href="data-in-chunks.html#cb11-6" tabindex="-1"></a>filter_data <span class="ot">&lt;-</span> <span class="cf">function</span>(data_chunk, pos) {</span>
-<span id="cb11-7"><a href="data-in-chunks.html#cb11-7" tabindex="-1"></a>  <span class="co"># Filters data chunk for only rows where state_code == &quot;NV&quot;</span></span>
-<span id="cb11-8"><a href="data-in-chunks.html#cb11-8" tabindex="-1"></a>  data_chunk <span class="ot">&lt;-</span> data_chunk<span class="sc">%&gt;%</span><span class="fu">filter</span>(state_code <span class="sc">==</span> <span class="st">&quot;NV&quot;</span>)</span>
-<span id="cb11-9"><a href="data-in-chunks.html#cb11-9" tabindex="-1"></a>}</span>
-<span id="cb11-10"><a href="data-in-chunks.html#cb11-10" tabindex="-1"></a></span>
-<span id="cb11-11"><a href="data-in-chunks.html#cb11-11" tabindex="-1"></a><span class="co"># Import a CSV file in chunks using read_csv_chunked()</span></span>
-<span id="cb11-12"><a href="data-in-chunks.html#cb11-12" tabindex="-1"></a>chunked_data <span class="ot">&lt;-</span> <span class="fu">read_delim_chunked</span>(</span>
-<span id="cb11-13"><a href="data-in-chunks.html#cb11-13" tabindex="-1"></a>  <span class="st">&quot;downloads/2023_combined_mlar_header.txt&quot;</span>, <span class="co"># specify the path to the CSV file</span></span>
-<span id="cb11-14"><a href="data-in-chunks.html#cb11-14" tabindex="-1"></a>  <span class="at">callback =</span> DataFrameCallback<span class="sc">$</span><span class="fu">new</span>(filter_data), <span class="co"># specify the callback function</span></span>
-<span id="cb11-15"><a href="data-in-chunks.html#cb11-15" tabindex="-1"></a>  <span class="at">chunk_size =</span> <span class="dv">10000</span>, <span class="co"># specify the chunk size,</span></span>
-<span id="cb11-16"><a href="data-in-chunks.html#cb11-16" tabindex="-1"></a>  <span class="at">delim =</span> <span class="st">&quot;|&quot;</span>,</span>
-<span id="cb11-17"><a href="data-in-chunks.html#cb11-17" tabindex="-1"></a>  <span class="at">escape_double =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb11-18"><a href="data-in-chunks.html#cb11-18" tabindex="-1"></a>  <span class="at">trim_ws =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb11-19"><a href="data-in-chunks.html#cb11-19" tabindex="-1"></a>  <span class="at">col_names =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb11-20"><a href="data-in-chunks.html#cb11-20" tabindex="-1"></a>  <span class="at">col_types =</span> <span class="fu">cols</span>(<span class="at">.default =</span> <span class="fu">col_character</span>())</span>
-<span id="cb11-21"><a href="data-in-chunks.html#cb11-21" tabindex="-1"></a>)</span></code></pre></div>
-<p>In this example:</p>
+<div id="basic-regression-analysis-in-r" class="section level1 hasAnchor" number="5">
+<h1><span class="header-section-number">Chapter 5</span> Basic Regression Analysis in R<a href="regressions.html#basic-regression-analysis-in-r" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="introduction-2" class="section level2 unlisted unumbered hasAnchor" number="5.1">
+<h2><span class="header-section-number">5.1</span> Introduction<a href="regressions.html#introduction-2" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Regression analysis is a powerful statistical method used to examine the relationship between a dependent variable and one or more independent variables. In this chapter, we will explore how to perform basic regression analysis in R using the HMDA (Home Mortgage Disclosure Act) dataset. Specifically, we will use the <code>income</code> variable to predict <code>property_value</code>.</p>
+<div id="preparing-the-data" class="section level3 unlisted unumbered hasAnchor" number="5.1.1">
+<h3><span class="header-section-number">5.1.1</span> Preparing the Data<a href="regressions.html#preparing-the-data" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Before performing regression analysis, it’s crucial to ensure that the data is clean and properly formatted. We’ll start by loading the necessary packages and preparing the HMDA data.</p>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="regressions.html#cb39-1" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb39-2"><a href="regressions.html#cb39-2" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb39-3"><a href="regressions.html#cb39-3" tabindex="-1"></a><span class="fu">library</span>(readr)</span>
+<span id="cb39-4"><a href="regressions.html#cb39-4" tabindex="-1"></a></span>
+<span id="cb39-5"><a href="regressions.html#cb39-5" tabindex="-1"></a><span class="co"># Load HMDA data</span></span>
+<span id="cb39-6"><a href="regressions.html#cb39-6" tabindex="-1"></a>hmda_data <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;downloads/state_NV.csv&quot;</span>, <span class="at">guess_max =</span> <span class="cn">Inf</span>)</span>
+<span id="cb39-7"><a href="regressions.html#cb39-7" tabindex="-1"></a></span>
+<span id="cb39-8"><a href="regressions.html#cb39-8" tabindex="-1"></a><span class="co"># Filter and prep HMDA data for regression analysis</span></span>
+<span id="cb39-9"><a href="regressions.html#cb39-9" tabindex="-1"></a>filtered_hmda_data <span class="ot">&lt;-</span> hmda_data <span class="sc">%&gt;%</span></span>
+<span id="cb39-10"><a href="regressions.html#cb39-10" tabindex="-1"></a>  <span class="fu">filter</span>(</span>
+<span id="cb39-11"><a href="regressions.html#cb39-11" tabindex="-1"></a>    action_taken <span class="sc">==</span> <span class="dv">1</span>,</span>
+<span id="cb39-12"><a href="regressions.html#cb39-12" tabindex="-1"></a>    loan_purpose <span class="sc">==</span> <span class="dv">1</span>,</span>
+<span id="cb39-13"><a href="regressions.html#cb39-13" tabindex="-1"></a>    occupancy_type <span class="sc">==</span> <span class="dv">1</span>,</span>
+<span id="cb39-14"><a href="regressions.html#cb39-14" tabindex="-1"></a>    lien_status <span class="sc">==</span> <span class="dv">1</span>,</span>
+<span id="cb39-15"><a href="regressions.html#cb39-15" tabindex="-1"></a>    total_units <span class="sc">==</span> <span class="st">&quot;1&quot;</span>,</span>
+<span id="cb39-16"><a href="regressions.html#cb39-16" tabindex="-1"></a>    <span class="sc">!</span>property_value <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;Exempt&quot;</span>, <span class="cn">NA</span>),</span>
+<span id="cb39-17"><a href="regressions.html#cb39-17" tabindex="-1"></a>    income <span class="sc">&lt;=</span> <span class="dv">250</span> <span class="sc">&amp;</span> income <span class="sc">&gt;</span> <span class="dv">0</span></span>
+<span id="cb39-18"><a href="regressions.html#cb39-18" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb39-19"><a href="regressions.html#cb39-19" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb39-20"><a href="regressions.html#cb39-20" tabindex="-1"></a>    <span class="at">property_value =</span> <span class="fu">as.numeric</span>(property_value),</span>
+<span id="cb39-21"><a href="regressions.html#cb39-21" tabindex="-1"></a>    <span class="at">loan_type =</span> <span class="fu">case_when</span>(</span>
+<span id="cb39-22"><a href="regressions.html#cb39-22" tabindex="-1"></a>      loan_type <span class="sc">==</span> <span class="dv">1</span> <span class="sc">~</span> <span class="st">&quot;Conventional&quot;</span>,</span>
+<span id="cb39-23"><a href="regressions.html#cb39-23" tabindex="-1"></a>      loan_type <span class="sc">==</span> <span class="dv">2</span> <span class="sc">~</span> <span class="st">&quot;FHA&quot;</span>,</span>
+<span id="cb39-24"><a href="regressions.html#cb39-24" tabindex="-1"></a>      loan_type <span class="sc">==</span> <span class="dv">3</span> <span class="sc">~</span> <span class="st">&quot;VA&quot;</span>,</span>
+<span id="cb39-25"><a href="regressions.html#cb39-25" tabindex="-1"></a>      loan_type <span class="sc">==</span> <span class="dv">4</span> <span class="sc">~</span> <span class="st">&quot;USDA&quot;</span></span>
+<span id="cb39-26"><a href="regressions.html#cb39-26" tabindex="-1"></a>    )</span>
+<span id="cb39-27"><a href="regressions.html#cb39-27" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb39-28"><a href="regressions.html#cb39-28" tabindex="-1"></a>  <span class="fu">filter</span>(property_value <span class="sc">&lt;</span> <span class="dv">1000000</span>)</span></code></pre></div>
+</div>
+</div>
+<div id="simple-linear-regression" class="section level2 hasAnchor" number="5.2">
+<h2><span class="header-section-number">5.2</span> Simple Linear Regression<a href="regressions.html#simple-linear-regression" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Simple linear regression is used to model the relationship between two continuous variables. In this case, we will model the relationship between <code>income</code> (independent variable) and <code>property_value</code> (dependent variable).</p>
+<div id="fitting-the-model" class="section level3 hasAnchor" number="5.2.1">
+<h3><span class="header-section-number">5.2.1</span> Fitting the Model<a href="regressions.html#fitting-the-model" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>We use the <code>lm()</code> function to fit a linear model.</p>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="regressions.html#cb40-1" tabindex="-1"></a><span class="co"># Fit the linear regression model</span></span>
+<span id="cb40-2"><a href="regressions.html#cb40-2" tabindex="-1"></a>lm_model <span class="ot">&lt;-</span> <span class="fu">lm</span>(property_value <span class="sc">~</span> income, <span class="at">data =</span> filtered_hmda_data)</span>
+<span id="cb40-3"><a href="regressions.html#cb40-3" tabindex="-1"></a></span>
+<span id="cb40-4"><a href="regressions.html#cb40-4" tabindex="-1"></a><span class="co"># Display the summary of the model</span></span>
+<span id="cb40-5"><a href="regressions.html#cb40-5" tabindex="-1"></a><span class="fu">summary</span>(lm_model)</span></code></pre></div>
+<p><img src="images/regression_summary.PNG" /></p>
+</div>
+<div id="interpreting-the-results" class="section level3 hasAnchor" number="5.2.2">
+<h3><span class="header-section-number">5.2.2</span> Interpreting the Results<a href="regressions.html#interpreting-the-results" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Let’s interpret the results of the simple linear regression model using the provided output.</p>
+<div id="coefficients" class="section level4 unnumbered hasAnchor">
+<h4>Coefficients<a href="regressions.html#coefficients" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>The <code>Coefficients</code> section provides the estimated values of the intercept and slope in the regression equation:</p>
 <ul>
-<li><strong><code>"downloads/2023_combined_mlar_header.txt"</code></strong> should be replaced with the actual path to your delimited file.</li>
-<li><strong><code>delim = "|"</code></strong> specifies the delimiter used in the file.</li>
-<li><strong><code>escape_double = FALSE</code></strong> specifies whether double quotes should be escaped.</li>
-<li><strong><code>trim_ws = TRUE</code></strong> indicates that whitespace should be trimmed from the beginning and end of each field.</li>
-<li><strong><code>col_names = TRUE</code></strong> specifies that the file contains column names.</li>
-<li><strong><code>col_types = cols(.default = col_character())</code></strong> sets all columns to be read as character data types.</li>
+<li><p><strong>Intercept</strong>: 251,430.88</p>
+<ul>
+<li>This represents the estimated property value when <code>income</code> is zero.</li>
+</ul></li>
+<li><p><strong>Income</strong>: 1,911.15</p>
+<ul>
+<li>This represents the estimated change in property value for each unit increase in <code>income</code>.</li>
+</ul></li>
 </ul>
-<p>The <strong><code>filter_data()</code></strong> function is used as a callback to filter the data for the state code “NV”. A callback function is a function passed as an argument to another function, which is then executed within that function. Here, the <strong><code>filter_data()</code></strong> function is applied to each chunk of data read by <strong><code>read_delim_chunked()</code></strong>, enabling the filtering of data for the state code “NV” as it is read in chunks.</p>
+</div>
+<div id="statistical-significance" class="section level4 unnumbered hasAnchor">
+<h4>Statistical Significance<a href="regressions.html#statistical-significance" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>The <code>Pr(&gt;|t|)</code> column provides the p-values for the coefficients:</p>
+<ul>
+<li><p><strong>Intercept</strong>: The p-value is less than 0.0000000000000002, indicating that the intercept is statistically significant.</p></li>
+<li><p><strong>Income</strong>: The p-value is also less than 0.0000000000000002, indicating that <code>income</code> is a statistically significant predictor of <code>property_value</code>.</p></li>
+</ul>
+</div>
+<div id="model-fit" class="section level4 unnumbered hasAnchor">
+<h4>Model Fit<a href="regressions.html#model-fit" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<ul>
+<li><p><strong>Residual standard error</strong>: 129,400 on 34,193 degrees of freedom</p>
+<ul>
+<li>This represents the average distance that the observed values fall from the regression line.</li>
+</ul></li>
+<li><p><strong>Multiple R-squared</strong>: 0.3188</p>
+<ul>
+<li>This indicates that approximately 31.88% of the variance in <code>property_value</code> can be explained by <code>income</code>.</li>
+</ul></li>
+<li><p><strong>Adjusted R-squared</strong>: 0.3187</p>
+<ul>
+<li>This is similar to the R-squared value but adjusted for the number of predictors in the model.</li>
+</ul></li>
+<li><p><strong>F-statistic</strong>: 1.6e+04 on 1 and 34,193 DF, p-value: &lt; 0.00000000000000022</p>
+<ul>
+<li>This indicates that the model is statistically significant overall.</li>
+</ul></li>
+</ul>
+<p>The results suggest that there is a statistically significant positive relationship between <code>income</code> and <code>property_value</code>. For every unit increase in <code>income</code>, the <code>property_value</code> is expected to increase by approximately 1,911.15 units, holding other factors constant. The R-squared value indicates that <code>income</code> explains about 31.88% of the variability in <code>property_value</code>, which suggests that other factors not included in the model may also play a significant role in determining property values.</p>
+</div>
+<div id="visualizing-the-regression-line" class="section level4 unnumbered hasAnchor">
+<h4>Visualizing the Regression Line<a href="regressions.html#visualizing-the-regression-line" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>We can visualize the regression line using ggplot2.</p>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="regressions.html#cb41-1" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> filtered_hmda_data, <span class="fu">aes</span>(<span class="at">x =</span> income, <span class="at">y =</span> property_value)) <span class="sc">+</span></span>
+<span id="cb41-2"><a href="regressions.html#cb41-2" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb41-3"><a href="regressions.html#cb41-3" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">&quot;lm&quot;</span>, <span class="at">col =</span> <span class="st">&quot;red&quot;</span>) <span class="sc">+</span></span>
+<span id="cb41-4"><a href="regressions.html#cb41-4" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Regression Line: Property Value vs Income&quot;</span>,</span>
+<span id="cb41-5"><a href="regressions.html#cb41-5" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">&quot;Income (in Thousands of Dollars)&quot;</span>,</span>
+<span id="cb41-6"><a href="regressions.html#cb41-6" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Property Value&quot;</span>)</span></code></pre></div>
+<p><img src="images/scatter_plot_with_regression.PNG" /></p>
+<p>In this plot:</p>
+<ul>
+<li><p><code>geom_point()</code> adds the data points.</p></li>
+<li><p><code>geom_smooth(method = "lm", col = "red")</code> adds the regression line with the color red.</p></li>
+</ul>
+</div>
+<div id="plotting-residuals-using-lm" class="section level4 unnumbered hasAnchor">
+<h4>Plotting Residuals Using <code>lm()</code><a href="regressions.html#plotting-residuals-using-lm" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>You can plot residuals of a linear model fitted with <code>lm()</code> using several methods in R. One common way is to use base R plotting functions to create diagnostic plots. Here is how you can plot the residuals:</p>
+<ol style="list-style-type: decimal">
+<li><strong>Basic Residual Plot</strong>: Plotting residuals versus fitted values.</li>
+</ol>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="regressions.html#cb42-1" tabindex="-1"></a><span class="co"># Fit the linear regression model</span></span>
+<span id="cb42-2"><a href="regressions.html#cb42-2" tabindex="-1"></a>lm_model <span class="ot">&lt;-</span> <span class="fu">lm</span>(property_value <span class="sc">~</span> income, <span class="at">data =</span> filtered_hmda_data)</span>
+<span id="cb42-3"><a href="regressions.html#cb42-3" tabindex="-1"></a></span>
+<span id="cb42-4"><a href="regressions.html#cb42-4" tabindex="-1"></a><span class="co"># Plot residuals vs. fitted values</span></span>
+<span id="cb42-5"><a href="regressions.html#cb42-5" tabindex="-1"></a><span class="fu">plot</span>(lm_model<span class="sc">$</span>fitted.values, lm_model<span class="sc">$</span>residuals,</span>
+<span id="cb42-6"><a href="regressions.html#cb42-6" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">&quot;Fitted Values&quot;</span>,</span>
+<span id="cb42-7"><a href="regressions.html#cb42-7" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">&quot;Residuals&quot;</span>,</span>
+<span id="cb42-8"><a href="regressions.html#cb42-8" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">&quot;Residuals vs Fitted Values&quot;</span>)</span>
+<span id="cb42-9"><a href="regressions.html#cb42-9" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h =</span> <span class="dv">0</span>, <span class="at">col =</span> <span class="st">&quot;red&quot;</span>)</span></code></pre></div>
+<p><img src="images/residual_plot.PNG" /></p>
+<ol start="2" style="list-style-type: decimal">
+<li><strong>Diagnostic Plots</strong> Plotting multiple diagnostic plots at once.</li>
+</ol>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="regressions.html#cb43-1" tabindex="-1"></a><span class="co"># Fit the linear regression model</span></span>
+<span id="cb43-2"><a href="regressions.html#cb43-2" tabindex="-1"></a>lm_model <span class="ot">&lt;-</span> <span class="fu">lm</span>(property_value <span class="sc">~</span> income, <span class="at">data =</span> filtered_hmda_data)</span>
+<span id="cb43-3"><a href="regressions.html#cb43-3" tabindex="-1"></a></span>
+<span id="cb43-4"><a href="regressions.html#cb43-4" tabindex="-1"></a><span class="co"># Produce diagnostic plots</span></span>
+<span id="cb43-5"><a href="regressions.html#cb43-5" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">2</span>)) <span class="co"># just lets R know we want the plots to be in 2x2 structure</span></span>
+<span id="cb43-6"><a href="regressions.html#cb43-6" tabindex="-1"></a><span class="fu">plot</span>(lm_model)</span></code></pre></div>
+<p><img src="images/diagnostic_plots.PNG" /></p>
+<p>The <code>plot(lm_model)</code> function produces four diagnostic plots:</p>
+<ul>
+<li><p>Residuals vs Fitted</p></li>
+<li><p>Normal Q-Q</p></li>
+<li><p>Scale-Location (Spread-Location)</p></li>
+<li><p>Residuals vs Leverage</p></li>
+</ul>
+<p>These plots help to assess the fit of the model and to identify any potential issues such as non-linearity, heteroscedasticity, and influential observations.</p>
 
 </div>
 </div>
+</div>
+</div>
+
+
+
+
+
+
+
             </section>
 
           </div>
         </div>
       </div>
-<a href="hmda-download-import.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="data-exploration-and-cleaning.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="advanced-ggplot.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -340,7 +461,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/aisolori/Data-Analysis-in-R-A-Basic-Guide/edit/main/chapter2/data-in-chunks.rmd",
+"link": "https://github.com/aisolori/Data-Analysis-in-R-A-Basic-Guide/edit/main/chapter5/regressions.Rmd",
 "text": "Edit"
 },
 "history": {

@@ -25,3 +25,12 @@ data-visualization-using-ggplot2
 introduction-1
 getting-started-with-ggplot2
 creating-basic-plot-types-with-ggplot2
+advanced-ggplot2-techniques
+faceting
+customizing-themes
+basic-regression-analysis-in-r
+introduction-2
+preparing-the-data
+simple-linear-regression
+fitting-the-model
+interpreting-the-results

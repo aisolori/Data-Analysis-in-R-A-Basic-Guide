@@ -120,7 +120,7 @@
 
 \title{Data Analysis in R: A Basic Guide}
 \author{Antonio Solorio}
-\date{2024-07-19}
+\date{2024-07-23}
 
 \begin{document}
 \maketitle
@@ -1037,6 +1037,597 @@ In this example:
 \item
   \texttt{theme\_minimal()}: Applies a minimalistic theme to the plot.
 \end{itemize}
+
+\hypertarget{advanced-ggplot2-techniques}{%
+\section{Advanced ggplot2 Techniques}\label{advanced-ggplot2-techniques}}
+
+In this section, we will delve into more advanced features of ggplot2 that allow for creating complex and customized visualizations. This includes using facets, customizing themes, adding annotations, and creating multi-layered plots.
+
+\hypertarget{faceting}{%
+\subsection{Faceting}\label{faceting}}
+
+Faceting is a powerful technique to create multiple plots based on the values of one or more categorical variables. It allows you to compare different subsets of the data side by side.
+
+\hypertarget{facet-wrap}{%
+\subsubsection*{Facet Wrap}\label{facet-wrap}}
+\addcontentsline{toc}{subsubsection}{Facet Wrap}
+
+The \texttt{facet\_wrap()} function splits the data into multiple panels based on the values of a single categorical variable.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(}\AttributeTok{data =}\NormalTok{ filtered\_hmda\_data, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ income, }\AttributeTok{y =}\NormalTok{ property\_value)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_point}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{facet\_wrap}\NormalTok{(}\SpecialCharTok{\textasciitilde{}}\NormalTok{ loan\_type) }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \StringTok{"Property Value vs Income by Loan Type"}\NormalTok{,}
+       \AttributeTok{x =} \StringTok{"Income"}\NormalTok{,}
+       \AttributeTok{y =} \StringTok{"Property Value"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{images/facet_wrap.PNG}
+
+In this example, \texttt{facet\_wrap(\textasciitilde{}\ loan\_type)} creates separate panels for each loan type, allowing us to compare the relationship between income and property value across different loan types.
+
+\hypertarget{facet-grid}{%
+\subsubsection*{Facet Grid}\label{facet-grid}}
+\addcontentsline{toc}{subsubsection}{Facet Grid}
+
+The \texttt{facet\_grid()} function allows for more complex faceting based on two variables, creating a matrix of panels.
+
+I removed the filter the occupancy that limited occupancy to only primary residences. I also constructed a \texttt{case\_when()} to label the occupancy type for each transaction
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Filter and prep HMDA data for plotting}
+\NormalTok{filtered\_hmda\_data }\OtherTok{\textless{}{-}}\NormalTok{ hmda\_data}\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(}
+    \CommentTok{\# Filter for only originated transactions}
+\NormalTok{    action\_taken }\SpecialCharTok{==} \DecValTok{1}\NormalTok{,}
+    \CommentTok{\# Filter for only for home purchases}
+\NormalTok{    loan\_purpose }\SpecialCharTok{==} \DecValTok{1}\NormalTok{,}
+    \CommentTok{\# Filter for only primary homss}
+    \CommentTok{\# This has been commented out}
+    \CommentTok{\#occupancy\_type == 1,}
+    \CommentTok{\# Filter for primary liens}
+\NormalTok{    lien\_status }\SpecialCharTok{==} \DecValTok{1}\NormalTok{,}
+    \CommentTok{\# Filter for single unit homes}
+\NormalTok{    total\_units }\SpecialCharTok{==} \StringTok{"1"}\NormalTok{,}
+    \CommentTok{\# Filter propery value }
+    \SpecialCharTok{!}\NormalTok{property\_value }\SpecialCharTok{\%in\%} \FunctionTok{c}\NormalTok{(}\StringTok{"Exempt"}\NormalTok{, }\ConstantTok{NA}\NormalTok{),}
+    \CommentTok{\# Filter income for values below 250 but above 0}
+\NormalTok{    income }\SpecialCharTok{\textless{}=}\DecValTok{250} \SpecialCharTok{\&}\NormalTok{ income}\SpecialCharTok{\textgreater{}}\DecValTok{0}\NormalTok{,}
+    \CommentTok{\# Filter for Clark County}
+\NormalTok{    county\_code }\SpecialCharTok{==} \StringTok{"32003"}
+    
+\NormalTok{  )}\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}
+    \AttributeTok{property\_value =} \FunctionTok{as.numeric}\NormalTok{(property\_value),}
+    \CommentTok{\# Assigning labels for each loan\_type}
+    \AttributeTok{loan\_type =} \FunctionTok{case\_when}\NormalTok{(}
+\NormalTok{      loan\_type }\SpecialCharTok{==} \DecValTok{1} \SpecialCharTok{\textasciitilde{}} \StringTok{"Conventional"}\NormalTok{,}
+\NormalTok{      loan\_type }\SpecialCharTok{==} \DecValTok{2} \SpecialCharTok{\textasciitilde{}} \StringTok{"FHA"}\NormalTok{,}
+\NormalTok{      loan\_type }\SpecialCharTok{==} \DecValTok{3} \SpecialCharTok{\textasciitilde{}} \StringTok{"VA"}\NormalTok{,}
+\NormalTok{      loan\_type }\SpecialCharTok{==} \DecValTok{4} \SpecialCharTok{\textasciitilde{}} \StringTok{"USDA"}
+\NormalTok{    ),}
+    \AttributeTok{occupancy\_type =} \FunctionTok{case\_when}\NormalTok{(}
+\NormalTok{      occupancy\_type }\SpecialCharTok{==} \DecValTok{1} \SpecialCharTok{\textasciitilde{}} \StringTok{"Primary Residence"}\NormalTok{,}
+\NormalTok{      occupancy\_type }\SpecialCharTok{==} \DecValTok{2} \SpecialCharTok{\textasciitilde{}} \StringTok{"Second Residence"}\NormalTok{,}
+\NormalTok{      occupancy\_type }\SpecialCharTok{==} \DecValTok{3} \SpecialCharTok{\textasciitilde{}} \StringTok{"Investment Property"}
+\NormalTok{    ))}\SpecialCharTok{\%\textgreater{}\%}
+    \CommentTok{\# Only keep property values under $1 million}
+  \FunctionTok{filter}\NormalTok{(property\_value}\SpecialCharTok{\textless{}}\DecValTok{1000000}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+Having prepped the data, we can now demonstrate the usage of \texttt{facet\_grid()} .
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(}\AttributeTok{data =}\NormalTok{ filtered\_hmda\_data, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ income, }\AttributeTok{y =}\NormalTok{ property\_value)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_point}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{facet\_grid}\NormalTok{(loan\_type }\SpecialCharTok{\textasciitilde{}}\NormalTok{ occupancy\_type) }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \StringTok{"Property Value vs Income by Loan Type and Occupancy Type"}\NormalTok{,}
+       \AttributeTok{x =} \StringTok{"Income"}\NormalTok{,}
+       \AttributeTok{y =} \StringTok{"Property Value"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{images/Facet_Grid.PNG}
+
+In this example, \texttt{facet\_grid(loan\_type\ \textasciitilde{}\ occupancy\_type)} creates a grid of panels, with rows representing loan types and columns representing occupancy types.
+
+\hypertarget{customizing-themes}{%
+\subsection{Customizing Themes}\label{customizing-themes}}
+
+Customizing the appearance of plots is crucial for creating visually appealing and professional graphics. ggplot2 provides several built-in themes and allows for extensive customization.
+
+\hypertarget{using-built-in-themes}{%
+\subsubsection*{Using Built-in Themes}\label{using-built-in-themes}}
+\addcontentsline{toc}{subsubsection}{Using Built-in Themes}
+
+ggplot2 includes several built-in themes that can be applied directly to your plots. Some common themes are \texttt{theme\_minimal()}, \texttt{theme\_classic()}, and \texttt{theme\_dark()}.
+
+\hypertarget{base-example}{%
+\paragraph*{Base Example}\label{base-example}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(}\AttributeTok{data =}\NormalTok{ filtered\_hmda\_data, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ income, }\AttributeTok{y =}\NormalTok{ property\_value)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_point}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \StringTok{"Property Value vs Income"}\NormalTok{,}
+       \AttributeTok{x =} \StringTok{"Income"}\NormalTok{,}
+       \AttributeTok{y =} \StringTok{"Property Value"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{images/scatter plot.PNG}
+
+\hypertarget{example-with-theme_minimal}{%
+\paragraph*{\texorpdfstring{Example with \texttt{theme\_minimal()}}{Example with theme\_minimal()}}\label{example-with-theme_minimal}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(}\AttributeTok{data =}\NormalTok{ filtered\_hmda\_data, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ income, }\AttributeTok{y =}\NormalTok{ property\_value)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_point}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \StringTok{"Property Value vs Income"}\NormalTok{,}
+       \AttributeTok{x =} \StringTok{"Income"}\NormalTok{,}
+       \AttributeTok{y =} \StringTok{"Property Value"}\NormalTok{)}\SpecialCharTok{+}
+  \FunctionTok{theme\_minimal}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{images/scatter plot with theme_minimal.PNG}
+
+For a complete list of themes available from \texttt{ggplot2} see \url{https://ggplot2.tidyverse.org/reference/ggtheme.html}. Additional themes are also available from the \texttt{ggthemes} package. For more information on these see \url{https://yutannihilation.github.io/allYourFigureAreBelongToUs/ggthemes/}.
+
+\hypertarget{customizing-themes-in-ggplot2}{%
+\subsubsection*{Customizing Themes in ggplot2}\label{customizing-themes-in-ggplot2}}
+\addcontentsline{toc}{subsubsection}{Customizing Themes in ggplot2}
+
+Customizing themes in ggplot2 allows you to tailor the appearance of your plots to fit your specific needs, making them more informative and visually appealing. This can include adjusting the size, color, and font of text elements, modifying background and grid line properties, and much more. The \texttt{theme()} function is central to these customizations, providing a wide range of options to fine-tune each component of the plot.
+
+For the purposes of this example, the filter on the \texttt{county\_code} has been removed to demonstrate the customization capabilities more broadly.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{filtered\_hmda\_data }\OtherTok{\textless{}{-}}\NormalTok{ hmda\_data }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(}
+\NormalTok{    action\_taken }\SpecialCharTok{==} \DecValTok{1}\NormalTok{,}
+\NormalTok{    loan\_purpose }\SpecialCharTok{==} \DecValTok{1}\NormalTok{,}
+\NormalTok{    occupancy\_type }\SpecialCharTok{==} \DecValTok{1}\NormalTok{,}
+\NormalTok{    lien\_status }\SpecialCharTok{==} \DecValTok{1}\NormalTok{,}
+\NormalTok{    total\_units }\SpecialCharTok{==} \StringTok{"1"}\NormalTok{,}
+    \SpecialCharTok{!}\NormalTok{property\_value }\SpecialCharTok{\%in\%} \FunctionTok{c}\NormalTok{(}\StringTok{"Exempt"}\NormalTok{, }\ConstantTok{NA}\NormalTok{),}
+\NormalTok{    income }\SpecialCharTok{\textless{}=} \DecValTok{250} \SpecialCharTok{\&}\NormalTok{ income }\SpecialCharTok{\textgreater{}} \DecValTok{0}
+\NormalTok{  ) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}
+    \AttributeTok{property\_value =} \FunctionTok{as.numeric}\NormalTok{(property\_value),}
+    \AttributeTok{loan\_type =} \FunctionTok{case\_when}\NormalTok{(}
+\NormalTok{      loan\_type }\SpecialCharTok{==} \DecValTok{1} \SpecialCharTok{\textasciitilde{}} \StringTok{"Conventional"}\NormalTok{,}
+\NormalTok{      loan\_type }\SpecialCharTok{==} \DecValTok{2} \SpecialCharTok{\textasciitilde{}} \StringTok{"FHA"}\NormalTok{,}
+\NormalTok{      loan\_type }\SpecialCharTok{==} \DecValTok{3} \SpecialCharTok{\textasciitilde{}} \StringTok{"VA"}\NormalTok{,}
+\NormalTok{      loan\_type }\SpecialCharTok{==} \DecValTok{4} \SpecialCharTok{\textasciitilde{}} \StringTok{"USDA"}
+\NormalTok{    )}
+\NormalTok{  ) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(property\_value }\SpecialCharTok{\textless{}} \DecValTok{1000000}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{customizing-text-elements}{%
+\subsubsection*{Customizing Text Elements}\label{customizing-text-elements}}
+\addcontentsline{toc}{subsubsection}{Customizing Text Elements}
+
+The \texttt{theme()} function can be used to customize various text elements in your plot, such as titles, axis titles, and axis text. Each of these elements can be adjusted for size, font face, color, and alignment.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(}\AttributeTok{data =}\NormalTok{ filtered\_hmda\_data, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ income, }\AttributeTok{y =}\NormalTok{ property\_value, }\AttributeTok{color =}\NormalTok{ loan\_type)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_point}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \StringTok{"Property Value vs Income"}\NormalTok{,}
+       \AttributeTok{subtitle =} \StringTok{"By County Code"}\NormalTok{,}
+       \AttributeTok{x =} \StringTok{"Income"}\NormalTok{,}
+       \AttributeTok{y =} \StringTok{"Property Value"}\NormalTok{,}
+       \AttributeTok{color =} \StringTok{"Loan Type"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{theme}\NormalTok{(}
+    \AttributeTok{plot.title =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{16}\NormalTok{, }\AttributeTok{face =} \StringTok{"bold"}\NormalTok{, }\AttributeTok{color =} \StringTok{"darkblue"}\NormalTok{),}
+    \AttributeTok{plot.subtitle =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{14}\NormalTok{, }\AttributeTok{face =} \StringTok{"italic"}\NormalTok{, }\AttributeTok{color =} \StringTok{"darkred"}\NormalTok{),}
+    \AttributeTok{axis.title =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{14}\NormalTok{, }\AttributeTok{face =} \StringTok{"italic"}\NormalTok{, }\AttributeTok{color =} \StringTok{"darkred"}\NormalTok{),}
+    \AttributeTok{axis.text =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{12}\NormalTok{, }\AttributeTok{color =} \StringTok{"darkgreen"}\NormalTok{)}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \FunctionTok{facet\_wrap}\NormalTok{(}\SpecialCharTok{\textasciitilde{}}\NormalTok{county\_code)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{images/custom_theme_1.PNG}In this example:
+
+\begin{itemize}
+\item
+  \texttt{plot.title\ =\ element\_text(size\ =\ 16,\ face\ =\ "bold",\ color\ =\ "darkblue")} customizes the plot title to be bold, size 16, and dark blue.
+\item
+  \texttt{plot.subtitle\ =\ element\_text(size\ =\ 14,\ face\ =\ "italic",\ color\ =\ "darkred")} customizes the plot subtitle to be italic, size 14, and dark red.
+\item
+  \texttt{axis.title\ =\ element\_text(size\ =\ 14,\ face\ =\ "italic",\ color\ =\ "darkred")} customizes the axis titles to be italic, size 14, and dark red.
+\item
+  \texttt{axis.text\ =\ element\_text(size\ =\ 12,\ color\ =\ "darkgreen")} customizes the axis text to be size 12 and dark green.
+\end{itemize}
+
+\hypertarget{customizing-background-and-grid-lines}{%
+\subsubsection*{Customizing Background and Grid Lines}\label{customizing-background-and-grid-lines}}
+\addcontentsline{toc}{subsubsection}{Customizing Background and Grid Lines}
+
+You can customize the background and grid lines to enhance the readability of your plots or to match a specific visual style.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(}\AttributeTok{data =}\NormalTok{ filtered\_hmda\_data, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ income, }\AttributeTok{y =}\NormalTok{ property\_value, }\AttributeTok{color =}\NormalTok{ loan\_type)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_point}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \StringTok{"Property Value vs Income"}\NormalTok{,}
+       \AttributeTok{subtitle =} \StringTok{"By County Code"}\NormalTok{,}
+       \AttributeTok{x =} \StringTok{"Income"}\NormalTok{,}
+       \AttributeTok{y =} \StringTok{"Property Value"}\NormalTok{,}
+       \AttributeTok{color =} \StringTok{"Loan Type"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{theme}\NormalTok{(}
+    \AttributeTok{panel.background =} \FunctionTok{element\_rect}\NormalTok{(}\AttributeTok{fill =} \StringTok{"lightgray"}\NormalTok{),}
+    \AttributeTok{panel.grid.major =} \FunctionTok{element\_line}\NormalTok{(}\AttributeTok{color =} \StringTok{"white"}\NormalTok{, }\AttributeTok{size =} \FloatTok{0.5}\NormalTok{),}
+    \AttributeTok{panel.grid.minor =} \FunctionTok{element\_line}\NormalTok{(}\AttributeTok{color =} \StringTok{"white"}\NormalTok{, }\AttributeTok{size =} \FloatTok{0.25}\NormalTok{),}
+    \AttributeTok{plot.background =} \FunctionTok{element\_rect}\NormalTok{(}\AttributeTok{fill =} \StringTok{"lightblue"}\NormalTok{),}
+    \AttributeTok{plot.title =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{16}\NormalTok{, }\AttributeTok{face =} \StringTok{"bold"}\NormalTok{)}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \FunctionTok{facet\_wrap}\NormalTok{(}\SpecialCharTok{\textasciitilde{}}\NormalTok{county\_code)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{images/custom_theme_2.PNG}
+
+In this example:
+
+\begin{itemize}
+\item
+  \texttt{panel.background\ =\ element\_rect(fill\ =\ "lightgray")} sets the panel background to light gray.
+\item
+  \texttt{panel.grid.major\ =\ element\_line(color\ =\ "white",\ size\ =\ 0.5)} customizes the major grid lines to be white and size 0.5.
+\item
+  \texttt{panel.grid.minor\ =\ element\_line(color\ =\ "white",\ size\ =\ 0.25)} customizes the minor grid lines to be white and size 0.25.
+\item
+  \texttt{plot.background\ =\ element\_rect(fill\ =\ "lightblue")} sets the overall plot background to light blue.
+\end{itemize}
+
+\hypertarget{customizing-legend}{%
+\subsubsection*{Customizing Legend}\label{customizing-legend}}
+\addcontentsline{toc}{subsubsection}{Customizing Legend}
+
+The legend can also be customized to improve the clarity and appearance of your plots. You can adjust the legend position, title, text, and background.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(}\AttributeTok{data =}\NormalTok{ filtered\_hmda\_data, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ income, }\AttributeTok{y =}\NormalTok{ property\_value, }\AttributeTok{color =}\NormalTok{ loan\_type)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_point}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \StringTok{"Property Value vs Income"}\NormalTok{,}
+       \AttributeTok{subtitle =} \StringTok{"By County Code"}\NormalTok{,}
+       \AttributeTok{x =} \StringTok{"Income"}\NormalTok{,}
+       \AttributeTok{y =} \StringTok{"Property Value"}\NormalTok{,}
+       \AttributeTok{color =} \StringTok{"Loan Type"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{theme}\NormalTok{(}
+    \AttributeTok{legend.position =} \StringTok{"bottom"}\NormalTok{,}
+    \AttributeTok{legend.title =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{12}\NormalTok{, }\AttributeTok{face =} \StringTok{"bold"}\NormalTok{),}
+    \AttributeTok{legend.text =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{10}\NormalTok{),}
+    \AttributeTok{legend.background =} \FunctionTok{element\_rect}\NormalTok{(}\AttributeTok{fill =} \StringTok{"lightyellow"}\NormalTok{),}
+    \AttributeTok{plot.title =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{16}\NormalTok{, }\AttributeTok{face =} \StringTok{"bold"}\NormalTok{)}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \FunctionTok{facet\_wrap}\NormalTok{(}\SpecialCharTok{\textasciitilde{}}\NormalTok{county\_code)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{images/custom_theme_3.PNG}
+
+In this example:
+
+\begin{itemize}
+\item
+  \texttt{legend.position\ =\ "bottom"} places the legend at the bottom of the plot.
+\item
+  \texttt{legend.title\ =\ element\_text(size\ =\ 12,\ face\ =\ "bold")} customizes the legend title to be bold and size 12.
+\item
+  \texttt{legend.text\ =\ element\_text(size\ =\ 10)} sets the legend text size to 10.
+\item
+  \texttt{legend.background\ =\ element\_rect(fill\ =\ "lightyellow")} sets the legend background to light yellow.
+\end{itemize}
+
+\hypertarget{complete-theme-customization-example}{%
+\subsubsection*{Complete Theme Customization Example}\label{complete-theme-customization-example}}
+\addcontentsline{toc}{subsubsection}{Complete Theme Customization Example}
+
+Combining these customizations, you can create a fully customized theme for your plot.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(}\AttributeTok{data =}\NormalTok{ filtered\_hmda\_data, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ income, }\AttributeTok{y =}\NormalTok{ property\_value, }\AttributeTok{color =}\NormalTok{ loan\_type)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_point}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \StringTok{"Property Value vs Income"}\NormalTok{,}
+       \AttributeTok{subtitle =} \StringTok{"By County Code"}\NormalTok{,}
+       \AttributeTok{x =} \StringTok{"Income"}\NormalTok{,}
+       \AttributeTok{y =} \StringTok{"Property Value"}\NormalTok{,}
+       \AttributeTok{color =} \StringTok{"Loan Type"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{theme}\NormalTok{(}
+    \AttributeTok{plot.title =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{20}\NormalTok{, }\AttributeTok{face =} \StringTok{"bold"}\NormalTok{, }\AttributeTok{color =} \StringTok{"navy"}\NormalTok{, }\AttributeTok{hjust =} \FloatTok{0.5}\NormalTok{),}
+    \AttributeTok{plot.subtitle =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{16}\NormalTok{, }\AttributeTok{face =} \StringTok{"bold"}\NormalTok{, }\AttributeTok{color =} \StringTok{"darkred"}\NormalTok{),}
+    \AttributeTok{axis.title =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{16}\NormalTok{, }\AttributeTok{face =} \StringTok{"bold"}\NormalTok{),}
+    \AttributeTok{axis.text =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{14}\NormalTok{),}
+    \AttributeTok{axis.text.x =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{angle =} \DecValTok{45}\NormalTok{, }\AttributeTok{hjust =} \DecValTok{1}\NormalTok{),}
+    \AttributeTok{panel.background =} \FunctionTok{element\_rect}\NormalTok{(}\AttributeTok{fill =} \StringTok{"white"}\NormalTok{),}
+    \AttributeTok{panel.grid.major =} \FunctionTok{element\_line}\NormalTok{(}\AttributeTok{color =} \StringTok{"gray80"}\NormalTok{, }\AttributeTok{size =} \FloatTok{0.5}\NormalTok{),}
+    \AttributeTok{panel.grid.minor =} \FunctionTok{element\_line}\NormalTok{(}\AttributeTok{color =} \StringTok{"gray90"}\NormalTok{, }\AttributeTok{size =} \FloatTok{0.25}\NormalTok{),}
+    \AttributeTok{legend.position =} \StringTok{"bottom"}\NormalTok{,}
+    \AttributeTok{legend.title =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{14}\NormalTok{, }\AttributeTok{face =} \StringTok{"bold"}\NormalTok{),}
+    \AttributeTok{legend.text =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{12}\NormalTok{),}
+    \AttributeTok{legend.background =} \FunctionTok{element\_rect}\NormalTok{(}\AttributeTok{fill =} \StringTok{"lightgray"}\NormalTok{)}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \FunctionTok{facet\_wrap}\NormalTok{(}\SpecialCharTok{\textasciitilde{}}\NormalTok{county\_code)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{images/custom_theme_4.PNG}
+
+In this comprehensive example:
+
+\begin{itemize}
+\item
+  \texttt{plot.title\ =\ element\_text(size\ =\ 20,\ face\ =\ "bold",\ color\ =\ "navy",\ hjust\ =\ 0.5)} centers the plot title and customizes its size, face, and color.
+\item
+  \texttt{plot.subtitle\ =\ element\_text(size\ =\ 16,\ face\ =\ "bold",\ color\ =\ "darkred")} customizes the plot subtitle to be bold, size 16, and dark red.
+\item
+  \texttt{axis.text.x\ =\ element\_text(angle\ =\ 45,\ hjust\ =\ 1)} rotates the x-axis text labels for better readability.
+\item
+  Other elements are customized as described in previous examples.
+\end{itemize}
+
+By utilizing the \texttt{theme()} function, you can create highly customized and polished visualizations tailored to your specific needs, making your data analysis and presentation more effective. This was meant to give you a rough idea of some of the customizations you can do with \texttt{ggplot2}, there are a myriad of other options available.
+
+\hypertarget{basic-regression-analysis-in-r}{%
+\chapter{Basic Regression Analysis in R}\label{basic-regression-analysis-in-r}}
+
+\hypertarget{introduction-2}{%
+\section{Introduction}\label{introduction-2}}
+
+Regression analysis is a powerful statistical method used to examine the relationship between a dependent variable and one or more independent variables. In this chapter, we will explore how to perform basic regression analysis in R using the HMDA (Home Mortgage Disclosure Act) dataset. Specifically, we will use the \texttt{income} variable to predict \texttt{property\_value}.
+
+\hypertarget{preparing-the-data}{%
+\subsection{Preparing the Data}\label{preparing-the-data}}
+
+Before performing regression analysis, it's crucial to ensure that the data is clean and properly formatted. We'll start by loading the necessary packages and preparing the HMDA data.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(ggplot2)}
+\FunctionTok{library}\NormalTok{(dplyr)}
+\FunctionTok{library}\NormalTok{(readr)}
+
+\CommentTok{\# Load HMDA data}
+\NormalTok{hmda\_data }\OtherTok{\textless{}{-}} \FunctionTok{read\_csv}\NormalTok{(}\StringTok{"downloads/state\_NV.csv"}\NormalTok{, }\AttributeTok{guess\_max =} \ConstantTok{Inf}\NormalTok{)}
+
+\CommentTok{\# Filter and prep HMDA data for regression analysis}
+\NormalTok{filtered\_hmda\_data }\OtherTok{\textless{}{-}}\NormalTok{ hmda\_data }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(}
+\NormalTok{    action\_taken }\SpecialCharTok{==} \DecValTok{1}\NormalTok{,}
+\NormalTok{    loan\_purpose }\SpecialCharTok{==} \DecValTok{1}\NormalTok{,}
+\NormalTok{    occupancy\_type }\SpecialCharTok{==} \DecValTok{1}\NormalTok{,}
+\NormalTok{    lien\_status }\SpecialCharTok{==} \DecValTok{1}\NormalTok{,}
+\NormalTok{    total\_units }\SpecialCharTok{==} \StringTok{"1"}\NormalTok{,}
+    \SpecialCharTok{!}\NormalTok{property\_value }\SpecialCharTok{\%in\%} \FunctionTok{c}\NormalTok{(}\StringTok{"Exempt"}\NormalTok{, }\ConstantTok{NA}\NormalTok{),}
+\NormalTok{    income }\SpecialCharTok{\textless{}=} \DecValTok{250} \SpecialCharTok{\&}\NormalTok{ income }\SpecialCharTok{\textgreater{}} \DecValTok{0}
+\NormalTok{  ) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}
+    \AttributeTok{property\_value =} \FunctionTok{as.numeric}\NormalTok{(property\_value),}
+    \AttributeTok{loan\_type =} \FunctionTok{case\_when}\NormalTok{(}
+\NormalTok{      loan\_type }\SpecialCharTok{==} \DecValTok{1} \SpecialCharTok{\textasciitilde{}} \StringTok{"Conventional"}\NormalTok{,}
+\NormalTok{      loan\_type }\SpecialCharTok{==} \DecValTok{2} \SpecialCharTok{\textasciitilde{}} \StringTok{"FHA"}\NormalTok{,}
+\NormalTok{      loan\_type }\SpecialCharTok{==} \DecValTok{3} \SpecialCharTok{\textasciitilde{}} \StringTok{"VA"}\NormalTok{,}
+\NormalTok{      loan\_type }\SpecialCharTok{==} \DecValTok{4} \SpecialCharTok{\textasciitilde{}} \StringTok{"USDA"}
+\NormalTok{    )}
+\NormalTok{  ) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(property\_value }\SpecialCharTok{\textless{}} \DecValTok{1000000}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{simple-linear-regression}{%
+\section{Simple Linear Regression}\label{simple-linear-regression}}
+
+Simple linear regression is used to model the relationship between two continuous variables. In this case, we will model the relationship between \texttt{income} (independent variable) and \texttt{property\_value} (dependent variable).
+
+\hypertarget{fitting-the-model}{%
+\subsection{Fitting the Model}\label{fitting-the-model}}
+
+We use the \texttt{lm()} function to fit a linear model.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Fit the linear regression model}
+\NormalTok{lm\_model }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(property\_value }\SpecialCharTok{\textasciitilde{}}\NormalTok{ income, }\AttributeTok{data =}\NormalTok{ filtered\_hmda\_data)}
+
+\CommentTok{\# Display the summary of the model}
+\FunctionTok{summary}\NormalTok{(lm\_model)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{images/regression_summary.PNG}
+
+\hypertarget{interpreting-the-results}{%
+\subsection{Interpreting the Results}\label{interpreting-the-results}}
+
+Let's interpret the results of the simple linear regression model using the provided output.
+
+\hypertarget{coefficients}{%
+\subsubsection*{Coefficients}\label{coefficients}}
+\addcontentsline{toc}{subsubsection}{Coefficients}
+
+The \texttt{Coefficients} section provides the estimated values of the intercept and slope in the regression equation:
+
+\begin{itemize}
+\item
+  \textbf{Intercept}: 251,430.88
+
+  \begin{itemize}
+  \tightlist
+  \item
+    This represents the estimated property value when \texttt{income} is zero.
+  \end{itemize}
+\item
+  \textbf{Income}: 1,911.15
+
+  \begin{itemize}
+  \tightlist
+  \item
+    This represents the estimated change in property value for each unit increase in \texttt{income}.
+  \end{itemize}
+\end{itemize}
+
+\hypertarget{statistical-significance}{%
+\subsubsection*{Statistical Significance}\label{statistical-significance}}
+\addcontentsline{toc}{subsubsection}{Statistical Significance}
+
+The \texttt{Pr(\textgreater{}\textbar{}t\textbar{})} column provides the p-values for the coefficients:
+
+\begin{itemize}
+\item
+  \textbf{Intercept}: The p-value is less than 0.0000000000000002, indicating that the intercept is statistically significant.
+\item
+  \textbf{Income}: The p-value is also less than 0.0000000000000002, indicating that \texttt{income} is a statistically significant predictor of \texttt{property\_value}.
+\end{itemize}
+
+\hypertarget{model-fit}{%
+\subsubsection*{Model Fit}\label{model-fit}}
+\addcontentsline{toc}{subsubsection}{Model Fit}
+
+\begin{itemize}
+\item
+  \textbf{Residual standard error}: 129,400 on 34,193 degrees of freedom
+
+  \begin{itemize}
+  \tightlist
+  \item
+    This represents the average distance that the observed values fall from the regression line.
+  \end{itemize}
+\item
+  \textbf{Multiple R-squared}: 0.3188
+
+  \begin{itemize}
+  \tightlist
+  \item
+    This indicates that approximately 31.88\% of the variance in \texttt{property\_value} can be explained by \texttt{income}.
+  \end{itemize}
+\item
+  \textbf{Adjusted R-squared}: 0.3187
+
+  \begin{itemize}
+  \tightlist
+  \item
+    This is similar to the R-squared value but adjusted for the number of predictors in the model.
+  \end{itemize}
+\item
+  \textbf{F-statistic}: 1.6e+04 on 1 and 34,193 DF, p-value: \textless{} 0.00000000000000022
+
+  \begin{itemize}
+  \tightlist
+  \item
+    This indicates that the model is statistically significant overall.
+  \end{itemize}
+\end{itemize}
+
+The results suggest that there is a statistically significant positive relationship between \texttt{income} and \texttt{property\_value}. For every unit increase in \texttt{income}, the \texttt{property\_value} is expected to increase by approximately 1,911.15 units, holding other factors constant. The R-squared value indicates that \texttt{income} explains about 31.88\% of the variability in \texttt{property\_value}, which suggests that other factors not included in the model may also play a significant role in determining property values.
+
+\hypertarget{visualizing-the-regression-line}{%
+\subsubsection*{Visualizing the Regression Line}\label{visualizing-the-regression-line}}
+\addcontentsline{toc}{subsubsection}{Visualizing the Regression Line}
+
+We can visualize the regression line using ggplot2.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(}\AttributeTok{data =}\NormalTok{ filtered\_hmda\_data, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ income, }\AttributeTok{y =}\NormalTok{ property\_value)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_point}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{geom\_smooth}\NormalTok{(}\AttributeTok{method =} \StringTok{"lm"}\NormalTok{, }\AttributeTok{col =} \StringTok{"red"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \StringTok{"Regression Line: Property Value vs Income"}\NormalTok{,}
+       \AttributeTok{x =} \StringTok{"Income (in Thousands of Dollars)"}\NormalTok{,}
+       \AttributeTok{y =} \StringTok{"Property Value"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{images/scatter_plot_with_regression.PNG}
+
+In this plot:
+
+\begin{itemize}
+\item
+  \texttt{geom\_point()} adds the data points.
+\item
+  \texttt{geom\_smooth(method\ =\ "lm",\ col\ =\ "red")} adds the regression line with the color red.
+\end{itemize}
+
+\hypertarget{plotting-residuals-using-lm}{%
+\subsubsection*{\texorpdfstring{Plotting Residuals Using \texttt{lm()}}{Plotting Residuals Using lm()}}\label{plotting-residuals-using-lm}}
+\addcontentsline{toc}{subsubsection}{Plotting Residuals Using \texttt{lm()}}
+
+You can plot residuals of a linear model fitted with \texttt{lm()} using several methods in R. One common way is to use base R plotting functions to create diagnostic plots. Here is how you can plot the residuals:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{Basic Residual Plot}: Plotting residuals versus fitted values.
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Fit the linear regression model}
+\NormalTok{lm\_model }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(property\_value }\SpecialCharTok{\textasciitilde{}}\NormalTok{ income, }\AttributeTok{data =}\NormalTok{ filtered\_hmda\_data)}
+
+\CommentTok{\# Plot residuals vs. fitted values}
+\FunctionTok{plot}\NormalTok{(lm\_model}\SpecialCharTok{$}\NormalTok{fitted.values, lm\_model}\SpecialCharTok{$}\NormalTok{residuals,}
+     \AttributeTok{xlab =} \StringTok{"Fitted Values"}\NormalTok{,}
+     \AttributeTok{ylab =} \StringTok{"Residuals"}\NormalTok{,}
+     \AttributeTok{main =} \StringTok{"Residuals vs Fitted Values"}\NormalTok{)}
+\FunctionTok{abline}\NormalTok{(}\AttributeTok{h =} \DecValTok{0}\NormalTok{, }\AttributeTok{col =} \StringTok{"red"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{images/residual_plot.PNG}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  \textbf{Diagnostic Plots} Plotting multiple diagnostic plots at once.
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Fit the linear regression model}
+\NormalTok{lm\_model }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(property\_value }\SpecialCharTok{\textasciitilde{}}\NormalTok{ income, }\AttributeTok{data =}\NormalTok{ filtered\_hmda\_data)}
+
+\CommentTok{\# Produce diagnostic plots}
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mfrow =} \FunctionTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{, }\DecValTok{2}\NormalTok{)) }\CommentTok{\# just lets R know we want the plots to be in 2x2 structure}
+\FunctionTok{plot}\NormalTok{(lm\_model)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{images/diagnostic_plots.PNG}
+
+The \texttt{plot(lm\_model)} function produces four diagnostic plots:
+
+\begin{itemize}
+\item
+  Residuals vs Fitted
+\item
+  Normal Q-Q
+\item
+  Scale-Location (Spread-Location)
+\item
+  Residuals vs Leverage
+\end{itemize}
+
+These plots help to assess the fit of the model and to identify any potential issues such as non-linearity, heteroscedasticity, and influential observations.
 
   \bibliography{book.bib,packages.bib}
 
