@@ -64,7 +64,7 @@ filtered_hmda_data <- hmda_data%>%
   filter(property_value<1000000)
 ```
 
-### Basic Plot Structure {.unlisted .unnumbered}
+### Basic Plot Structure / Scatter Plot {.unlisted .unnumbered}
 
 The structure of a ggplot2 plot is built around the `ggplot()`\*\* function and the `+` operator to add layers. Here's a simple example of a scatter pplot:
 
@@ -102,7 +102,7 @@ ggplot(data = filtered_hmda_data, aes(x = property_value)) +
 
 ![](images/histogram_plot.PNG)
 
--   `geom_histogram(binwidth = 50000, fill = "blue", color = "black")` adds a histogram layer with specified bin width, fill color, and border color.
+-   `geom_histogram(binwidth = 50000)` adds a histogram layer with specified bin width.
 -   `labs()` is used to add titles and labels to the plot.
 
 #### Bar Plot {.unnumbered}
@@ -117,15 +117,45 @@ ggplot(data = filtered_hmda_data, aes(x = loan_type)) +
        y = "Count")
 ```
 
+![](images/bar_plot.PNG)
+
 -   `ggplot(data = filtered_hmda_data, aes(x = loan_type))`: This line initializes the ggplot object with the specified dataset (`filtered_hmda_data`) and maps the loan_type column to the x-axis.
 -   `geom_bar()`: This adds a bar plot layer to the ggplot object. By default, geom_bar() counts the number of occurrences of each loan_type.
--   `labs(title = "Count of Loans by Loan Type", x = "Loan Type", y = "Count")`: This function is used to add titles and labels to the plot. It specifies the plot title and labels for the x and y axes..
+-   `labs(title = "Count of Loans by Loan Type", x = "Loan Type", y = "Count")`: This function is used to add titles and labels to the plot. It specifies the plot title and labels for the x and y axes.
 
-![](images/bar_plot.PNG)
+A common issue that many beginners have have when creating bar plots, is that many don't know the difference between `geom_col()` and `geom_bar()`.
+
+The primary difference between `geom_col()` and `geom_bar()` in ggplot2 lies in how they handle the data for the height of the bars in a bar plot.
+
+1.  **`geom_col()`**:
+
+    -   **Purpose**: It is used when you already have the values that you want to plot (i.e., the heights of the bars).
+
+    -   **Usage**: You provide both the x and y values directly. This is useful when your data is already summarized.
+
+    -   **Example**:
+
+        ``` r
+        ggplot(data, aes(x = category, y = value)) +
+          geom_col()
+        ```
+
+2.  **`geom_bar()`**:
+
+    -   **Purpose**: It is used to create bar plots from raw data, where the heights of the bars are calculated as the counts of cases at each x position.
+
+    -   **Usage**: You provide the x values, and ggplot2 will count the number of occurrences of each x value and use these counts as the heights of the bars.
+
+    -   **Example**:
+
+        ``` r
+        ggplot(data, aes(x = category)) +
+          geom_bar()
+        ```
 
 #### Box Plot {.unnumbered}
 
-Box plots are useful for visualizing the distribution of a continuous variable across different categories. Let's create a box plot to visualize property values by loan type.
+Box plots are useful for visualizing the distribution of a continuous variable across different categories. They summarize key statistics like the median, quartiles, and potential outliers, making it easy to compare different groups. Let's create a box plot to visualize property values by loan type.
 
 ``` r
 ggplot(data = filtered_hmda_data, aes(x = loan_type, y = property_value)) +
@@ -142,6 +172,16 @@ In this example:
 -   `geom_boxplot()` adds a box plot layer.
 
 -   `labs()` is used to add titles and labels to the plot.
+
+##### Explanation of Box Plot Components {.unnumbered .unlisted}
+
+-   **Median**: The thick line in the middle of the box represents the median of the data.
+
+-   **Interquartile Range (IQR)**: The box itself represents the IQR, which spans from the first quartile (25th percentile) to the third quartile (75th percentile).
+
+-   **Whiskers**: The lines extending from the box (whiskers) represent the range of the data within 1.5 times the IQR from the first and third quartiles. Data points outside this range are considered outliers.
+
+-   **Outliers**: Points outside the whiskers are potential outliers, indicating values that are significantly higher or lower than the rest of the data.
 
 #### Line Plot {.unnumbered}
 

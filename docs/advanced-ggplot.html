@@ -23,7 +23,7 @@
 <meta name="author" content="Antonio Solorio" />
 
 
-<meta name="date" content="2024-07-23" />
+<meta name="date" content="2024-07-25" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -224,6 +224,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="advanced-ggplot.html"><a href="advanced-ggplot.html#complete-theme-customization-example"><i class="fa fa-check"></i>Complete Theme Customization Example</a></li>
 </ul></li>
 </ul></li>
+<li class="chapter" data-level="" data-path="advanced-ggplot.html"><a href="advanced-ggplot.html#more-information-on-ggplot2"><i class="fa fa-check"></i>More Information on ggplot2</a></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="regressions.html"><a href="regressions.html"><i class="fa fa-check"></i><b>5</b> Basic Regression Analysis in R</a>
 <ul>
@@ -242,6 +243,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="regressions.html"><a href="regressions.html#visualizing-the-regression-line"><i class="fa fa-check"></i>Visualizing the Regression Line</a></li>
 <li class="chapter" data-level="" data-path="regressions.html"><a href="regressions.html#plotting-residuals-using-lm"><i class="fa fa-check"></i>Plotting Residuals Using <code>lm()</code></a></li>
 </ul></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="regressions.html"><a href="regressions.html#multiple-linear-regression"><i class="fa fa-check"></i><b>5.3</b> Multiple Linear Regression</a>
+<ul>
+<li class="chapter" data-level="5.3.1" data-path="regressions.html"><a href="regressions.html#including-multiple-variables"><i class="fa fa-check"></i><b>5.3.1</b> Including Multiple Variables</a></li>
+<li class="chapter" data-level="5.3.2" data-path="regressions.html"><a href="regressions.html#creating-dummy-variables"><i class="fa fa-check"></i><b>5.3.2</b> Creating Dummy Variables</a></li>
+<li class="chapter" data-level="5.3.3" data-path="regressions.html"><a href="regressions.html#preparing-the-data-1"><i class="fa fa-check"></i><b>5.3.3</b> Preparing the Data</a></li>
+<li class="chapter" data-level="5.3.4" data-path="regressions.html"><a href="regressions.html#fitting-the-multiple-linear-regression-model"><i class="fa fa-check"></i><b>5.3.4</b> Fitting the Multiple Linear Regression Model</a></li>
+</ul></li>
+<li class="chapter" data-level="5.4" data-path="regressions.html"><a href="regressions.html#robust-linear-regression"><i class="fa fa-check"></i><b>5.4</b> Robust Linear Regression</a>
+<ul>
+<li class="chapter" data-level="5.4.1" data-path="regressions.html"><a href="regressions.html#preparing-the-data-2"><i class="fa fa-check"></i><b>5.4.1</b> Preparing the Data</a></li>
+<li class="chapter" data-level="5.4.2" data-path="regressions.html"><a href="regressions.html#fitting-the-robust-linear-model"><i class="fa fa-check"></i><b>5.4.2</b> Fitting the Robust Linear Model</a></li>
 </ul></li>
 </ul></li>
 <li class="divider"></li>
@@ -273,12 +286,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="facet-wrap" class="section level4 unnumbered hasAnchor">
 <h4>Facet Wrap<a href="advanced-ggplot.html#facet-wrap" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>The <code>facet_wrap()</code> function splits the data into multiple panels based on the values of a single categorical variable.</p>
-<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="advanced-ggplot.html#cb29-1" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> filtered_hmda_data, <span class="fu">aes</span>(<span class="at">x =</span> income, <span class="at">y =</span> property_value)) <span class="sc">+</span></span>
-<span id="cb29-2"><a href="advanced-ggplot.html#cb29-2" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb29-3"><a href="advanced-ggplot.html#cb29-3" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> loan_type) <span class="sc">+</span></span>
-<span id="cb29-4"><a href="advanced-ggplot.html#cb29-4" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Property Value vs Income by Loan Type&quot;</span>,</span>
-<span id="cb29-5"><a href="advanced-ggplot.html#cb29-5" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">&quot;Income&quot;</span>,</span>
-<span id="cb29-6"><a href="advanced-ggplot.html#cb29-6" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Property Value&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="advanced-ggplot.html#cb31-1" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> filtered_hmda_data, <span class="fu">aes</span>(<span class="at">x =</span> income, <span class="at">y =</span> property_value)) <span class="sc">+</span></span>
+<span id="cb31-2"><a href="advanced-ggplot.html#cb31-2" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb31-3"><a href="advanced-ggplot.html#cb31-3" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> loan_type) <span class="sc">+</span></span>
+<span id="cb31-4"><a href="advanced-ggplot.html#cb31-4" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Property Value vs Income by Loan Type&quot;</span>,</span>
+<span id="cb31-5"><a href="advanced-ggplot.html#cb31-5" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">&quot;Income&quot;</span>,</span>
+<span id="cb31-6"><a href="advanced-ggplot.html#cb31-6" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Property Value&quot;</span>)</span></code></pre></div>
 <p><img src="images/facet_wrap.PNG" /></p>
 <p>In this example, <code>facet_wrap(~ loan_type)</code> creates separate panels for each loan type, allowing us to compare the relationship between income and property value across different loan types.</p>
 </div>
@@ -286,51 +299,51 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h4>Facet Grid<a href="advanced-ggplot.html#facet-grid" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>The <code>facet_grid()</code> function allows for more complex faceting based on two variables, creating a matrix of panels.</p>
 <p>I removed the filter the occupancy that limited occupancy to only primary residences. I also constructed a <code>case_when()</code> to label the occupancy type for each transaction</p>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="advanced-ggplot.html#cb30-1" tabindex="-1"></a><span class="co"># Filter and prep HMDA data for plotting</span></span>
-<span id="cb30-2"><a href="advanced-ggplot.html#cb30-2" tabindex="-1"></a>filtered_hmda_data <span class="ot">&lt;-</span> hmda_data<span class="sc">%&gt;%</span></span>
-<span id="cb30-3"><a href="advanced-ggplot.html#cb30-3" tabindex="-1"></a>  <span class="fu">filter</span>(</span>
-<span id="cb30-4"><a href="advanced-ggplot.html#cb30-4" tabindex="-1"></a>    <span class="co"># Filter for only originated transactions</span></span>
-<span id="cb30-5"><a href="advanced-ggplot.html#cb30-5" tabindex="-1"></a>    action_taken <span class="sc">==</span> <span class="dv">1</span>,</span>
-<span id="cb30-6"><a href="advanced-ggplot.html#cb30-6" tabindex="-1"></a>    <span class="co"># Filter for only for home purchases</span></span>
-<span id="cb30-7"><a href="advanced-ggplot.html#cb30-7" tabindex="-1"></a>    loan_purpose <span class="sc">==</span> <span class="dv">1</span>,</span>
-<span id="cb30-8"><a href="advanced-ggplot.html#cb30-8" tabindex="-1"></a>    <span class="co"># Filter for only primary homss</span></span>
-<span id="cb30-9"><a href="advanced-ggplot.html#cb30-9" tabindex="-1"></a>    <span class="co"># This has been commented out</span></span>
-<span id="cb30-10"><a href="advanced-ggplot.html#cb30-10" tabindex="-1"></a>    <span class="co">#occupancy_type == 1,</span></span>
-<span id="cb30-11"><a href="advanced-ggplot.html#cb30-11" tabindex="-1"></a>    <span class="co"># Filter for primary liens</span></span>
-<span id="cb30-12"><a href="advanced-ggplot.html#cb30-12" tabindex="-1"></a>    lien_status <span class="sc">==</span> <span class="dv">1</span>,</span>
-<span id="cb30-13"><a href="advanced-ggplot.html#cb30-13" tabindex="-1"></a>    <span class="co"># Filter for single unit homes</span></span>
-<span id="cb30-14"><a href="advanced-ggplot.html#cb30-14" tabindex="-1"></a>    total_units <span class="sc">==</span> <span class="st">&quot;1&quot;</span>,</span>
-<span id="cb30-15"><a href="advanced-ggplot.html#cb30-15" tabindex="-1"></a>    <span class="co"># Filter propery value </span></span>
-<span id="cb30-16"><a href="advanced-ggplot.html#cb30-16" tabindex="-1"></a>    <span class="sc">!</span>property_value <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;Exempt&quot;</span>, <span class="cn">NA</span>),</span>
-<span id="cb30-17"><a href="advanced-ggplot.html#cb30-17" tabindex="-1"></a>    <span class="co"># Filter income for values below 250 but above 0</span></span>
-<span id="cb30-18"><a href="advanced-ggplot.html#cb30-18" tabindex="-1"></a>    income <span class="sc">&lt;=</span><span class="dv">250</span> <span class="sc">&amp;</span> income<span class="sc">&gt;</span><span class="dv">0</span>,</span>
-<span id="cb30-19"><a href="advanced-ggplot.html#cb30-19" tabindex="-1"></a>    <span class="co"># Filter for Clark County</span></span>
-<span id="cb30-20"><a href="advanced-ggplot.html#cb30-20" tabindex="-1"></a>    county_code <span class="sc">==</span> <span class="st">&quot;32003&quot;</span></span>
-<span id="cb30-21"><a href="advanced-ggplot.html#cb30-21" tabindex="-1"></a>    </span>
-<span id="cb30-22"><a href="advanced-ggplot.html#cb30-22" tabindex="-1"></a>  )<span class="sc">%&gt;%</span></span>
-<span id="cb30-23"><a href="advanced-ggplot.html#cb30-23" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb30-24"><a href="advanced-ggplot.html#cb30-24" tabindex="-1"></a>    <span class="at">property_value =</span> <span class="fu">as.numeric</span>(property_value),</span>
-<span id="cb30-25"><a href="advanced-ggplot.html#cb30-25" tabindex="-1"></a>    <span class="co"># Assigning labels for each loan_type</span></span>
-<span id="cb30-26"><a href="advanced-ggplot.html#cb30-26" tabindex="-1"></a>    <span class="at">loan_type =</span> <span class="fu">case_when</span>(</span>
-<span id="cb30-27"><a href="advanced-ggplot.html#cb30-27" tabindex="-1"></a>      loan_type <span class="sc">==</span> <span class="dv">1</span> <span class="sc">~</span> <span class="st">&quot;Conventional&quot;</span>,</span>
-<span id="cb30-28"><a href="advanced-ggplot.html#cb30-28" tabindex="-1"></a>      loan_type <span class="sc">==</span> <span class="dv">2</span> <span class="sc">~</span> <span class="st">&quot;FHA&quot;</span>,</span>
-<span id="cb30-29"><a href="advanced-ggplot.html#cb30-29" tabindex="-1"></a>      loan_type <span class="sc">==</span> <span class="dv">3</span> <span class="sc">~</span> <span class="st">&quot;VA&quot;</span>,</span>
-<span id="cb30-30"><a href="advanced-ggplot.html#cb30-30" tabindex="-1"></a>      loan_type <span class="sc">==</span> <span class="dv">4</span> <span class="sc">~</span> <span class="st">&quot;USDA&quot;</span></span>
-<span id="cb30-31"><a href="advanced-ggplot.html#cb30-31" tabindex="-1"></a>    ),</span>
-<span id="cb30-32"><a href="advanced-ggplot.html#cb30-32" tabindex="-1"></a>    <span class="at">occupancy_type =</span> <span class="fu">case_when</span>(</span>
-<span id="cb30-33"><a href="advanced-ggplot.html#cb30-33" tabindex="-1"></a>      occupancy_type <span class="sc">==</span> <span class="dv">1</span> <span class="sc">~</span> <span class="st">&quot;Primary Residence&quot;</span>,</span>
-<span id="cb30-34"><a href="advanced-ggplot.html#cb30-34" tabindex="-1"></a>      occupancy_type <span class="sc">==</span> <span class="dv">2</span> <span class="sc">~</span> <span class="st">&quot;Second Residence&quot;</span>,</span>
-<span id="cb30-35"><a href="advanced-ggplot.html#cb30-35" tabindex="-1"></a>      occupancy_type <span class="sc">==</span> <span class="dv">3</span> <span class="sc">~</span> <span class="st">&quot;Investment Property&quot;</span></span>
-<span id="cb30-36"><a href="advanced-ggplot.html#cb30-36" tabindex="-1"></a>    ))<span class="sc">%&gt;%</span></span>
-<span id="cb30-37"><a href="advanced-ggplot.html#cb30-37" tabindex="-1"></a>    <span class="co"># Only keep property values under $1 million</span></span>
-<span id="cb30-38"><a href="advanced-ggplot.html#cb30-38" tabindex="-1"></a>  <span class="fu">filter</span>(property_value<span class="sc">&lt;</span><span class="dv">1000000</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="advanced-ggplot.html#cb32-1" tabindex="-1"></a><span class="co"># Filter and prep HMDA data for plotting</span></span>
+<span id="cb32-2"><a href="advanced-ggplot.html#cb32-2" tabindex="-1"></a>filtered_hmda_data <span class="ot">&lt;-</span> hmda_data<span class="sc">%&gt;%</span></span>
+<span id="cb32-3"><a href="advanced-ggplot.html#cb32-3" tabindex="-1"></a>  <span class="fu">filter</span>(</span>
+<span id="cb32-4"><a href="advanced-ggplot.html#cb32-4" tabindex="-1"></a>    <span class="co"># Filter for only originated transactions</span></span>
+<span id="cb32-5"><a href="advanced-ggplot.html#cb32-5" tabindex="-1"></a>    action_taken <span class="sc">==</span> <span class="dv">1</span>,</span>
+<span id="cb32-6"><a href="advanced-ggplot.html#cb32-6" tabindex="-1"></a>    <span class="co"># Filter for only for home purchases</span></span>
+<span id="cb32-7"><a href="advanced-ggplot.html#cb32-7" tabindex="-1"></a>    loan_purpose <span class="sc">==</span> <span class="dv">1</span>,</span>
+<span id="cb32-8"><a href="advanced-ggplot.html#cb32-8" tabindex="-1"></a>    <span class="co"># Filter for only primary homss</span></span>
+<span id="cb32-9"><a href="advanced-ggplot.html#cb32-9" tabindex="-1"></a>    <span class="co"># This has been commented out</span></span>
+<span id="cb32-10"><a href="advanced-ggplot.html#cb32-10" tabindex="-1"></a>    <span class="co">#occupancy_type == 1,</span></span>
+<span id="cb32-11"><a href="advanced-ggplot.html#cb32-11" tabindex="-1"></a>    <span class="co"># Filter for primary liens</span></span>
+<span id="cb32-12"><a href="advanced-ggplot.html#cb32-12" tabindex="-1"></a>    lien_status <span class="sc">==</span> <span class="dv">1</span>,</span>
+<span id="cb32-13"><a href="advanced-ggplot.html#cb32-13" tabindex="-1"></a>    <span class="co"># Filter for single unit homes</span></span>
+<span id="cb32-14"><a href="advanced-ggplot.html#cb32-14" tabindex="-1"></a>    total_units <span class="sc">==</span> <span class="st">&quot;1&quot;</span>,</span>
+<span id="cb32-15"><a href="advanced-ggplot.html#cb32-15" tabindex="-1"></a>    <span class="co"># Filter propery value </span></span>
+<span id="cb32-16"><a href="advanced-ggplot.html#cb32-16" tabindex="-1"></a>    <span class="sc">!</span>property_value <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;Exempt&quot;</span>, <span class="cn">NA</span>),</span>
+<span id="cb32-17"><a href="advanced-ggplot.html#cb32-17" tabindex="-1"></a>    <span class="co"># Filter income for values below 250 but above 0</span></span>
+<span id="cb32-18"><a href="advanced-ggplot.html#cb32-18" tabindex="-1"></a>    income <span class="sc">&lt;=</span><span class="dv">250</span> <span class="sc">&amp;</span> income<span class="sc">&gt;</span><span class="dv">0</span>,</span>
+<span id="cb32-19"><a href="advanced-ggplot.html#cb32-19" tabindex="-1"></a>    <span class="co"># Filter for Clark County</span></span>
+<span id="cb32-20"><a href="advanced-ggplot.html#cb32-20" tabindex="-1"></a>    county_code <span class="sc">==</span> <span class="st">&quot;32003&quot;</span></span>
+<span id="cb32-21"><a href="advanced-ggplot.html#cb32-21" tabindex="-1"></a>    </span>
+<span id="cb32-22"><a href="advanced-ggplot.html#cb32-22" tabindex="-1"></a>  )<span class="sc">%&gt;%</span></span>
+<span id="cb32-23"><a href="advanced-ggplot.html#cb32-23" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb32-24"><a href="advanced-ggplot.html#cb32-24" tabindex="-1"></a>    <span class="at">property_value =</span> <span class="fu">as.numeric</span>(property_value),</span>
+<span id="cb32-25"><a href="advanced-ggplot.html#cb32-25" tabindex="-1"></a>    <span class="co"># Assigning labels for each loan_type</span></span>
+<span id="cb32-26"><a href="advanced-ggplot.html#cb32-26" tabindex="-1"></a>    <span class="at">loan_type =</span> <span class="fu">case_when</span>(</span>
+<span id="cb32-27"><a href="advanced-ggplot.html#cb32-27" tabindex="-1"></a>      loan_type <span class="sc">==</span> <span class="dv">1</span> <span class="sc">~</span> <span class="st">&quot;Conventional&quot;</span>,</span>
+<span id="cb32-28"><a href="advanced-ggplot.html#cb32-28" tabindex="-1"></a>      loan_type <span class="sc">==</span> <span class="dv">2</span> <span class="sc">~</span> <span class="st">&quot;FHA&quot;</span>,</span>
+<span id="cb32-29"><a href="advanced-ggplot.html#cb32-29" tabindex="-1"></a>      loan_type <span class="sc">==</span> <span class="dv">3</span> <span class="sc">~</span> <span class="st">&quot;VA&quot;</span>,</span>
+<span id="cb32-30"><a href="advanced-ggplot.html#cb32-30" tabindex="-1"></a>      loan_type <span class="sc">==</span> <span class="dv">4</span> <span class="sc">~</span> <span class="st">&quot;USDA&quot;</span></span>
+<span id="cb32-31"><a href="advanced-ggplot.html#cb32-31" tabindex="-1"></a>    ),</span>
+<span id="cb32-32"><a href="advanced-ggplot.html#cb32-32" tabindex="-1"></a>    <span class="at">occupancy_type =</span> <span class="fu">case_when</span>(</span>
+<span id="cb32-33"><a href="advanced-ggplot.html#cb32-33" tabindex="-1"></a>      occupancy_type <span class="sc">==</span> <span class="dv">1</span> <span class="sc">~</span> <span class="st">&quot;Primary Residence&quot;</span>,</span>
+<span id="cb32-34"><a href="advanced-ggplot.html#cb32-34" tabindex="-1"></a>      occupancy_type <span class="sc">==</span> <span class="dv">2</span> <span class="sc">~</span> <span class="st">&quot;Second Residence&quot;</span>,</span>
+<span id="cb32-35"><a href="advanced-ggplot.html#cb32-35" tabindex="-1"></a>      occupancy_type <span class="sc">==</span> <span class="dv">3</span> <span class="sc">~</span> <span class="st">&quot;Investment Property&quot;</span></span>
+<span id="cb32-36"><a href="advanced-ggplot.html#cb32-36" tabindex="-1"></a>    ))<span class="sc">%&gt;%</span></span>
+<span id="cb32-37"><a href="advanced-ggplot.html#cb32-37" tabindex="-1"></a>    <span class="co"># Only keep property values under $1 million</span></span>
+<span id="cb32-38"><a href="advanced-ggplot.html#cb32-38" tabindex="-1"></a>  <span class="fu">filter</span>(property_value<span class="sc">&lt;</span><span class="dv">1000000</span>)</span></code></pre></div>
 <p>Having prepped the data, we can now demonstrate the usage of <code>facet_grid()</code> .</p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="advanced-ggplot.html#cb31-1" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> filtered_hmda_data, <span class="fu">aes</span>(<span class="at">x =</span> income, <span class="at">y =</span> property_value)) <span class="sc">+</span></span>
-<span id="cb31-2"><a href="advanced-ggplot.html#cb31-2" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb31-3"><a href="advanced-ggplot.html#cb31-3" tabindex="-1"></a>  <span class="fu">facet_grid</span>(loan_type <span class="sc">~</span> occupancy_type) <span class="sc">+</span></span>
-<span id="cb31-4"><a href="advanced-ggplot.html#cb31-4" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Property Value vs Income by Loan Type and Occupancy Type&quot;</span>,</span>
-<span id="cb31-5"><a href="advanced-ggplot.html#cb31-5" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">&quot;Income&quot;</span>,</span>
-<span id="cb31-6"><a href="advanced-ggplot.html#cb31-6" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Property Value&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="advanced-ggplot.html#cb33-1" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> filtered_hmda_data, <span class="fu">aes</span>(<span class="at">x =</span> income, <span class="at">y =</span> property_value)) <span class="sc">+</span></span>
+<span id="cb33-2"><a href="advanced-ggplot.html#cb33-2" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb33-3"><a href="advanced-ggplot.html#cb33-3" tabindex="-1"></a>  <span class="fu">facet_grid</span>(loan_type <span class="sc">~</span> occupancy_type) <span class="sc">+</span></span>
+<span id="cb33-4"><a href="advanced-ggplot.html#cb33-4" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Property Value vs Income by Loan Type and Occupancy Type&quot;</span>,</span>
+<span id="cb33-5"><a href="advanced-ggplot.html#cb33-5" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">&quot;Income&quot;</span>,</span>
+<span id="cb33-6"><a href="advanced-ggplot.html#cb33-6" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Property Value&quot;</span>)</span></code></pre></div>
 <p><img src="images/Facet_Grid.PNG" /></p>
 <p>In this example, <code>facet_grid(loan_type ~ occupancy_type)</code> creates a grid of panels, with rows representing loan types and columns representing occupancy types.</p>
 </div>
@@ -343,21 +356,21 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>ggplot2 includes several built-in themes that can be applied directly to your plots. Some common themes are <code>theme_minimal()</code>, <code>theme_classic()</code>, and <code>theme_dark()</code>.</p>
 <div id="base-example" class="section level5 unlisted unnumbered hasAnchor">
 <h5>Base Example<a href="advanced-ggplot.html#base-example" class="anchor-section" aria-label="Anchor link to header"></a></h5>
-<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="advanced-ggplot.html#cb32-1" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> filtered_hmda_data, <span class="fu">aes</span>(<span class="at">x =</span> income, <span class="at">y =</span> property_value)) <span class="sc">+</span></span>
-<span id="cb32-2"><a href="advanced-ggplot.html#cb32-2" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb32-3"><a href="advanced-ggplot.html#cb32-3" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Property Value vs Income&quot;</span>,</span>
-<span id="cb32-4"><a href="advanced-ggplot.html#cb32-4" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">&quot;Income&quot;</span>,</span>
-<span id="cb32-5"><a href="advanced-ggplot.html#cb32-5" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Property Value&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="advanced-ggplot.html#cb34-1" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> filtered_hmda_data, <span class="fu">aes</span>(<span class="at">x =</span> income, <span class="at">y =</span> property_value)) <span class="sc">+</span></span>
+<span id="cb34-2"><a href="advanced-ggplot.html#cb34-2" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb34-3"><a href="advanced-ggplot.html#cb34-3" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Property Value vs Income&quot;</span>,</span>
+<span id="cb34-4"><a href="advanced-ggplot.html#cb34-4" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">&quot;Income&quot;</span>,</span>
+<span id="cb34-5"><a href="advanced-ggplot.html#cb34-5" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Property Value&quot;</span>)</span></code></pre></div>
 <p><img src="images/scatter%20plot.PNG" /></p>
 </div>
 <div id="example-with-theme_minimal" class="section level5 unlisted unnumbered hasAnchor">
 <h5>Example with <code>theme_minimal()</code><a href="advanced-ggplot.html#example-with-theme_minimal" class="anchor-section" aria-label="Anchor link to header"></a></h5>
-<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="advanced-ggplot.html#cb33-1" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> filtered_hmda_data, <span class="fu">aes</span>(<span class="at">x =</span> income, <span class="at">y =</span> property_value)) <span class="sc">+</span></span>
-<span id="cb33-2"><a href="advanced-ggplot.html#cb33-2" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb33-3"><a href="advanced-ggplot.html#cb33-3" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Property Value vs Income&quot;</span>,</span>
-<span id="cb33-4"><a href="advanced-ggplot.html#cb33-4" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">&quot;Income&quot;</span>,</span>
-<span id="cb33-5"><a href="advanced-ggplot.html#cb33-5" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Property Value&quot;</span>)<span class="sc">+</span></span>
-<span id="cb33-6"><a href="advanced-ggplot.html#cb33-6" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="advanced-ggplot.html#cb35-1" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> filtered_hmda_data, <span class="fu">aes</span>(<span class="at">x =</span> income, <span class="at">y =</span> property_value)) <span class="sc">+</span></span>
+<span id="cb35-2"><a href="advanced-ggplot.html#cb35-2" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb35-3"><a href="advanced-ggplot.html#cb35-3" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Property Value vs Income&quot;</span>,</span>
+<span id="cb35-4"><a href="advanced-ggplot.html#cb35-4" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">&quot;Income&quot;</span>,</span>
+<span id="cb35-5"><a href="advanced-ggplot.html#cb35-5" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Property Value&quot;</span>)<span class="sc">+</span></span>
+<span id="cb35-6"><a href="advanced-ggplot.html#cb35-6" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div>
 <p><img src="images/scatter%20plot%20with%20theme_minimal.PNG" /></p>
 <p>For a complete list of themes available from <code>ggplot2</code> see <a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="uri">https://ggplot2.tidyverse.org/reference/ggtheme.html</a>. Additional themes are also available from the <code>ggthemes</code> package. For more information on these see <a href="https://yutannihilation.github.io/allYourFigureAreBelongToUs/ggthemes/" class="uri">https://yutannihilation.github.io/allYourFigureAreBelongToUs/ggthemes/</a>.</p>
 </div>
@@ -366,44 +379,44 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h4>Customizing Themes in ggplot2<a href="advanced-ggplot.html#customizing-themes-in-ggplot2" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>Customizing themes in ggplot2 allows you to tailor the appearance of your plots to fit your specific needs, making them more informative and visually appealing. This can include adjusting the size, color, and font of text elements, modifying background and grid line properties, and much more. The <code>theme()</code> function is central to these customizations, providing a wide range of options to fine-tune each component of the plot.</p>
 <p>For the purposes of this example, the filter on the <code>county_code</code> has been removed to demonstrate the customization capabilities more broadly.</p>
-<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="advanced-ggplot.html#cb34-1" tabindex="-1"></a>filtered_hmda_data <span class="ot">&lt;-</span> hmda_data <span class="sc">%&gt;%</span></span>
-<span id="cb34-2"><a href="advanced-ggplot.html#cb34-2" tabindex="-1"></a>  <span class="fu">filter</span>(</span>
-<span id="cb34-3"><a href="advanced-ggplot.html#cb34-3" tabindex="-1"></a>    action_taken <span class="sc">==</span> <span class="dv">1</span>,</span>
-<span id="cb34-4"><a href="advanced-ggplot.html#cb34-4" tabindex="-1"></a>    loan_purpose <span class="sc">==</span> <span class="dv">1</span>,</span>
-<span id="cb34-5"><a href="advanced-ggplot.html#cb34-5" tabindex="-1"></a>    occupancy_type <span class="sc">==</span> <span class="dv">1</span>,</span>
-<span id="cb34-6"><a href="advanced-ggplot.html#cb34-6" tabindex="-1"></a>    lien_status <span class="sc">==</span> <span class="dv">1</span>,</span>
-<span id="cb34-7"><a href="advanced-ggplot.html#cb34-7" tabindex="-1"></a>    total_units <span class="sc">==</span> <span class="st">&quot;1&quot;</span>,</span>
-<span id="cb34-8"><a href="advanced-ggplot.html#cb34-8" tabindex="-1"></a>    <span class="sc">!</span>property_value <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;Exempt&quot;</span>, <span class="cn">NA</span>),</span>
-<span id="cb34-9"><a href="advanced-ggplot.html#cb34-9" tabindex="-1"></a>    income <span class="sc">&lt;=</span> <span class="dv">250</span> <span class="sc">&amp;</span> income <span class="sc">&gt;</span> <span class="dv">0</span></span>
-<span id="cb34-10"><a href="advanced-ggplot.html#cb34-10" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb34-11"><a href="advanced-ggplot.html#cb34-11" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb34-12"><a href="advanced-ggplot.html#cb34-12" tabindex="-1"></a>    <span class="at">property_value =</span> <span class="fu">as.numeric</span>(property_value),</span>
-<span id="cb34-13"><a href="advanced-ggplot.html#cb34-13" tabindex="-1"></a>    <span class="at">loan_type =</span> <span class="fu">case_when</span>(</span>
-<span id="cb34-14"><a href="advanced-ggplot.html#cb34-14" tabindex="-1"></a>      loan_type <span class="sc">==</span> <span class="dv">1</span> <span class="sc">~</span> <span class="st">&quot;Conventional&quot;</span>,</span>
-<span id="cb34-15"><a href="advanced-ggplot.html#cb34-15" tabindex="-1"></a>      loan_type <span class="sc">==</span> <span class="dv">2</span> <span class="sc">~</span> <span class="st">&quot;FHA&quot;</span>,</span>
-<span id="cb34-16"><a href="advanced-ggplot.html#cb34-16" tabindex="-1"></a>      loan_type <span class="sc">==</span> <span class="dv">3</span> <span class="sc">~</span> <span class="st">&quot;VA&quot;</span>,</span>
-<span id="cb34-17"><a href="advanced-ggplot.html#cb34-17" tabindex="-1"></a>      loan_type <span class="sc">==</span> <span class="dv">4</span> <span class="sc">~</span> <span class="st">&quot;USDA&quot;</span></span>
-<span id="cb34-18"><a href="advanced-ggplot.html#cb34-18" tabindex="-1"></a>    )</span>
-<span id="cb34-19"><a href="advanced-ggplot.html#cb34-19" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb34-20"><a href="advanced-ggplot.html#cb34-20" tabindex="-1"></a>  <span class="fu">filter</span>(property_value <span class="sc">&lt;</span> <span class="dv">1000000</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="advanced-ggplot.html#cb36-1" tabindex="-1"></a>filtered_hmda_data <span class="ot">&lt;-</span> hmda_data <span class="sc">%&gt;%</span></span>
+<span id="cb36-2"><a href="advanced-ggplot.html#cb36-2" tabindex="-1"></a>  <span class="fu">filter</span>(</span>
+<span id="cb36-3"><a href="advanced-ggplot.html#cb36-3" tabindex="-1"></a>    action_taken <span class="sc">==</span> <span class="dv">1</span>,</span>
+<span id="cb36-4"><a href="advanced-ggplot.html#cb36-4" tabindex="-1"></a>    loan_purpose <span class="sc">==</span> <span class="dv">1</span>,</span>
+<span id="cb36-5"><a href="advanced-ggplot.html#cb36-5" tabindex="-1"></a>    occupancy_type <span class="sc">==</span> <span class="dv">1</span>,</span>
+<span id="cb36-6"><a href="advanced-ggplot.html#cb36-6" tabindex="-1"></a>    lien_status <span class="sc">==</span> <span class="dv">1</span>,</span>
+<span id="cb36-7"><a href="advanced-ggplot.html#cb36-7" tabindex="-1"></a>    total_units <span class="sc">==</span> <span class="st">&quot;1&quot;</span>,</span>
+<span id="cb36-8"><a href="advanced-ggplot.html#cb36-8" tabindex="-1"></a>    <span class="sc">!</span>property_value <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;Exempt&quot;</span>, <span class="cn">NA</span>),</span>
+<span id="cb36-9"><a href="advanced-ggplot.html#cb36-9" tabindex="-1"></a>    income <span class="sc">&lt;=</span> <span class="dv">250</span> <span class="sc">&amp;</span> income <span class="sc">&gt;</span> <span class="dv">0</span></span>
+<span id="cb36-10"><a href="advanced-ggplot.html#cb36-10" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb36-11"><a href="advanced-ggplot.html#cb36-11" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb36-12"><a href="advanced-ggplot.html#cb36-12" tabindex="-1"></a>    <span class="at">property_value =</span> <span class="fu">as.numeric</span>(property_value),</span>
+<span id="cb36-13"><a href="advanced-ggplot.html#cb36-13" tabindex="-1"></a>    <span class="at">loan_type =</span> <span class="fu">case_when</span>(</span>
+<span id="cb36-14"><a href="advanced-ggplot.html#cb36-14" tabindex="-1"></a>      loan_type <span class="sc">==</span> <span class="dv">1</span> <span class="sc">~</span> <span class="st">&quot;Conventional&quot;</span>,</span>
+<span id="cb36-15"><a href="advanced-ggplot.html#cb36-15" tabindex="-1"></a>      loan_type <span class="sc">==</span> <span class="dv">2</span> <span class="sc">~</span> <span class="st">&quot;FHA&quot;</span>,</span>
+<span id="cb36-16"><a href="advanced-ggplot.html#cb36-16" tabindex="-1"></a>      loan_type <span class="sc">==</span> <span class="dv">3</span> <span class="sc">~</span> <span class="st">&quot;VA&quot;</span>,</span>
+<span id="cb36-17"><a href="advanced-ggplot.html#cb36-17" tabindex="-1"></a>      loan_type <span class="sc">==</span> <span class="dv">4</span> <span class="sc">~</span> <span class="st">&quot;USDA&quot;</span></span>
+<span id="cb36-18"><a href="advanced-ggplot.html#cb36-18" tabindex="-1"></a>    )</span>
+<span id="cb36-19"><a href="advanced-ggplot.html#cb36-19" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb36-20"><a href="advanced-ggplot.html#cb36-20" tabindex="-1"></a>  <span class="fu">filter</span>(property_value <span class="sc">&lt;</span> <span class="dv">1000000</span>)</span></code></pre></div>
 </div>
 <div id="customizing-text-elements" class="section level4 unnumbered hasAnchor">
 <h4>Customizing Text Elements<a href="advanced-ggplot.html#customizing-text-elements" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>The <code>theme()</code> function can be used to customize various text elements in your plot, such as titles, axis titles, and axis text. Each of these elements can be adjusted for size, font face, color, and alignment.</p>
-<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="advanced-ggplot.html#cb35-1" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> filtered_hmda_data, <span class="fu">aes</span>(<span class="at">x =</span> income, <span class="at">y =</span> property_value, <span class="at">color =</span> loan_type)) <span class="sc">+</span></span>
-<span id="cb35-2"><a href="advanced-ggplot.html#cb35-2" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb35-3"><a href="advanced-ggplot.html#cb35-3" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Property Value vs Income&quot;</span>,</span>
-<span id="cb35-4"><a href="advanced-ggplot.html#cb35-4" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">&quot;By County Code&quot;</span>,</span>
-<span id="cb35-5"><a href="advanced-ggplot.html#cb35-5" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">&quot;Income&quot;</span>,</span>
-<span id="cb35-6"><a href="advanced-ggplot.html#cb35-6" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Property Value&quot;</span>,</span>
-<span id="cb35-7"><a href="advanced-ggplot.html#cb35-7" tabindex="-1"></a>       <span class="at">color =</span> <span class="st">&quot;Loan Type&quot;</span>) <span class="sc">+</span></span>
-<span id="cb35-8"><a href="advanced-ggplot.html#cb35-8" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
-<span id="cb35-9"><a href="advanced-ggplot.html#cb35-9" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">16</span>, <span class="at">face =</span> <span class="st">&quot;bold&quot;</span>, <span class="at">color =</span> <span class="st">&quot;darkblue&quot;</span>),</span>
-<span id="cb35-10"><a href="advanced-ggplot.html#cb35-10" tabindex="-1"></a>    <span class="at">plot.subtitle =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">14</span>, <span class="at">face =</span> <span class="st">&quot;italic&quot;</span>, <span class="at">color =</span> <span class="st">&quot;darkred&quot;</span>),</span>
-<span id="cb35-11"><a href="advanced-ggplot.html#cb35-11" tabindex="-1"></a>    <span class="at">axis.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">14</span>, <span class="at">face =</span> <span class="st">&quot;italic&quot;</span>, <span class="at">color =</span> <span class="st">&quot;darkred&quot;</span>),</span>
-<span id="cb35-12"><a href="advanced-ggplot.html#cb35-12" tabindex="-1"></a>    <span class="at">axis.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>, <span class="at">color =</span> <span class="st">&quot;darkgreen&quot;</span>)</span>
-<span id="cb35-13"><a href="advanced-ggplot.html#cb35-13" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb35-14"><a href="advanced-ggplot.html#cb35-14" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>county_code)</span></code></pre></div>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="advanced-ggplot.html#cb37-1" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> filtered_hmda_data, <span class="fu">aes</span>(<span class="at">x =</span> income, <span class="at">y =</span> property_value, <span class="at">color =</span> loan_type)) <span class="sc">+</span></span>
+<span id="cb37-2"><a href="advanced-ggplot.html#cb37-2" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb37-3"><a href="advanced-ggplot.html#cb37-3" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Property Value vs Income&quot;</span>,</span>
+<span id="cb37-4"><a href="advanced-ggplot.html#cb37-4" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">&quot;By County Code&quot;</span>,</span>
+<span id="cb37-5"><a href="advanced-ggplot.html#cb37-5" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">&quot;Income&quot;</span>,</span>
+<span id="cb37-6"><a href="advanced-ggplot.html#cb37-6" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Property Value&quot;</span>,</span>
+<span id="cb37-7"><a href="advanced-ggplot.html#cb37-7" tabindex="-1"></a>       <span class="at">color =</span> <span class="st">&quot;Loan Type&quot;</span>) <span class="sc">+</span></span>
+<span id="cb37-8"><a href="advanced-ggplot.html#cb37-8" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb37-9"><a href="advanced-ggplot.html#cb37-9" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">16</span>, <span class="at">face =</span> <span class="st">&quot;bold&quot;</span>, <span class="at">color =</span> <span class="st">&quot;darkblue&quot;</span>),</span>
+<span id="cb37-10"><a href="advanced-ggplot.html#cb37-10" tabindex="-1"></a>    <span class="at">plot.subtitle =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">14</span>, <span class="at">face =</span> <span class="st">&quot;italic&quot;</span>, <span class="at">color =</span> <span class="st">&quot;darkred&quot;</span>),</span>
+<span id="cb37-11"><a href="advanced-ggplot.html#cb37-11" tabindex="-1"></a>    <span class="at">axis.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">14</span>, <span class="at">face =</span> <span class="st">&quot;italic&quot;</span>, <span class="at">color =</span> <span class="st">&quot;darkred&quot;</span>),</span>
+<span id="cb37-12"><a href="advanced-ggplot.html#cb37-12" tabindex="-1"></a>    <span class="at">axis.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>, <span class="at">color =</span> <span class="st">&quot;darkgreen&quot;</span>)</span>
+<span id="cb37-13"><a href="advanced-ggplot.html#cb37-13" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb37-14"><a href="advanced-ggplot.html#cb37-14" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>county_code)</span></code></pre></div>
 <p><img src="images/custom_theme_1.PNG" />In this example:</p>
 <ul>
 <li><p><code>plot.title = element_text(size = 16, face = "bold", color = "darkblue")</code> customizes the plot title to be bold, size 16, and dark blue.</p></li>
@@ -415,21 +428,21 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="customizing-background-and-grid-lines" class="section level4 unnumbered hasAnchor">
 <h4>Customizing Background and Grid Lines<a href="advanced-ggplot.html#customizing-background-and-grid-lines" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>You can customize the background and grid lines to enhance the readability of your plots or to match a specific visual style.</p>
-<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="advanced-ggplot.html#cb36-1" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> filtered_hmda_data, <span class="fu">aes</span>(<span class="at">x =</span> income, <span class="at">y =</span> property_value, <span class="at">color =</span> loan_type)) <span class="sc">+</span></span>
-<span id="cb36-2"><a href="advanced-ggplot.html#cb36-2" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb36-3"><a href="advanced-ggplot.html#cb36-3" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Property Value vs Income&quot;</span>,</span>
-<span id="cb36-4"><a href="advanced-ggplot.html#cb36-4" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">&quot;By County Code&quot;</span>,</span>
-<span id="cb36-5"><a href="advanced-ggplot.html#cb36-5" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">&quot;Income&quot;</span>,</span>
-<span id="cb36-6"><a href="advanced-ggplot.html#cb36-6" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Property Value&quot;</span>,</span>
-<span id="cb36-7"><a href="advanced-ggplot.html#cb36-7" tabindex="-1"></a>       <span class="at">color =</span> <span class="st">&quot;Loan Type&quot;</span>) <span class="sc">+</span></span>
-<span id="cb36-8"><a href="advanced-ggplot.html#cb36-8" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
-<span id="cb36-9"><a href="advanced-ggplot.html#cb36-9" tabindex="-1"></a>    <span class="at">panel.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">&quot;lightgray&quot;</span>),</span>
-<span id="cb36-10"><a href="advanced-ggplot.html#cb36-10" tabindex="-1"></a>    <span class="at">panel.grid.major =</span> <span class="fu">element_line</span>(<span class="at">color =</span> <span class="st">&quot;white&quot;</span>, <span class="at">size =</span> <span class="fl">0.5</span>),</span>
-<span id="cb36-11"><a href="advanced-ggplot.html#cb36-11" tabindex="-1"></a>    <span class="at">panel.grid.minor =</span> <span class="fu">element_line</span>(<span class="at">color =</span> <span class="st">&quot;white&quot;</span>, <span class="at">size =</span> <span class="fl">0.25</span>),</span>
-<span id="cb36-12"><a href="advanced-ggplot.html#cb36-12" tabindex="-1"></a>    <span class="at">plot.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">&quot;lightblue&quot;</span>),</span>
-<span id="cb36-13"><a href="advanced-ggplot.html#cb36-13" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">16</span>, <span class="at">face =</span> <span class="st">&quot;bold&quot;</span>)</span>
-<span id="cb36-14"><a href="advanced-ggplot.html#cb36-14" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb36-15"><a href="advanced-ggplot.html#cb36-15" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>county_code)</span></code></pre></div>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="advanced-ggplot.html#cb38-1" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> filtered_hmda_data, <span class="fu">aes</span>(<span class="at">x =</span> income, <span class="at">y =</span> property_value, <span class="at">color =</span> loan_type)) <span class="sc">+</span></span>
+<span id="cb38-2"><a href="advanced-ggplot.html#cb38-2" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb38-3"><a href="advanced-ggplot.html#cb38-3" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Property Value vs Income&quot;</span>,</span>
+<span id="cb38-4"><a href="advanced-ggplot.html#cb38-4" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">&quot;By County Code&quot;</span>,</span>
+<span id="cb38-5"><a href="advanced-ggplot.html#cb38-5" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">&quot;Income&quot;</span>,</span>
+<span id="cb38-6"><a href="advanced-ggplot.html#cb38-6" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Property Value&quot;</span>,</span>
+<span id="cb38-7"><a href="advanced-ggplot.html#cb38-7" tabindex="-1"></a>       <span class="at">color =</span> <span class="st">&quot;Loan Type&quot;</span>) <span class="sc">+</span></span>
+<span id="cb38-8"><a href="advanced-ggplot.html#cb38-8" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb38-9"><a href="advanced-ggplot.html#cb38-9" tabindex="-1"></a>    <span class="at">panel.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">&quot;lightgray&quot;</span>),</span>
+<span id="cb38-10"><a href="advanced-ggplot.html#cb38-10" tabindex="-1"></a>    <span class="at">panel.grid.major =</span> <span class="fu">element_line</span>(<span class="at">color =</span> <span class="st">&quot;white&quot;</span>, <span class="at">size =</span> <span class="fl">0.5</span>),</span>
+<span id="cb38-11"><a href="advanced-ggplot.html#cb38-11" tabindex="-1"></a>    <span class="at">panel.grid.minor =</span> <span class="fu">element_line</span>(<span class="at">color =</span> <span class="st">&quot;white&quot;</span>, <span class="at">size =</span> <span class="fl">0.25</span>),</span>
+<span id="cb38-12"><a href="advanced-ggplot.html#cb38-12" tabindex="-1"></a>    <span class="at">plot.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">&quot;lightblue&quot;</span>),</span>
+<span id="cb38-13"><a href="advanced-ggplot.html#cb38-13" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">16</span>, <span class="at">face =</span> <span class="st">&quot;bold&quot;</span>)</span>
+<span id="cb38-14"><a href="advanced-ggplot.html#cb38-14" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb38-15"><a href="advanced-ggplot.html#cb38-15" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>county_code)</span></code></pre></div>
 <p><img src="images/custom_theme_2.PNG" /></p>
 <p>In this example:</p>
 <ul>
@@ -442,21 +455,21 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="customizing-legend" class="section level4 unnumbered hasAnchor">
 <h4>Customizing Legend<a href="advanced-ggplot.html#customizing-legend" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>The legend can also be customized to improve the clarity and appearance of your plots. You can adjust the legend position, title, text, and background.</p>
-<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="advanced-ggplot.html#cb37-1" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> filtered_hmda_data, <span class="fu">aes</span>(<span class="at">x =</span> income, <span class="at">y =</span> property_value, <span class="at">color =</span> loan_type)) <span class="sc">+</span></span>
-<span id="cb37-2"><a href="advanced-ggplot.html#cb37-2" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb37-3"><a href="advanced-ggplot.html#cb37-3" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Property Value vs Income&quot;</span>,</span>
-<span id="cb37-4"><a href="advanced-ggplot.html#cb37-4" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">&quot;By County Code&quot;</span>,</span>
-<span id="cb37-5"><a href="advanced-ggplot.html#cb37-5" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">&quot;Income&quot;</span>,</span>
-<span id="cb37-6"><a href="advanced-ggplot.html#cb37-6" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Property Value&quot;</span>,</span>
-<span id="cb37-7"><a href="advanced-ggplot.html#cb37-7" tabindex="-1"></a>       <span class="at">color =</span> <span class="st">&quot;Loan Type&quot;</span>) <span class="sc">+</span></span>
-<span id="cb37-8"><a href="advanced-ggplot.html#cb37-8" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
-<span id="cb37-9"><a href="advanced-ggplot.html#cb37-9" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">&quot;bottom&quot;</span>,</span>
-<span id="cb37-10"><a href="advanced-ggplot.html#cb37-10" tabindex="-1"></a>    <span class="at">legend.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>, <span class="at">face =</span> <span class="st">&quot;bold&quot;</span>),</span>
-<span id="cb37-11"><a href="advanced-ggplot.html#cb37-11" tabindex="-1"></a>    <span class="at">legend.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">10</span>),</span>
-<span id="cb37-12"><a href="advanced-ggplot.html#cb37-12" tabindex="-1"></a>    <span class="at">legend.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">&quot;lightyellow&quot;</span>),</span>
-<span id="cb37-13"><a href="advanced-ggplot.html#cb37-13" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">16</span>, <span class="at">face =</span> <span class="st">&quot;bold&quot;</span>)</span>
-<span id="cb37-14"><a href="advanced-ggplot.html#cb37-14" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb37-15"><a href="advanced-ggplot.html#cb37-15" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>county_code)</span></code></pre></div>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="advanced-ggplot.html#cb39-1" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> filtered_hmda_data, <span class="fu">aes</span>(<span class="at">x =</span> income, <span class="at">y =</span> property_value, <span class="at">color =</span> loan_type)) <span class="sc">+</span></span>
+<span id="cb39-2"><a href="advanced-ggplot.html#cb39-2" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb39-3"><a href="advanced-ggplot.html#cb39-3" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Property Value vs Income&quot;</span>,</span>
+<span id="cb39-4"><a href="advanced-ggplot.html#cb39-4" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">&quot;By County Code&quot;</span>,</span>
+<span id="cb39-5"><a href="advanced-ggplot.html#cb39-5" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">&quot;Income&quot;</span>,</span>
+<span id="cb39-6"><a href="advanced-ggplot.html#cb39-6" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Property Value&quot;</span>,</span>
+<span id="cb39-7"><a href="advanced-ggplot.html#cb39-7" tabindex="-1"></a>       <span class="at">color =</span> <span class="st">&quot;Loan Type&quot;</span>) <span class="sc">+</span></span>
+<span id="cb39-8"><a href="advanced-ggplot.html#cb39-8" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb39-9"><a href="advanced-ggplot.html#cb39-9" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">&quot;bottom&quot;</span>,</span>
+<span id="cb39-10"><a href="advanced-ggplot.html#cb39-10" tabindex="-1"></a>    <span class="at">legend.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>, <span class="at">face =</span> <span class="st">&quot;bold&quot;</span>),</span>
+<span id="cb39-11"><a href="advanced-ggplot.html#cb39-11" tabindex="-1"></a>    <span class="at">legend.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">10</span>),</span>
+<span id="cb39-12"><a href="advanced-ggplot.html#cb39-12" tabindex="-1"></a>    <span class="at">legend.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">&quot;lightyellow&quot;</span>),</span>
+<span id="cb39-13"><a href="advanced-ggplot.html#cb39-13" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">16</span>, <span class="at">face =</span> <span class="st">&quot;bold&quot;</span>)</span>
+<span id="cb39-14"><a href="advanced-ggplot.html#cb39-14" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb39-15"><a href="advanced-ggplot.html#cb39-15" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>county_code)</span></code></pre></div>
 <p><img src="images/custom_theme_3.PNG" /></p>
 <p>In this example:</p>
 <ul>
@@ -469,28 +482,28 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="complete-theme-customization-example" class="section level4 unnumbered hasAnchor">
 <h4>Complete Theme Customization Example<a href="advanced-ggplot.html#complete-theme-customization-example" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>Combining these customizations, you can create a fully customized theme for your plot.</p>
-<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="advanced-ggplot.html#cb38-1" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> filtered_hmda_data, <span class="fu">aes</span>(<span class="at">x =</span> income, <span class="at">y =</span> property_value, <span class="at">color =</span> loan_type)) <span class="sc">+</span></span>
-<span id="cb38-2"><a href="advanced-ggplot.html#cb38-2" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb38-3"><a href="advanced-ggplot.html#cb38-3" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Property Value vs Income&quot;</span>,</span>
-<span id="cb38-4"><a href="advanced-ggplot.html#cb38-4" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">&quot;By County Code&quot;</span>,</span>
-<span id="cb38-5"><a href="advanced-ggplot.html#cb38-5" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">&quot;Income&quot;</span>,</span>
-<span id="cb38-6"><a href="advanced-ggplot.html#cb38-6" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Property Value&quot;</span>,</span>
-<span id="cb38-7"><a href="advanced-ggplot.html#cb38-7" tabindex="-1"></a>       <span class="at">color =</span> <span class="st">&quot;Loan Type&quot;</span>) <span class="sc">+</span></span>
-<span id="cb38-8"><a href="advanced-ggplot.html#cb38-8" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
-<span id="cb38-9"><a href="advanced-ggplot.html#cb38-9" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">20</span>, <span class="at">face =</span> <span class="st">&quot;bold&quot;</span>, <span class="at">color =</span> <span class="st">&quot;navy&quot;</span>, <span class="at">hjust =</span> <span class="fl">0.5</span>),</span>
-<span id="cb38-10"><a href="advanced-ggplot.html#cb38-10" tabindex="-1"></a>    <span class="at">plot.subtitle =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">16</span>, <span class="at">face =</span> <span class="st">&quot;bold&quot;</span>, <span class="at">color =</span> <span class="st">&quot;darkred&quot;</span>),</span>
-<span id="cb38-11"><a href="advanced-ggplot.html#cb38-11" tabindex="-1"></a>    <span class="at">axis.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">16</span>, <span class="at">face =</span> <span class="st">&quot;bold&quot;</span>),</span>
-<span id="cb38-12"><a href="advanced-ggplot.html#cb38-12" tabindex="-1"></a>    <span class="at">axis.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">14</span>),</span>
-<span id="cb38-13"><a href="advanced-ggplot.html#cb38-13" tabindex="-1"></a>    <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>),</span>
-<span id="cb38-14"><a href="advanced-ggplot.html#cb38-14" tabindex="-1"></a>    <span class="at">panel.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">&quot;white&quot;</span>),</span>
-<span id="cb38-15"><a href="advanced-ggplot.html#cb38-15" tabindex="-1"></a>    <span class="at">panel.grid.major =</span> <span class="fu">element_line</span>(<span class="at">color =</span> <span class="st">&quot;gray80&quot;</span>, <span class="at">size =</span> <span class="fl">0.5</span>),</span>
-<span id="cb38-16"><a href="advanced-ggplot.html#cb38-16" tabindex="-1"></a>    <span class="at">panel.grid.minor =</span> <span class="fu">element_line</span>(<span class="at">color =</span> <span class="st">&quot;gray90&quot;</span>, <span class="at">size =</span> <span class="fl">0.25</span>),</span>
-<span id="cb38-17"><a href="advanced-ggplot.html#cb38-17" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">&quot;bottom&quot;</span>,</span>
-<span id="cb38-18"><a href="advanced-ggplot.html#cb38-18" tabindex="-1"></a>    <span class="at">legend.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">14</span>, <span class="at">face =</span> <span class="st">&quot;bold&quot;</span>),</span>
-<span id="cb38-19"><a href="advanced-ggplot.html#cb38-19" tabindex="-1"></a>    <span class="at">legend.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>),</span>
-<span id="cb38-20"><a href="advanced-ggplot.html#cb38-20" tabindex="-1"></a>    <span class="at">legend.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">&quot;lightgray&quot;</span>)</span>
-<span id="cb38-21"><a href="advanced-ggplot.html#cb38-21" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb38-22"><a href="advanced-ggplot.html#cb38-22" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>county_code)</span></code></pre></div>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="advanced-ggplot.html#cb40-1" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> filtered_hmda_data, <span class="fu">aes</span>(<span class="at">x =</span> income, <span class="at">y =</span> property_value, <span class="at">color =</span> loan_type)) <span class="sc">+</span></span>
+<span id="cb40-2"><a href="advanced-ggplot.html#cb40-2" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb40-3"><a href="advanced-ggplot.html#cb40-3" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Property Value vs Income&quot;</span>,</span>
+<span id="cb40-4"><a href="advanced-ggplot.html#cb40-4" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">&quot;By County Code&quot;</span>,</span>
+<span id="cb40-5"><a href="advanced-ggplot.html#cb40-5" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">&quot;Income&quot;</span>,</span>
+<span id="cb40-6"><a href="advanced-ggplot.html#cb40-6" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Property Value&quot;</span>,</span>
+<span id="cb40-7"><a href="advanced-ggplot.html#cb40-7" tabindex="-1"></a>       <span class="at">color =</span> <span class="st">&quot;Loan Type&quot;</span>) <span class="sc">+</span></span>
+<span id="cb40-8"><a href="advanced-ggplot.html#cb40-8" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb40-9"><a href="advanced-ggplot.html#cb40-9" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">20</span>, <span class="at">face =</span> <span class="st">&quot;bold&quot;</span>, <span class="at">color =</span> <span class="st">&quot;navy&quot;</span>, <span class="at">hjust =</span> <span class="fl">0.5</span>),</span>
+<span id="cb40-10"><a href="advanced-ggplot.html#cb40-10" tabindex="-1"></a>    <span class="at">plot.subtitle =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">16</span>, <span class="at">face =</span> <span class="st">&quot;bold&quot;</span>, <span class="at">color =</span> <span class="st">&quot;darkred&quot;</span>),</span>
+<span id="cb40-11"><a href="advanced-ggplot.html#cb40-11" tabindex="-1"></a>    <span class="at">axis.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">16</span>, <span class="at">face =</span> <span class="st">&quot;bold&quot;</span>),</span>
+<span id="cb40-12"><a href="advanced-ggplot.html#cb40-12" tabindex="-1"></a>    <span class="at">axis.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">14</span>),</span>
+<span id="cb40-13"><a href="advanced-ggplot.html#cb40-13" tabindex="-1"></a>    <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>),</span>
+<span id="cb40-14"><a href="advanced-ggplot.html#cb40-14" tabindex="-1"></a>    <span class="at">panel.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">&quot;white&quot;</span>),</span>
+<span id="cb40-15"><a href="advanced-ggplot.html#cb40-15" tabindex="-1"></a>    <span class="at">panel.grid.major =</span> <span class="fu">element_line</span>(<span class="at">color =</span> <span class="st">&quot;gray80&quot;</span>, <span class="at">size =</span> <span class="fl">0.5</span>),</span>
+<span id="cb40-16"><a href="advanced-ggplot.html#cb40-16" tabindex="-1"></a>    <span class="at">panel.grid.minor =</span> <span class="fu">element_line</span>(<span class="at">color =</span> <span class="st">&quot;gray90&quot;</span>, <span class="at">size =</span> <span class="fl">0.25</span>),</span>
+<span id="cb40-17"><a href="advanced-ggplot.html#cb40-17" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">&quot;bottom&quot;</span>,</span>
+<span id="cb40-18"><a href="advanced-ggplot.html#cb40-18" tabindex="-1"></a>    <span class="at">legend.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">14</span>, <span class="at">face =</span> <span class="st">&quot;bold&quot;</span>),</span>
+<span id="cb40-19"><a href="advanced-ggplot.html#cb40-19" tabindex="-1"></a>    <span class="at">legend.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>),</span>
+<span id="cb40-20"><a href="advanced-ggplot.html#cb40-20" tabindex="-1"></a>    <span class="at">legend.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">&quot;lightgray&quot;</span>)</span>
+<span id="cb40-21"><a href="advanced-ggplot.html#cb40-21" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb40-22"><a href="advanced-ggplot.html#cb40-22" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>county_code)</span></code></pre></div>
 <p><img src="images/custom_theme_4.PNG" /></p>
 <p>In this comprehensive example:</p>
 <ul>
@@ -500,9 +513,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><p>Other elements are customized as described in previous examples.</p></li>
 </ul>
 <p>By utilizing the <code>theme()</code> function, you can create highly customized and polished visualizations tailored to your specific needs, making your data analysis and presentation more effective. This was meant to give you a rough idea of some of the customizations you can do with <code>ggplot2</code>, there are a myriad of other options available.</p>
+</div>
+</div>
+</div>
+<div id="more-information-on-ggplot2" class="section level2 unnumbered hasAnchor">
+<h2>More Information on ggplot2<a href="advanced-ggplot.html#more-information-on-ggplot2" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>For more information on ggpplot2 visit: <a href="https://ggplot2.tidyverse.org/reference/index.html" class="uri">https://ggplot2.tidyverse.org/reference/index.html</a></p>
 
-</div>
-</div>
 </div>
 </div>
             </section>

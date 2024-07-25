@@ -23,7 +23,7 @@
 <meta name="author" content="Antonio Solorio" />
 
 
-<meta name="date" content="2024-07-23" />
+<meta name="date" content="2024-07-25" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -224,6 +224,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="advanced-ggplot.html"><a href="advanced-ggplot.html#complete-theme-customization-example"><i class="fa fa-check"></i>Complete Theme Customization Example</a></li>
 </ul></li>
 </ul></li>
+<li class="chapter" data-level="" data-path="advanced-ggplot.html"><a href="advanced-ggplot.html#more-information-on-ggplot2"><i class="fa fa-check"></i>More Information on ggplot2</a></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="regressions.html"><a href="regressions.html"><i class="fa fa-check"></i><b>5</b> Basic Regression Analysis in R</a>
 <ul>
@@ -242,6 +243,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="regressions.html"><a href="regressions.html#visualizing-the-regression-line"><i class="fa fa-check"></i>Visualizing the Regression Line</a></li>
 <li class="chapter" data-level="" data-path="regressions.html"><a href="regressions.html#plotting-residuals-using-lm"><i class="fa fa-check"></i>Plotting Residuals Using <code>lm()</code></a></li>
 </ul></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="regressions.html"><a href="regressions.html#multiple-linear-regression"><i class="fa fa-check"></i><b>5.3</b> Multiple Linear Regression</a>
+<ul>
+<li class="chapter" data-level="5.3.1" data-path="regressions.html"><a href="regressions.html#including-multiple-variables"><i class="fa fa-check"></i><b>5.3.1</b> Including Multiple Variables</a></li>
+<li class="chapter" data-level="5.3.2" data-path="regressions.html"><a href="regressions.html#creating-dummy-variables"><i class="fa fa-check"></i><b>5.3.2</b> Creating Dummy Variables</a></li>
+<li class="chapter" data-level="5.3.3" data-path="regressions.html"><a href="regressions.html#preparing-the-data-1"><i class="fa fa-check"></i><b>5.3.3</b> Preparing the Data</a></li>
+<li class="chapter" data-level="5.3.4" data-path="regressions.html"><a href="regressions.html#fitting-the-multiple-linear-regression-model"><i class="fa fa-check"></i><b>5.3.4</b> Fitting the Multiple Linear Regression Model</a></li>
+</ul></li>
+<li class="chapter" data-level="5.4" data-path="regressions.html"><a href="regressions.html#robust-linear-regression"><i class="fa fa-check"></i><b>5.4</b> Robust Linear Regression</a>
+<ul>
+<li class="chapter" data-level="5.4.1" data-path="regressions.html"><a href="regressions.html#preparing-the-data-2"><i class="fa fa-check"></i><b>5.4.1</b> Preparing the Data</a></li>
+<li class="chapter" data-level="5.4.2" data-path="regressions.html"><a href="regressions.html#fitting-the-robust-linear-model"><i class="fa fa-check"></i><b>5.4.2</b> Fitting the Robust Linear Model</a></li>
 </ul></li>
 </ul></li>
 <li class="divider"></li>
@@ -318,8 +331,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb22-31"><a href="data-visualization-ggplot.html#cb22-31" tabindex="-1"></a>    <span class="co"># Only keep property values under $1 million</span></span>
 <span id="cb22-32"><a href="data-visualization-ggplot.html#cb22-32" tabindex="-1"></a>  <span class="fu">filter</span>(property_value<span class="sc">&lt;</span><span class="dv">1000000</span>)</span></code></pre></div>
 </div>
-<div id="basic-plot-structure" class="section level3 unlisted unnumbered hasAnchor">
-<h3>Basic Plot Structure<a href="data-visualization-ggplot.html#basic-plot-structure" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="basic-plot-structure-scatter-plot" class="section level3 unlisted unnumbered hasAnchor">
+<h3>Basic Plot Structure / Scatter Plot<a href="data-visualization-ggplot.html#basic-plot-structure-scatter-plot" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>The structure of a ggplot2 plot is built around the <code>ggplot()</code>** function and the <code>+</code> operator to add layers. Here’s a simple example of a scatter pplot:</p>
 <div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="data-visualization-ggplot.html#cb23-1" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> filtered_hmda_data, <span class="fu">aes</span>(<span class="at">x =</span> income, <span class="at">y =</span> property_value))<span class="sc">+</span></span>
 <span id="cb23-2"><a href="data-visualization-ggplot.html#cb23-2" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code></pre></div>
@@ -347,7 +360,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb24-5"><a href="data-visualization-ggplot.html#cb24-5" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Count&quot;</span>)</span></code></pre></div>
 <p><img src="images/histogram_plot.PNG" /></p>
 <ul>
-<li><code>geom_histogram(binwidth = 50000, fill = "blue", color = "black")</code> adds a histogram layer with specified bin width, fill color, and border color.</li>
+<li><code>geom_histogram(binwidth = 50000)</code> adds a histogram layer with specified bin width.</li>
 <li><code>labs()</code> is used to add titles and labels to the plot.</li>
 </ul>
 </div>
@@ -359,50 +372,79 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb25-3"><a href="data-visualization-ggplot.html#cb25-3" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Count of Loans by Loan Type&quot;</span>,</span>
 <span id="cb25-4"><a href="data-visualization-ggplot.html#cb25-4" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">&quot;Loan Type&quot;</span>,</span>
 <span id="cb25-5"><a href="data-visualization-ggplot.html#cb25-5" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Count&quot;</span>)</span></code></pre></div>
+<p><img src="images/bar_plot.PNG" /></p>
 <ul>
 <li><code>ggplot(data = filtered_hmda_data, aes(x = loan_type))</code>: This line initializes the ggplot object with the specified dataset (<code>filtered_hmda_data</code>) and maps the loan_type column to the x-axis.</li>
 <li><code>geom_bar()</code>: This adds a bar plot layer to the ggplot object. By default, geom_bar() counts the number of occurrences of each loan_type.</li>
-<li><code>labs(title = "Count of Loans by Loan Type", x = "Loan Type", y = "Count")</code>: This function is used to add titles and labels to the plot. It specifies the plot title and labels for the x and y axes..</li>
+<li><code>labs(title = "Count of Loans by Loan Type", x = "Loan Type", y = "Count")</code>: This function is used to add titles and labels to the plot. It specifies the plot title and labels for the x and y axes.</li>
 </ul>
-<p><img src="images/bar_plot.PNG" /></p>
+<p>A common issue that many beginners have have when creating bar plots, is that many don’t know the difference between <code>geom_col()</code> and <code>geom_bar()</code>.</p>
+<p>The primary difference between <code>geom_col()</code> and <code>geom_bar()</code> in ggplot2 lies in how they handle the data for the height of the bars in a bar plot.</p>
+<ol style="list-style-type: decimal">
+<li><p><strong><code>geom_col()</code></strong>:</p>
+<ul>
+<li><p><strong>Purpose</strong>: It is used when you already have the values that you want to plot (i.e., the heights of the bars).</p></li>
+<li><p><strong>Usage</strong>: You provide both the x and y values directly. This is useful when your data is already summarized.</p></li>
+<li><p><strong>Example</strong>:</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="data-visualization-ggplot.html#cb26-1" tabindex="-1"></a><span class="fu">ggplot</span>(data, <span class="fu">aes</span>(<span class="at">x =</span> category, <span class="at">y =</span> value)) <span class="sc">+</span></span>
+<span id="cb26-2"><a href="data-visualization-ggplot.html#cb26-2" tabindex="-1"></a>  <span class="fu">geom_col</span>()</span></code></pre></div></li>
+</ul></li>
+<li><p><strong><code>geom_bar()</code></strong>:</p>
+<ul>
+<li><p><strong>Purpose</strong>: It is used to create bar plots from raw data, where the heights of the bars are calculated as the counts of cases at each x position.</p></li>
+<li><p><strong>Usage</strong>: You provide the x values, and ggplot2 will count the number of occurrences of each x value and use these counts as the heights of the bars.</p></li>
+<li><p><strong>Example</strong>:</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="data-visualization-ggplot.html#cb27-1" tabindex="-1"></a><span class="fu">ggplot</span>(data, <span class="fu">aes</span>(<span class="at">x =</span> category)) <span class="sc">+</span></span>
+<span id="cb27-2"><a href="data-visualization-ggplot.html#cb27-2" tabindex="-1"></a>  <span class="fu">geom_bar</span>()</span></code></pre></div></li>
+</ul></li>
+</ol>
 </div>
 <div id="box-plot" class="section level4 unnumbered hasAnchor">
 <h4>Box Plot<a href="data-visualization-ggplot.html#box-plot" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<p>Box plots are useful for visualizing the distribution of a continuous variable across different categories. Let’s create a box plot to visualize property values by loan type.</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="data-visualization-ggplot.html#cb26-1" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> filtered_hmda_data, <span class="fu">aes</span>(<span class="at">x =</span> loan_type, <span class="at">y =</span> property_value)) <span class="sc">+</span></span>
-<span id="cb26-2"><a href="data-visualization-ggplot.html#cb26-2" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
-<span id="cb26-3"><a href="data-visualization-ggplot.html#cb26-3" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Property Values by Loan Type&quot;</span>,</span>
-<span id="cb26-4"><a href="data-visualization-ggplot.html#cb26-4" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">&quot;Loan Type&quot;</span>,</span>
-<span id="cb26-5"><a href="data-visualization-ggplot.html#cb26-5" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Property Value&quot;</span>)</span></code></pre></div>
+<p>Box plots are useful for visualizing the distribution of a continuous variable across different categories. They summarize key statistics like the median, quartiles, and potential outliers, making it easy to compare different groups. Let’s create a box plot to visualize property values by loan type.</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="data-visualization-ggplot.html#cb28-1" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> filtered_hmda_data, <span class="fu">aes</span>(<span class="at">x =</span> loan_type, <span class="at">y =</span> property_value)) <span class="sc">+</span></span>
+<span id="cb28-2"><a href="data-visualization-ggplot.html#cb28-2" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
+<span id="cb28-3"><a href="data-visualization-ggplot.html#cb28-3" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Property Values by Loan Type&quot;</span>,</span>
+<span id="cb28-4"><a href="data-visualization-ggplot.html#cb28-4" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">&quot;Loan Type&quot;</span>,</span>
+<span id="cb28-5"><a href="data-visualization-ggplot.html#cb28-5" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Property Value&quot;</span>)</span></code></pre></div>
 <p><img src="images/box_plot.PNG" /></p>
 <p>In this example:</p>
 <ul>
 <li><p><code>geom_boxplot()</code> adds a box plot layer.</p></li>
 <li><p><code>labs()</code> is used to add titles and labels to the plot.</p></li>
 </ul>
+<div id="explanation-of-box-plot-components" class="section level5 unnumbered unlisted hasAnchor">
+<h5>Explanation of Box Plot Components<a href="data-visualization-ggplot.html#explanation-of-box-plot-components" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<ul>
+<li><p><strong>Median</strong>: The thick line in the middle of the box represents the median of the data.</p></li>
+<li><p><strong>Interquartile Range (IQR)</strong>: The box itself represents the IQR, which spans from the first quartile (25th percentile) to the third quartile (75th percentile).</p></li>
+<li><p><strong>Whiskers</strong>: The lines extending from the box (whiskers) represent the range of the data within 1.5 times the IQR from the first and third quartiles. Data points outside this range are considered outliers.</p></li>
+<li><p><strong>Outliers</strong>: Points outside the whiskers are potential outliers, indicating values that are significantly higher or lower than the rest of the data.</p></li>
+</ul>
+</div>
 </div>
 <div id="line-plot" class="section level4 unnumbered hasAnchor">
 <h4>Line Plot<a href="data-visualization-ggplot.html#line-plot" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>Line plots are useful for visualizing trends over time or ordered categories. Since the HMDA data we have been working with is not historical, we will use one of R’s built-in datasets, AirPassengers, to demonstrate creating a line plot. The <code>AirPassengers</code> dataset contains monthly totals of international airline passengers from 1949 to 1960.</p>
 <p>First, let’s load the dataset and take a look at its structure:</p>
-<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="data-visualization-ggplot.html#cb27-1" tabindex="-1"></a><span class="co"># Load the AirPassengers dataset</span></span>
-<span id="cb27-2"><a href="data-visualization-ggplot.html#cb27-2" tabindex="-1"></a><span class="fu">data</span>(<span class="st">&quot;AirPassengers&quot;</span>)</span>
-<span id="cb27-3"><a href="data-visualization-ggplot.html#cb27-3" tabindex="-1"></a>airpassengers_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb27-4"><a href="data-visualization-ggplot.html#cb27-4" tabindex="-1"></a>  <span class="at">Month =</span> <span class="fu">time</span>(AirPassengers),</span>
-<span id="cb27-5"><a href="data-visualization-ggplot.html#cb27-5" tabindex="-1"></a>  <span class="at">Passengers =</span> <span class="fu">as.numeric</span>(AirPassengers)</span>
-<span id="cb27-6"><a href="data-visualization-ggplot.html#cb27-6" tabindex="-1"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="data-visualization-ggplot.html#cb29-1" tabindex="-1"></a><span class="co"># Load the AirPassengers dataset</span></span>
+<span id="cb29-2"><a href="data-visualization-ggplot.html#cb29-2" tabindex="-1"></a><span class="fu">data</span>(<span class="st">&quot;AirPassengers&quot;</span>)</span>
+<span id="cb29-3"><a href="data-visualization-ggplot.html#cb29-3" tabindex="-1"></a>airpassengers_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb29-4"><a href="data-visualization-ggplot.html#cb29-4" tabindex="-1"></a>  <span class="at">Month =</span> <span class="fu">time</span>(AirPassengers),</span>
+<span id="cb29-5"><a href="data-visualization-ggplot.html#cb29-5" tabindex="-1"></a>  <span class="at">Passengers =</span> <span class="fu">as.numeric</span>(AirPassengers)</span>
+<span id="cb29-6"><a href="data-visualization-ggplot.html#cb29-6" tabindex="-1"></a>)</span></code></pre></div>
 <p><img src="images/airplane_table_head.PNG" /></p>
 <p>The <code>airpassengers_data</code> dataframe has two columns: <code>Month</code> and <code>Passengers</code>.</p>
 </div>
 <div id="creating-a-line-plot" class="section level4 unnumbered unlisted hasAnchor">
 <h4>Creating a Line Plot<a href="data-visualization-ggplot.html#creating-a-line-plot" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>Now, let’s create a line plot to visualize the trend of airline passengers over time.</p>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="data-visualization-ggplot.html#cb28-1" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> airpassengers_data, <span class="fu">aes</span>(<span class="at">x =</span> Month, <span class="at">y =</span> Passengers)) <span class="sc">+</span></span>
-<span id="cb28-2"><a href="data-visualization-ggplot.html#cb28-2" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">color =</span> <span class="st">&quot;blue&quot;</span>) <span class="sc">+</span></span>
-<span id="cb28-3"><a href="data-visualization-ggplot.html#cb28-3" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Trend of Airline Passengers Over Time&quot;</span>,</span>
-<span id="cb28-4"><a href="data-visualization-ggplot.html#cb28-4" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">&quot;Month&quot;</span>,</span>
-<span id="cb28-5"><a href="data-visualization-ggplot.html#cb28-5" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Number of Passengers&quot;</span>) <span class="sc">+</span></span>
-<span id="cb28-6"><a href="data-visualization-ggplot.html#cb28-6" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="data-visualization-ggplot.html#cb30-1" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> airpassengers_data, <span class="fu">aes</span>(<span class="at">x =</span> Month, <span class="at">y =</span> Passengers)) <span class="sc">+</span></span>
+<span id="cb30-2"><a href="data-visualization-ggplot.html#cb30-2" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">color =</span> <span class="st">&quot;blue&quot;</span>) <span class="sc">+</span></span>
+<span id="cb30-3"><a href="data-visualization-ggplot.html#cb30-3" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Trend of Airline Passengers Over Time&quot;</span>,</span>
+<span id="cb30-4"><a href="data-visualization-ggplot.html#cb30-4" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">&quot;Month&quot;</span>,</span>
+<span id="cb30-5"><a href="data-visualization-ggplot.html#cb30-5" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Number of Passengers&quot;</span>) <span class="sc">+</span></span>
+<span id="cb30-6"><a href="data-visualization-ggplot.html#cb30-6" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div>
 <p><img src="images/line_graph_example.PNG" /></p>
 <p>In this example:</p>
 <ul>

@@ -34,3 +34,11 @@ preparing-the-data
 simple-linear-regression
 fitting-the-model
 interpreting-the-results
+multiple-linear-regression
+including-multiple-variables
+creating-dummy-variables
+preparing-the-data-1
+fitting-the-multiple-linear-regression-model
+robust-linear-regression
+preparing-the-data-2
+fitting-the-robust-linear-model

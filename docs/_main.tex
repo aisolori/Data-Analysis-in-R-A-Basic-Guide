@@ -120,7 +120,7 @@
 
 \title{Data Analysis in R: A Basic Guide}
 \author{Antonio Solorio}
-\date{2024-07-23}
+\date{2024-07-25}
 
 \begin{document}
 \maketitle
@@ -866,8 +866,8 @@ Once we have the data loaded, we proceed to do some preliminary prep and cleanup
 \end{Highlighting}
 \end{Shaded}
 
-\hypertarget{basic-plot-structure}{%
-\subsection*{Basic Plot Structure}\label{basic-plot-structure}}
+\hypertarget{basic-plot-structure-scatter-plot}{%
+\subsection*{Basic Plot Structure / Scatter Plot}\label{basic-plot-structure-scatter-plot}}
 
 The structure of a ggplot2 plot is built around the \texttt{ggplot()}** function and the \texttt{+} operator to add layers. Here's a simple example of a scatter pplot:
 
@@ -924,7 +924,7 @@ Histograms are useful for visualizing the distribution of a single continuous va
 \begin{itemize}
 \tightlist
 \item
-  \texttt{geom\_histogram(binwidth\ =\ 50000,\ fill\ =\ "blue",\ color\ =\ "black")} adds a histogram layer with specified bin width, fill color, and border color.
+  \texttt{geom\_histogram(binwidth\ =\ 50000)} adds a histogram layer with specified bin width.
 \item
   \texttt{labs()} is used to add titles and labels to the plot.
 \end{itemize}
@@ -945,6 +945,8 @@ Bar plots are useful for visualizing categorical data. Let's create a bar plot t
 \end{Highlighting}
 \end{Shaded}
 
+\includegraphics{images/bar_plot.PNG}
+
 \begin{itemize}
 \tightlist
 \item
@@ -952,16 +954,58 @@ Bar plots are useful for visualizing categorical data. Let's create a bar plot t
 \item
   \texttt{geom\_bar()}: This adds a bar plot layer to the ggplot object. By default, geom\_bar() counts the number of occurrences of each loan\_type.
 \item
-  \texttt{labs(title\ =\ "Count\ of\ Loans\ by\ Loan\ Type",\ x\ =\ "Loan\ Type",\ y\ =\ "Count")}: This function is used to add titles and labels to the plot. It specifies the plot title and labels for the x and y axes..
+  \texttt{labs(title\ =\ "Count\ of\ Loans\ by\ Loan\ Type",\ x\ =\ "Loan\ Type",\ y\ =\ "Count")}: This function is used to add titles and labels to the plot. It specifies the plot title and labels for the x and y axes.
 \end{itemize}
 
-\includegraphics{images/bar_plot.PNG}
+A common issue that many beginners have have when creating bar plots, is that many don't know the difference between \texttt{geom\_col()} and \texttt{geom\_bar()}.
+
+The primary difference between \texttt{geom\_col()} and \texttt{geom\_bar()} in ggplot2 lies in how they handle the data for the height of the bars in a bar plot.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  \textbf{\texttt{geom\_col()}}:
+
+  \begin{itemize}
+  \item
+    \textbf{Purpose}: It is used when you already have the values that you want to plot (i.e., the heights of the bars).
+  \item
+    \textbf{Usage}: You provide both the x and y values directly. This is useful when your data is already summarized.
+  \item
+    \textbf{Example}:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(data, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ category, }\AttributeTok{y =}\NormalTok{ value)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_col}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+  \end{itemize}
+\item
+  \textbf{\texttt{geom\_bar()}}:
+
+  \begin{itemize}
+  \item
+    \textbf{Purpose}: It is used to create bar plots from raw data, where the heights of the bars are calculated as the counts of cases at each x position.
+  \item
+    \textbf{Usage}: You provide the x values, and ggplot2 will count the number of occurrences of each x value and use these counts as the heights of the bars.
+  \item
+    \textbf{Example}:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(data, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ category)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_bar}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+  \end{itemize}
+\end{enumerate}
 
 \hypertarget{box-plot}{%
 \subsubsection*{Box Plot}\label{box-plot}}
 \addcontentsline{toc}{subsubsection}{Box Plot}
 
-Box plots are useful for visualizing the distribution of a continuous variable across different categories. Let's create a box plot to visualize property values by loan type.
+Box plots are useful for visualizing the distribution of a continuous variable across different categories. They summarize key statistics like the median, quartiles, and potential outliers, making it easy to compare different groups. Let's create a box plot to visualize property values by loan type.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -982,6 +1026,20 @@ In this example:
   \texttt{geom\_boxplot()} adds a box plot layer.
 \item
   \texttt{labs()} is used to add titles and labels to the plot.
+\end{itemize}
+
+\hypertarget{explanation-of-box-plot-components}{%
+\paragraph*{Explanation of Box Plot Components}\label{explanation-of-box-plot-components}}
+
+\begin{itemize}
+\item
+  \textbf{Median}: The thick line in the middle of the box represents the median of the data.
+\item
+  \textbf{Interquartile Range (IQR)}: The box itself represents the IQR, which spans from the first quartile (25th percentile) to the third quartile (75th percentile).
+\item
+  \textbf{Whiskers}: The lines extending from the box (whiskers) represent the range of the data within 1.5 times the IQR from the first and third quartiles. Data points outside this range are considered outliers.
+\item
+  \textbf{Outliers}: Points outside the whiskers are potential outliers, indicating values that are significantly higher or lower than the rest of the data.
 \end{itemize}
 
 \hypertarget{line-plot}{%
@@ -1384,6 +1442,12 @@ In this comprehensive example:
 
 By utilizing the \texttt{theme()} function, you can create highly customized and polished visualizations tailored to your specific needs, making your data analysis and presentation more effective. This was meant to give you a rough idea of some of the customizations you can do with \texttt{ggplot2}, there are a myriad of other options available.
 
+\hypertarget{more-information-on-ggplot2}{%
+\section*{More Information on ggplot2}\label{more-information-on-ggplot2}}
+\addcontentsline{toc}{section}{More Information on ggplot2}
+
+For more information on ggpplot2 visit: \url{https://ggplot2.tidyverse.org/reference/index.html}
+
 \hypertarget{basic-regression-analysis-in-r}{%
 \chapter{Basic Regression Analysis in R}\label{basic-regression-analysis-in-r}}
 
@@ -1546,7 +1610,7 @@ We can visualize the regression line using ggplot2.
 \begin{Highlighting}[]
 \FunctionTok{ggplot}\NormalTok{(}\AttributeTok{data =}\NormalTok{ filtered\_hmda\_data, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ income, }\AttributeTok{y =}\NormalTok{ property\_value)) }\SpecialCharTok{+}
   \FunctionTok{geom\_point}\NormalTok{() }\SpecialCharTok{+}
-  \FunctionTok{geom\_smooth}\NormalTok{(}\AttributeTok{method =} \StringTok{"lm"}\NormalTok{, }\AttributeTok{col =} \StringTok{"red"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{geom\_smooth}\NormalTok{(}\AttributeTok{method =} \StringTok{"lm"}\NormalTok{, }\AttributeTok{color =} \StringTok{"red"}\NormalTok{, }\AttributeTok{formula =}\NormalTok{ y }\SpecialCharTok{\textasciitilde{}}\NormalTok{ x) }\SpecialCharTok{+}
   \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \StringTok{"Regression Line: Property Value vs Income"}\NormalTok{,}
        \AttributeTok{x =} \StringTok{"Income (in Thousands of Dollars)"}\NormalTok{,}
        \AttributeTok{y =} \StringTok{"Property Value"}\NormalTok{)}
@@ -1561,7 +1625,7 @@ In this plot:
 \item
   \texttt{geom\_point()} adds the data points.
 \item
-  \texttt{geom\_smooth(method\ =\ "lm",\ col\ =\ "red")} adds the regression line with the color red.
+  \texttt{geom\_smooth(method\ =\ "lm",\ color\ =\ "red",\ formula\ =\ y\ \textasciitilde{}\ x)} adds the regression line with the color red and using the formula \texttt{y\ \textasciitilde{}\ x} .
 \end{itemize}
 
 \hypertarget{plotting-residuals-using-lm}{%
@@ -1628,6 +1692,91 @@ The \texttt{plot(lm\_model)} function produces four diagnostic plots:
 \end{itemize}
 
 These plots help to assess the fit of the model and to identify any potential issues such as non-linearity, heteroscedasticity, and influential observations.
+
+\hypertarget{multiple-linear-regression}{%
+\section{Multiple Linear Regression}\label{multiple-linear-regression}}
+
+Multiple linear regression is used to model the relationship between a dependent variable and two or more independent variables. In this section, we will extend our analysis to include additional predictors and dummy variables.
+
+\hypertarget{including-multiple-variables}{%
+\subsection{Including Multiple Variables}\label{including-multiple-variables}}
+
+To include more than one independent variable in our model, we simply add them to the formula. For instance, we might want to include both \texttt{income} and \texttt{loan\_amount} as predictors of \texttt{property\_value}.
+
+\hypertarget{creating-dummy-variables}{%
+\subsection{Creating Dummy Variables}\label{creating-dummy-variables}}
+
+Dummy variables are used to include categorical variables in the regression model. For example, the \texttt{loan\_type} variable in our dataset is categorical, and we need to convert it to dummy variables.
+
+\hypertarget{preparing-the-data-1}{%
+\subsection{Preparing the Data}\label{preparing-the-data-1}}
+
+We will modify our previous data preparation steps to include additional variables and create dummy variables for \texttt{loan\_type}.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Create dummy variables for loan\_type}
+\NormalTok{filtered\_hmda\_data }\OtherTok{\textless{}{-}}\NormalTok{ filtered\_hmda\_data }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}
+    \AttributeTok{loan\_type\_conventional =} \FunctionTok{ifelse}\NormalTok{(loan\_type }\SpecialCharTok{==} \StringTok{"Conventional"}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{0}\NormalTok{),}
+    \AttributeTok{loan\_type\_fha =} \FunctionTok{ifelse}\NormalTok{(loan\_type }\SpecialCharTok{==} \StringTok{"FHA"}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{0}\NormalTok{),}
+    \AttributeTok{loan\_type\_va =} \FunctionTok{ifelse}\NormalTok{(loan\_type }\SpecialCharTok{==} \StringTok{"VA"}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{0}\NormalTok{),}
+    \AttributeTok{loan\_type\_usda =} \FunctionTok{ifelse}\NormalTok{(loan\_type }\SpecialCharTok{==} \StringTok{"USDA"}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{0}\NormalTok{)}
+\NormalTok{  )}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{fitting-the-multiple-linear-regression-model}{%
+\subsection{Fitting the Multiple Linear Regression Model}\label{fitting-the-multiple-linear-regression-model}}
+
+We use the \texttt{lm()} function to fit a multiple linear regression model.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Fit the multiple linear regression model}
+\NormalTok{mlm\_model }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(property\_value }\SpecialCharTok{\textasciitilde{}}\NormalTok{ income }\SpecialCharTok{+}\NormalTok{ loan\_amount }\SpecialCharTok{+}\NormalTok{ loan\_type\_conventional }\SpecialCharTok{+}\NormalTok{ loan\_type\_fha }\SpecialCharTok{+}\NormalTok{ loan\_type\_va }\SpecialCharTok{+}\NormalTok{ loan\_type\_usda, }\AttributeTok{data =}\NormalTok{ filtered\_hmda\_data)}
+
+\CommentTok{\# Display the summary of the model}
+\FunctionTok{summary}\NormalTok{(mlm\_model)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{images/mlm_summary.PNG}
+
+As we can see now instead of just having a coefficients and statistics for the intercept term and \texttt{income} we now also have coefficients for the the dummy variables we created based on the different loan types.
+
+\hypertarget{robust-linear-regression}{%
+\section{Robust Linear Regression}\label{robust-linear-regression}}
+
+Introduction to Robust Regression \{.unlisted .unumbered\} Robust regression is a technique used when the assumptions underlying ordinary least squares (OLS) regression are violated. These assumptions include the presence of normally distributed errors, constant variance (homoscedasticity), and the absence of outliers. In cases where the data contains outliers or exhibits heteroscedasticity (non-constant variance), OLS estimates can be significantly biased or inefficient.
+
+The rlm() function from the MASS package provides a robust alternative to OLS regression through the use of M-estimators. Unlike OLS, which minimizes the sum of squared residuals, rlm() minimizes a weighted sum of residuals, where weights are adjusted to reduce the influence of outliers. This adjustment allows rlm() to provide more reliable parameter estimates when dealing with problematic data conditions. \footnote{For a more advanced and comprehensive explanation of how \texttt{rlm()} works you may refer to \url{https://www.researchgate.net/publication/224817420_Modern_Applied_Statistics_With_S}}
+
+\hypertarget{preparing-the-data-2}{%
+\subsection{Preparing the Data}\label{preparing-the-data-2}}
+
+We'll use the same HMDA dataset prepared for the basic regression analysis.
+
+\hypertarget{fitting-the-robust-linear-model}{%
+\subsection{Fitting the Robust Linear Model}\label{fitting-the-robust-linear-model}}
+
+We use the \texttt{rlm()} function from the \texttt{MASS} package to fit a robust linear model.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(MASS)}
+
+\CommentTok{\# Fit the robust linear regression model}
+\NormalTok{rlm\_model }\OtherTok{\textless{}{-}} \FunctionTok{rlm}\NormalTok{(property\_value }\SpecialCharTok{\textasciitilde{}}\NormalTok{ income, }\AttributeTok{data =}\NormalTok{ filtered\_hmda\_data)}
+
+\CommentTok{\# Display the summary of the model}
+\FunctionTok{summary}\NormalTok{(rlm\_model)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{images/robust_regression_summary.PNG}
+
+The interpretation of summary is the same as it was when we ran a simple linear regression using the \texttt{lm()} model. One of the key differences is that you won't see an R\textsuperscript{2} statistic. since \texttt{rlm()} down-weight outliers the traditional calculation of R\textsuperscript{2} would not accurately reflect the model's fit or explanatory power.
 
   \bibliography{book.bib,packages.bib}
 

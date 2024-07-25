@@ -23,7 +23,7 @@
 <meta name="author" content="Antonio Solorio" />
 
 
-<meta name="date" content="2024-07-23" />
+<meta name="date" content="2024-07-25" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -224,6 +224,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="advanced-ggplot.html"><a href="advanced-ggplot.html#complete-theme-customization-example"><i class="fa fa-check"></i>Complete Theme Customization Example</a></li>
 </ul></li>
 </ul></li>
+<li class="chapter" data-level="" data-path="advanced-ggplot.html"><a href="advanced-ggplot.html#more-information-on-ggplot2"><i class="fa fa-check"></i>More Information on ggplot2</a></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="regressions.html"><a href="regressions.html"><i class="fa fa-check"></i><b>5</b> Basic Regression Analysis in R</a>
 <ul>
@@ -242,6 +243,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="regressions.html"><a href="regressions.html#visualizing-the-regression-line"><i class="fa fa-check"></i>Visualizing the Regression Line</a></li>
 <li class="chapter" data-level="" data-path="regressions.html"><a href="regressions.html#plotting-residuals-using-lm"><i class="fa fa-check"></i>Plotting Residuals Using <code>lm()</code></a></li>
 </ul></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="regressions.html"><a href="regressions.html#multiple-linear-regression"><i class="fa fa-check"></i><b>5.3</b> Multiple Linear Regression</a>
+<ul>
+<li class="chapter" data-level="5.3.1" data-path="regressions.html"><a href="regressions.html#including-multiple-variables"><i class="fa fa-check"></i><b>5.3.1</b> Including Multiple Variables</a></li>
+<li class="chapter" data-level="5.3.2" data-path="regressions.html"><a href="regressions.html#creating-dummy-variables"><i class="fa fa-check"></i><b>5.3.2</b> Creating Dummy Variables</a></li>
+<li class="chapter" data-level="5.3.3" data-path="regressions.html"><a href="regressions.html#preparing-the-data-1"><i class="fa fa-check"></i><b>5.3.3</b> Preparing the Data</a></li>
+<li class="chapter" data-level="5.3.4" data-path="regressions.html"><a href="regressions.html#fitting-the-multiple-linear-regression-model"><i class="fa fa-check"></i><b>5.3.4</b> Fitting the Multiple Linear Regression Model</a></li>
+</ul></li>
+<li class="chapter" data-level="5.4" data-path="regressions.html"><a href="regressions.html#robust-linear-regression"><i class="fa fa-check"></i><b>5.4</b> Robust Linear Regression</a>
+<ul>
+<li class="chapter" data-level="5.4.1" data-path="regressions.html"><a href="regressions.html#preparing-the-data-2"><i class="fa fa-check"></i><b>5.4.1</b> Preparing the Data</a></li>
+<li class="chapter" data-level="5.4.2" data-path="regressions.html"><a href="regressions.html#fitting-the-robust-linear-model"><i class="fa fa-check"></i><b>5.4.2</b> Fitting the Robust Linear Model</a></li>
 </ul></li>
 </ul></li>
 <li class="divider"></li>
@@ -272,34 +285,34 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="preparing-the-data" class="section level3 unlisted unumbered hasAnchor" number="5.1.1">
 <h3><span class="header-section-number">5.1.1</span> Preparing the Data<a href="regressions.html#preparing-the-data" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Before performing regression analysis, it’s crucial to ensure that the data is clean and properly formatted. We’ll start by loading the necessary packages and preparing the HMDA data.</p>
-<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="regressions.html#cb39-1" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb39-2"><a href="regressions.html#cb39-2" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb39-3"><a href="regressions.html#cb39-3" tabindex="-1"></a><span class="fu">library</span>(readr)</span>
-<span id="cb39-4"><a href="regressions.html#cb39-4" tabindex="-1"></a></span>
-<span id="cb39-5"><a href="regressions.html#cb39-5" tabindex="-1"></a><span class="co"># Load HMDA data</span></span>
-<span id="cb39-6"><a href="regressions.html#cb39-6" tabindex="-1"></a>hmda_data <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;downloads/state_NV.csv&quot;</span>, <span class="at">guess_max =</span> <span class="cn">Inf</span>)</span>
-<span id="cb39-7"><a href="regressions.html#cb39-7" tabindex="-1"></a></span>
-<span id="cb39-8"><a href="regressions.html#cb39-8" tabindex="-1"></a><span class="co"># Filter and prep HMDA data for regression analysis</span></span>
-<span id="cb39-9"><a href="regressions.html#cb39-9" tabindex="-1"></a>filtered_hmda_data <span class="ot">&lt;-</span> hmda_data <span class="sc">%&gt;%</span></span>
-<span id="cb39-10"><a href="regressions.html#cb39-10" tabindex="-1"></a>  <span class="fu">filter</span>(</span>
-<span id="cb39-11"><a href="regressions.html#cb39-11" tabindex="-1"></a>    action_taken <span class="sc">==</span> <span class="dv">1</span>,</span>
-<span id="cb39-12"><a href="regressions.html#cb39-12" tabindex="-1"></a>    loan_purpose <span class="sc">==</span> <span class="dv">1</span>,</span>
-<span id="cb39-13"><a href="regressions.html#cb39-13" tabindex="-1"></a>    occupancy_type <span class="sc">==</span> <span class="dv">1</span>,</span>
-<span id="cb39-14"><a href="regressions.html#cb39-14" tabindex="-1"></a>    lien_status <span class="sc">==</span> <span class="dv">1</span>,</span>
-<span id="cb39-15"><a href="regressions.html#cb39-15" tabindex="-1"></a>    total_units <span class="sc">==</span> <span class="st">&quot;1&quot;</span>,</span>
-<span id="cb39-16"><a href="regressions.html#cb39-16" tabindex="-1"></a>    <span class="sc">!</span>property_value <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;Exempt&quot;</span>, <span class="cn">NA</span>),</span>
-<span id="cb39-17"><a href="regressions.html#cb39-17" tabindex="-1"></a>    income <span class="sc">&lt;=</span> <span class="dv">250</span> <span class="sc">&amp;</span> income <span class="sc">&gt;</span> <span class="dv">0</span></span>
-<span id="cb39-18"><a href="regressions.html#cb39-18" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb39-19"><a href="regressions.html#cb39-19" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb39-20"><a href="regressions.html#cb39-20" tabindex="-1"></a>    <span class="at">property_value =</span> <span class="fu">as.numeric</span>(property_value),</span>
-<span id="cb39-21"><a href="regressions.html#cb39-21" tabindex="-1"></a>    <span class="at">loan_type =</span> <span class="fu">case_when</span>(</span>
-<span id="cb39-22"><a href="regressions.html#cb39-22" tabindex="-1"></a>      loan_type <span class="sc">==</span> <span class="dv">1</span> <span class="sc">~</span> <span class="st">&quot;Conventional&quot;</span>,</span>
-<span id="cb39-23"><a href="regressions.html#cb39-23" tabindex="-1"></a>      loan_type <span class="sc">==</span> <span class="dv">2</span> <span class="sc">~</span> <span class="st">&quot;FHA&quot;</span>,</span>
-<span id="cb39-24"><a href="regressions.html#cb39-24" tabindex="-1"></a>      loan_type <span class="sc">==</span> <span class="dv">3</span> <span class="sc">~</span> <span class="st">&quot;VA&quot;</span>,</span>
-<span id="cb39-25"><a href="regressions.html#cb39-25" tabindex="-1"></a>      loan_type <span class="sc">==</span> <span class="dv">4</span> <span class="sc">~</span> <span class="st">&quot;USDA&quot;</span></span>
-<span id="cb39-26"><a href="regressions.html#cb39-26" tabindex="-1"></a>    )</span>
-<span id="cb39-27"><a href="regressions.html#cb39-27" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb39-28"><a href="regressions.html#cb39-28" tabindex="-1"></a>  <span class="fu">filter</span>(property_value <span class="sc">&lt;</span> <span class="dv">1000000</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="regressions.html#cb41-1" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb41-2"><a href="regressions.html#cb41-2" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb41-3"><a href="regressions.html#cb41-3" tabindex="-1"></a><span class="fu">library</span>(readr)</span>
+<span id="cb41-4"><a href="regressions.html#cb41-4" tabindex="-1"></a></span>
+<span id="cb41-5"><a href="regressions.html#cb41-5" tabindex="-1"></a><span class="co"># Load HMDA data</span></span>
+<span id="cb41-6"><a href="regressions.html#cb41-6" tabindex="-1"></a>hmda_data <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;downloads/state_NV.csv&quot;</span>, <span class="at">guess_max =</span> <span class="cn">Inf</span>)</span>
+<span id="cb41-7"><a href="regressions.html#cb41-7" tabindex="-1"></a></span>
+<span id="cb41-8"><a href="regressions.html#cb41-8" tabindex="-1"></a><span class="co"># Filter and prep HMDA data for regression analysis</span></span>
+<span id="cb41-9"><a href="regressions.html#cb41-9" tabindex="-1"></a>filtered_hmda_data <span class="ot">&lt;-</span> hmda_data <span class="sc">%&gt;%</span></span>
+<span id="cb41-10"><a href="regressions.html#cb41-10" tabindex="-1"></a>  <span class="fu">filter</span>(</span>
+<span id="cb41-11"><a href="regressions.html#cb41-11" tabindex="-1"></a>    action_taken <span class="sc">==</span> <span class="dv">1</span>,</span>
+<span id="cb41-12"><a href="regressions.html#cb41-12" tabindex="-1"></a>    loan_purpose <span class="sc">==</span> <span class="dv">1</span>,</span>
+<span id="cb41-13"><a href="regressions.html#cb41-13" tabindex="-1"></a>    occupancy_type <span class="sc">==</span> <span class="dv">1</span>,</span>
+<span id="cb41-14"><a href="regressions.html#cb41-14" tabindex="-1"></a>    lien_status <span class="sc">==</span> <span class="dv">1</span>,</span>
+<span id="cb41-15"><a href="regressions.html#cb41-15" tabindex="-1"></a>    total_units <span class="sc">==</span> <span class="st">&quot;1&quot;</span>,</span>
+<span id="cb41-16"><a href="regressions.html#cb41-16" tabindex="-1"></a>    <span class="sc">!</span>property_value <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;Exempt&quot;</span>, <span class="cn">NA</span>),</span>
+<span id="cb41-17"><a href="regressions.html#cb41-17" tabindex="-1"></a>    income <span class="sc">&lt;=</span> <span class="dv">250</span> <span class="sc">&amp;</span> income <span class="sc">&gt;</span> <span class="dv">0</span></span>
+<span id="cb41-18"><a href="regressions.html#cb41-18" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb41-19"><a href="regressions.html#cb41-19" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb41-20"><a href="regressions.html#cb41-20" tabindex="-1"></a>    <span class="at">property_value =</span> <span class="fu">as.numeric</span>(property_value),</span>
+<span id="cb41-21"><a href="regressions.html#cb41-21" tabindex="-1"></a>    <span class="at">loan_type =</span> <span class="fu">case_when</span>(</span>
+<span id="cb41-22"><a href="regressions.html#cb41-22" tabindex="-1"></a>      loan_type <span class="sc">==</span> <span class="dv">1</span> <span class="sc">~</span> <span class="st">&quot;Conventional&quot;</span>,</span>
+<span id="cb41-23"><a href="regressions.html#cb41-23" tabindex="-1"></a>      loan_type <span class="sc">==</span> <span class="dv">2</span> <span class="sc">~</span> <span class="st">&quot;FHA&quot;</span>,</span>
+<span id="cb41-24"><a href="regressions.html#cb41-24" tabindex="-1"></a>      loan_type <span class="sc">==</span> <span class="dv">3</span> <span class="sc">~</span> <span class="st">&quot;VA&quot;</span>,</span>
+<span id="cb41-25"><a href="regressions.html#cb41-25" tabindex="-1"></a>      loan_type <span class="sc">==</span> <span class="dv">4</span> <span class="sc">~</span> <span class="st">&quot;USDA&quot;</span></span>
+<span id="cb41-26"><a href="regressions.html#cb41-26" tabindex="-1"></a>    )</span>
+<span id="cb41-27"><a href="regressions.html#cb41-27" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb41-28"><a href="regressions.html#cb41-28" tabindex="-1"></a>  <span class="fu">filter</span>(property_value <span class="sc">&lt;</span> <span class="dv">1000000</span>)</span></code></pre></div>
 </div>
 </div>
 <div id="simple-linear-regression" class="section level2 hasAnchor" number="5.2">
@@ -308,11 +321,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="fitting-the-model" class="section level3 hasAnchor" number="5.2.1">
 <h3><span class="header-section-number">5.2.1</span> Fitting the Model<a href="regressions.html#fitting-the-model" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>We use the <code>lm()</code> function to fit a linear model.</p>
-<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="regressions.html#cb40-1" tabindex="-1"></a><span class="co"># Fit the linear regression model</span></span>
-<span id="cb40-2"><a href="regressions.html#cb40-2" tabindex="-1"></a>lm_model <span class="ot">&lt;-</span> <span class="fu">lm</span>(property_value <span class="sc">~</span> income, <span class="at">data =</span> filtered_hmda_data)</span>
-<span id="cb40-3"><a href="regressions.html#cb40-3" tabindex="-1"></a></span>
-<span id="cb40-4"><a href="regressions.html#cb40-4" tabindex="-1"></a><span class="co"># Display the summary of the model</span></span>
-<span id="cb40-5"><a href="regressions.html#cb40-5" tabindex="-1"></a><span class="fu">summary</span>(lm_model)</span></code></pre></div>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="regressions.html#cb42-1" tabindex="-1"></a><span class="co"># Fit the linear regression model</span></span>
+<span id="cb42-2"><a href="regressions.html#cb42-2" tabindex="-1"></a>lm_model <span class="ot">&lt;-</span> <span class="fu">lm</span>(property_value <span class="sc">~</span> income, <span class="at">data =</span> filtered_hmda_data)</span>
+<span id="cb42-3"><a href="regressions.html#cb42-3" tabindex="-1"></a></span>
+<span id="cb42-4"><a href="regressions.html#cb42-4" tabindex="-1"></a><span class="co"># Display the summary of the model</span></span>
+<span id="cb42-5"><a href="regressions.html#cb42-5" tabindex="-1"></a><span class="fu">summary</span>(lm_model)</span></code></pre></div>
 <p><img src="images/regression_summary.PNG" /></p>
 </div>
 <div id="interpreting-the-results" class="section level3 hasAnchor" number="5.2.2">
@@ -365,17 +378,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="visualizing-the-regression-line" class="section level4 unnumbered hasAnchor">
 <h4>Visualizing the Regression Line<a href="regressions.html#visualizing-the-regression-line" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>We can visualize the regression line using ggplot2.</p>
-<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="regressions.html#cb41-1" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> filtered_hmda_data, <span class="fu">aes</span>(<span class="at">x =</span> income, <span class="at">y =</span> property_value)) <span class="sc">+</span></span>
-<span id="cb41-2"><a href="regressions.html#cb41-2" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb41-3"><a href="regressions.html#cb41-3" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">&quot;lm&quot;</span>, <span class="at">col =</span> <span class="st">&quot;red&quot;</span>) <span class="sc">+</span></span>
-<span id="cb41-4"><a href="regressions.html#cb41-4" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Regression Line: Property Value vs Income&quot;</span>,</span>
-<span id="cb41-5"><a href="regressions.html#cb41-5" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">&quot;Income (in Thousands of Dollars)&quot;</span>,</span>
-<span id="cb41-6"><a href="regressions.html#cb41-6" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Property Value&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="regressions.html#cb43-1" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> filtered_hmda_data, <span class="fu">aes</span>(<span class="at">x =</span> income, <span class="at">y =</span> property_value)) <span class="sc">+</span></span>
+<span id="cb43-2"><a href="regressions.html#cb43-2" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb43-3"><a href="regressions.html#cb43-3" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">&quot;lm&quot;</span>, <span class="at">color =</span> <span class="st">&quot;red&quot;</span>, <span class="at">formula =</span> y <span class="sc">~</span> x) <span class="sc">+</span></span>
+<span id="cb43-4"><a href="regressions.html#cb43-4" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Regression Line: Property Value vs Income&quot;</span>,</span>
+<span id="cb43-5"><a href="regressions.html#cb43-5" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">&quot;Income (in Thousands of Dollars)&quot;</span>,</span>
+<span id="cb43-6"><a href="regressions.html#cb43-6" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Property Value&quot;</span>)</span></code></pre></div>
 <p><img src="images/scatter_plot_with_regression.PNG" /></p>
 <p>In this plot:</p>
 <ul>
 <li><p><code>geom_point()</code> adds the data points.</p></li>
-<li><p><code>geom_smooth(method = "lm", col = "red")</code> adds the regression line with the color red.</p></li>
+<li><p><code>geom_smooth(method = "lm", color = "red", formula = y ~ x)</code> adds the regression line with the color red and using the formula <code>y ~ x</code> .</p></li>
 </ul>
 </div>
 <div id="plotting-residuals-using-lm" class="section level4 unnumbered hasAnchor">
@@ -384,25 +397,25 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ol style="list-style-type: decimal">
 <li><strong>Basic Residual Plot</strong>: Plotting residuals versus fitted values.</li>
 </ol>
-<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="regressions.html#cb42-1" tabindex="-1"></a><span class="co"># Fit the linear regression model</span></span>
-<span id="cb42-2"><a href="regressions.html#cb42-2" tabindex="-1"></a>lm_model <span class="ot">&lt;-</span> <span class="fu">lm</span>(property_value <span class="sc">~</span> income, <span class="at">data =</span> filtered_hmda_data)</span>
-<span id="cb42-3"><a href="regressions.html#cb42-3" tabindex="-1"></a></span>
-<span id="cb42-4"><a href="regressions.html#cb42-4" tabindex="-1"></a><span class="co"># Plot residuals vs. fitted values</span></span>
-<span id="cb42-5"><a href="regressions.html#cb42-5" tabindex="-1"></a><span class="fu">plot</span>(lm_model<span class="sc">$</span>fitted.values, lm_model<span class="sc">$</span>residuals,</span>
-<span id="cb42-6"><a href="regressions.html#cb42-6" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">&quot;Fitted Values&quot;</span>,</span>
-<span id="cb42-7"><a href="regressions.html#cb42-7" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">&quot;Residuals&quot;</span>,</span>
-<span id="cb42-8"><a href="regressions.html#cb42-8" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">&quot;Residuals vs Fitted Values&quot;</span>)</span>
-<span id="cb42-9"><a href="regressions.html#cb42-9" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h =</span> <span class="dv">0</span>, <span class="at">col =</span> <span class="st">&quot;red&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="regressions.html#cb44-1" tabindex="-1"></a><span class="co"># Fit the linear regression model</span></span>
+<span id="cb44-2"><a href="regressions.html#cb44-2" tabindex="-1"></a>lm_model <span class="ot">&lt;-</span> <span class="fu">lm</span>(property_value <span class="sc">~</span> income, <span class="at">data =</span> filtered_hmda_data)</span>
+<span id="cb44-3"><a href="regressions.html#cb44-3" tabindex="-1"></a></span>
+<span id="cb44-4"><a href="regressions.html#cb44-4" tabindex="-1"></a><span class="co"># Plot residuals vs. fitted values</span></span>
+<span id="cb44-5"><a href="regressions.html#cb44-5" tabindex="-1"></a><span class="fu">plot</span>(lm_model<span class="sc">$</span>fitted.values, lm_model<span class="sc">$</span>residuals,</span>
+<span id="cb44-6"><a href="regressions.html#cb44-6" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">&quot;Fitted Values&quot;</span>,</span>
+<span id="cb44-7"><a href="regressions.html#cb44-7" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">&quot;Residuals&quot;</span>,</span>
+<span id="cb44-8"><a href="regressions.html#cb44-8" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">&quot;Residuals vs Fitted Values&quot;</span>)</span>
+<span id="cb44-9"><a href="regressions.html#cb44-9" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h =</span> <span class="dv">0</span>, <span class="at">col =</span> <span class="st">&quot;red&quot;</span>)</span></code></pre></div>
 <p><img src="images/residual_plot.PNG" /></p>
 <ol start="2" style="list-style-type: decimal">
 <li><strong>Diagnostic Plots</strong> Plotting multiple diagnostic plots at once.</li>
 </ol>
-<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="regressions.html#cb43-1" tabindex="-1"></a><span class="co"># Fit the linear regression model</span></span>
-<span id="cb43-2"><a href="regressions.html#cb43-2" tabindex="-1"></a>lm_model <span class="ot">&lt;-</span> <span class="fu">lm</span>(property_value <span class="sc">~</span> income, <span class="at">data =</span> filtered_hmda_data)</span>
-<span id="cb43-3"><a href="regressions.html#cb43-3" tabindex="-1"></a></span>
-<span id="cb43-4"><a href="regressions.html#cb43-4" tabindex="-1"></a><span class="co"># Produce diagnostic plots</span></span>
-<span id="cb43-5"><a href="regressions.html#cb43-5" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">2</span>)) <span class="co"># just lets R know we want the plots to be in 2x2 structure</span></span>
-<span id="cb43-6"><a href="regressions.html#cb43-6" tabindex="-1"></a><span class="fu">plot</span>(lm_model)</span></code></pre></div>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="regressions.html#cb45-1" tabindex="-1"></a><span class="co"># Fit the linear regression model</span></span>
+<span id="cb45-2"><a href="regressions.html#cb45-2" tabindex="-1"></a>lm_model <span class="ot">&lt;-</span> <span class="fu">lm</span>(property_value <span class="sc">~</span> income, <span class="at">data =</span> filtered_hmda_data)</span>
+<span id="cb45-3"><a href="regressions.html#cb45-3" tabindex="-1"></a></span>
+<span id="cb45-4"><a href="regressions.html#cb45-4" tabindex="-1"></a><span class="co"># Produce diagnostic plots</span></span>
+<span id="cb45-5"><a href="regressions.html#cb45-5" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">2</span>)) <span class="co"># just lets R know we want the plots to be in 2x2 structure</span></span>
+<span id="cb45-6"><a href="regressions.html#cb45-6" tabindex="-1"></a><span class="fu">plot</span>(lm_model)</span></code></pre></div>
 <p><img src="images/diagnostic_plots.PNG" /></p>
 <p>The <code>plot(lm_model)</code> function produces four diagnostic plots:</p>
 <ul>
@@ -412,18 +425,82 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><p>Residuals vs Leverage</p></li>
 </ul>
 <p>These plots help to assess the fit of the model and to identify any potential issues such as non-linearity, heteroscedasticity, and influential observations.</p>
+</div>
+</div>
+</div>
+<div id="multiple-linear-regression" class="section level2 hasAnchor" number="5.3">
+<h2><span class="header-section-number">5.3</span> Multiple Linear Regression<a href="regressions.html#multiple-linear-regression" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Multiple linear regression is used to model the relationship between a dependent variable and two or more independent variables. In this section, we will extend our analysis to include additional predictors and dummy variables.</p>
+<div id="including-multiple-variables" class="section level3 hasAnchor" number="5.3.1">
+<h3><span class="header-section-number">5.3.1</span> Including Multiple Variables<a href="regressions.html#including-multiple-variables" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>To include more than one independent variable in our model, we simply add them to the formula. For instance, we might want to include both <code>income</code> and <code>loan_amount</code> as predictors of <code>property_value</code>.</p>
+</div>
+<div id="creating-dummy-variables" class="section level3 hasAnchor" number="5.3.2">
+<h3><span class="header-section-number">5.3.2</span> Creating Dummy Variables<a href="regressions.html#creating-dummy-variables" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Dummy variables are used to include categorical variables in the regression model. For example, the <code>loan_type</code> variable in our dataset is categorical, and we need to convert it to dummy variables.</p>
+</div>
+<div id="preparing-the-data-1" class="section level3 hasAnchor" number="5.3.3">
+<h3><span class="header-section-number">5.3.3</span> Preparing the Data<a href="regressions.html#preparing-the-data-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>We will modify our previous data preparation steps to include additional variables and create dummy variables for <code>loan_type</code>.</p>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="regressions.html#cb46-1" tabindex="-1"></a><span class="co"># Create dummy variables for loan_type</span></span>
+<span id="cb46-2"><a href="regressions.html#cb46-2" tabindex="-1"></a>filtered_hmda_data <span class="ot">&lt;-</span> filtered_hmda_data <span class="sc">%&gt;%</span></span>
+<span id="cb46-3"><a href="regressions.html#cb46-3" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb46-4"><a href="regressions.html#cb46-4" tabindex="-1"></a>    <span class="at">loan_type_conventional =</span> <span class="fu">ifelse</span>(loan_type <span class="sc">==</span> <span class="st">&quot;Conventional&quot;</span>, <span class="dv">1</span>, <span class="dv">0</span>),</span>
+<span id="cb46-5"><a href="regressions.html#cb46-5" tabindex="-1"></a>    <span class="at">loan_type_fha =</span> <span class="fu">ifelse</span>(loan_type <span class="sc">==</span> <span class="st">&quot;FHA&quot;</span>, <span class="dv">1</span>, <span class="dv">0</span>),</span>
+<span id="cb46-6"><a href="regressions.html#cb46-6" tabindex="-1"></a>    <span class="at">loan_type_va =</span> <span class="fu">ifelse</span>(loan_type <span class="sc">==</span> <span class="st">&quot;VA&quot;</span>, <span class="dv">1</span>, <span class="dv">0</span>),</span>
+<span id="cb46-7"><a href="regressions.html#cb46-7" tabindex="-1"></a>    <span class="at">loan_type_usda =</span> <span class="fu">ifelse</span>(loan_type <span class="sc">==</span> <span class="st">&quot;USDA&quot;</span>, <span class="dv">1</span>, <span class="dv">0</span>)</span>
+<span id="cb46-8"><a href="regressions.html#cb46-8" tabindex="-1"></a>  )</span></code></pre></div>
+</div>
+<div id="fitting-the-multiple-linear-regression-model" class="section level3 hasAnchor" number="5.3.4">
+<h3><span class="header-section-number">5.3.4</span> Fitting the Multiple Linear Regression Model<a href="regressions.html#fitting-the-multiple-linear-regression-model" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>We use the <code>lm()</code> function to fit a multiple linear regression model.</p>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="regressions.html#cb47-1" tabindex="-1"></a><span class="co"># Fit the multiple linear regression model</span></span>
+<span id="cb47-2"><a href="regressions.html#cb47-2" tabindex="-1"></a>mlm_model <span class="ot">&lt;-</span> <span class="fu">lm</span>(property_value <span class="sc">~</span> income <span class="sc">+</span> loan_amount <span class="sc">+</span> loan_type_conventional <span class="sc">+</span> loan_type_fha <span class="sc">+</span> loan_type_va <span class="sc">+</span> loan_type_usda, <span class="at">data =</span> filtered_hmda_data)</span>
+<span id="cb47-3"><a href="regressions.html#cb47-3" tabindex="-1"></a></span>
+<span id="cb47-4"><a href="regressions.html#cb47-4" tabindex="-1"></a><span class="co"># Display the summary of the model</span></span>
+<span id="cb47-5"><a href="regressions.html#cb47-5" tabindex="-1"></a><span class="fu">summary</span>(mlm_model)</span></code></pre></div>
+<p><img src="images/mlm_summary.PNG" /></p>
+<p>As we can see now instead of just having a coefficients and statistics for the intercept term and <code>income</code> we now also have coefficients for the the dummy variables we created based on the different loan types.</p>
+</div>
+</div>
+<div id="robust-linear-regression" class="section level2 hasAnchor" number="5.4">
+<h2><span class="header-section-number">5.4</span> Robust Linear Regression<a href="regressions.html#robust-linear-regression" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Introduction to Robust Regression {.unlisted .unumbered} Robust regression is a technique used when the assumptions underlying ordinary least squares (OLS) regression are violated. These assumptions include the presence of normally distributed errors, constant variance (homoscedasticity), and the absence of outliers. In cases where the data contains outliers or exhibits heteroscedasticity (non-constant variance), OLS estimates can be significantly biased or inefficient.</p>
+<p>The rlm() function from the MASS package provides a robust alternative to OLS regression through the use of M-estimators. Unlike OLS, which minimizes the sum of squared residuals, rlm() minimizes a weighted sum of residuals, where weights are adjusted to reduce the influence of outliers. This adjustment allows rlm() to provide more reliable parameter estimates when dealing with problematic data conditions. <a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a></p>
+<div id="preparing-the-data-2" class="section level3 unlisted unumbered hasAnchor" number="5.4.1">
+<h3><span class="header-section-number">5.4.1</span> Preparing the Data<a href="regressions.html#preparing-the-data-2" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>We’ll use the same HMDA dataset prepared for the basic regression analysis.</p>
+</div>
+<div id="fitting-the-robust-linear-model" class="section level3 hasAnchor" number="5.4.2">
+<h3><span class="header-section-number">5.4.2</span> Fitting the Robust Linear Model<a href="regressions.html#fitting-the-robust-linear-model" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>We use the <code>rlm()</code> function from the <code>MASS</code> package to fit a robust linear model.</p>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="regressions.html#cb48-1" tabindex="-1"></a><span class="fu">library</span>(MASS)</span>
+<span id="cb48-2"><a href="regressions.html#cb48-2" tabindex="-1"></a></span>
+<span id="cb48-3"><a href="regressions.html#cb48-3" tabindex="-1"></a><span class="co"># Fit the robust linear regression model</span></span>
+<span id="cb48-4"><a href="regressions.html#cb48-4" tabindex="-1"></a>rlm_model <span class="ot">&lt;-</span> <span class="fu">rlm</span>(property_value <span class="sc">~</span> income, <span class="at">data =</span> filtered_hmda_data)</span>
+<span id="cb48-5"><a href="regressions.html#cb48-5" tabindex="-1"></a></span>
+<span id="cb48-6"><a href="regressions.html#cb48-6" tabindex="-1"></a><span class="co"># Display the summary of the model</span></span>
+<span id="cb48-7"><a href="regressions.html#cb48-7" tabindex="-1"></a><span class="fu">summary</span>(rlm_model)</span></code></pre></div>
+<p><img src="images/robust_regression_summary.PNG" /></p>
+<p>The interpretation of summary is the same as it was when we ran a simple linear regression using the <code>lm()</code> model. One of the key differences is that you won’t see an R<sup>2</sup> statistic. since <code>rlm()</code> down-weight outliers the traditional calculation of R<sup>2</sup> would not accurately reflect the model’s fit or explanatory power.</p>
 
 </div>
 </div>
 </div>
+
+
+
+
+
+
+
+
+<div class="footnotes">
+<hr />
+<ol start="3">
+<li id="fn3"><p>For a more advanced and comprehensive explanation of how <code>rlm()</code> works you may refer to <a href="https://www.researchgate.net/publication/224817420_Modern_Applied_Statistics_With_S" class="uri">https://www.researchgate.net/publication/224817420_Modern_Applied_Statistics_With_S</a><a href="regressions.html#fnref3" class="footnote-back">↩︎</a></p></li>
+</ol>
 </div>
-
-
-
-
-
-
-
             </section>
 
           </div>

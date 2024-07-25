@@ -1,7 +1,8 @@
-## Exploring and Cleaning HMDA Data
+## Exploring and Cleaning the Data Structure
 
-In this section we will utilize the HMDA Snapshot data for 2022 in Nevada to practice data exploration and cleaning. The data is available at the following link: <https://ffiec.cfpb.gov/v2/data-browser-api/view/csv?states=NV&years=2022>. We have downloaded the data and read it into R using the following:
+In this section we will utilize the HMDA Snapshot data for 2022 in Nevada to practice data structure exploration and cleaning. The data is available at the following link: <https://ffiec.cfpb.gov/v2/data-browser-api/view/csv?states=NV&years=2022>. We have downloaded the data and read it into R using the following:
 
+When we 
 ``` r
 # Load the data
 hmda_data <- read_csv("downloads/state_NV.csv", guess_max = Inf)

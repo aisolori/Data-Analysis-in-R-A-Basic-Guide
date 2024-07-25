@@ -290,3 +290,7 @@ In this comprehensive example:
 -   Other elements are customized as described in previous examples.
 
 By utilizing the `theme()` function, you can create highly customized and polished visualizations tailored to your specific needs, making your data analysis and presentation more effective. This was meant to give you a rough idea of some of the customizations you can do with `ggplot2`, there are a myriad of other options available.
+
+## More Information on ggplot2 {.unnumbered}
+
+For more information on ggpplot2 visit: https://ggplot2.tidyverse.org/reference/index.html
