@@ -1,0 +1,539 @@
+---
+title: 'Naswa Summer Series: Notebook II'
+output:
+  html_document:
+    df_print: paged
+---
+# Data Visualization Using `ggplot()`
+
+## Introduction
+
+Data visualization is a crucial step in data analysis as it helps in understanding the underlying patterns, trends, and relationships in the data. In this chapter, we will explore how to create various types of visualizations using the ggplot2 package in R, focusing on HMDA (Home Mortgage Disclosure Act) data.
+
+### Loading of Packages and Data
+
+Before performing regression analysis, it's crucial to ensure that the data is clean and properly formatted. We'll start by loading the necessary packages and preparing the HMDA data. The `tidyverse` package, which includes `ggplot2` and many other useful packages for data loading, cleaning, and preparation, is highly recommended. Install and load the tidyverse package to proceed.
+
+### Installing `tidyverse`
+
+If you don't already have tidyverse installed, you can run the following code chunk to do so:
+
+```{r, eval=FALSE}
+# Installing package from CRAN repository
+install.packages("tidyverse")
+```
+
+### Data Loading and Prep
+
+```{r libraries, echo= FALSE, cache=TRUE, message= FALSE}
+library(tidyverse) # This package loads dplyr, forcats, ggplot2, lubridate, purrr, readr, stringr, tibble and tidyr
+options(scipen = 999) # we do this to avoid values being displayed in scientific notation
+
+# Reading in Nevada HMDA Data for 2022
+hmda_data <- read.csv("https://ffiec.cfpb.gov/v2/data-browser-api/view/csv?states=NV&years=2022")
+
+# Filter and prep HMDA data for plotting
+filtered_hmda_data <- hmda_data%>%
+  filter(
+    # Filter for only originated transactions
+    action_taken == 1,
+    # Filter for only for home purchases
+    loan_purpose == 1,
+    # Filter for only primary homes
+    occupancy_type == 1,
+    # Filter for primary liens
+    lien_status == 1,
+    # Filter for single unit homes
+    total_units == "1",
+    # Filter propery value 
+    !property_value %in% c("Exempt", NA),
+    # Filter income for values below 250 but above 0
+    income <=250 & income>0
+    
+  )%>%
+  mutate(
+    property_value = as.numeric(property_value),
+    # Assigning labels for each loan_type
+    loan_type = case_when(
+      loan_type == 1 ~ "Conventional",
+      loan_type == 2 ~ "FHA",
+      loan_type == 3 ~ "VA",
+      loan_type == 4 ~ "USDA"
+    ))%>%
+    # Only keep property values under $1 million
+  filter(property_value<1000000)
+
+filtered_hmda_data
+```
+
+## Basic Plot Structure / Scatter Plot
+
+The structure of a ggplot2 plot is built around the `ggplot()` function and the `+` operator to add layers. Here’s a simple example of a scatter pplot:
+
+```{r}
+ggplot(data = filtered_hmda_data, aes(x = income, y = property_value))+
+  geom_point()
+```
+
+In this example, `ggplot()` is the initial function call to create a new plot. The function takes the following primary arguments:
+
+-   `data`: This argument specifies the dataset to be used in the plot. In this case, `filtered_hmda_data` is the dataset containing the HMDA data.
+
+-   `aes()`: Short for aesthetics, this function defines the mapping of variables in your data to visual properties (aesthetics) such as x and y axes, colors, shapes, and sizes of points or lines. In the example, `x = income` maps the `income` variable to the x-axis, and `y = property_value` maps the `property_value` variable to the y-axis. Later in this notebook we will cover some of the other available aesthetics.
+
+After the initial `ggplot()` function, we add layers to the plot using the **`+`** operator. Each layer represents a specific component of the plot, such as points, lines, bars, etc.
+
+-   `geom_point()`: This is a geometric object (geom) layer that adds a scatter plot layer to the plot. Each point represents an observation in the dataset.
+
+It is also possible to overlay multiple plot layers together. For example if we wanted to add a regression line to the scatter plot, we could do this using `geom_smooth()` .
+
+```{r}
+ggplot(data = filtered_hmda_data, aes(x = income, y = property_value))+
+  geom_point()+
+  geom_smooth(method = "lm", color = "red" , formula = y ~ x)
+```
+
+### Creating Basic Plot Types with ggplot2
+
+In this section, we will explore how to create various types of basic plots using ggplot2. We will start with histograms, bar plots, box plots, and line plots, each serving different purposes in data visualization.
+
+#### Histogram
+
+Histograms are useful for visualizing the distribution of a single continuous variable. For example, let’s create a histogram to visualize the distribution of property values in our filtered HMDA data.
+
+```{r}
+ggplot(data = filtered_hmda_data, aes(x = property_value)) +
+  geom_histogram(binwidth = 50000) +
+  labs(title = "Distribution of Property Values",
+       x = "Property Value",
+       y = "Count")
+```
+
+-   `geom_histogram(binwidth = 50000)` adds a histogram layer with specified bin width.
+
+-   `labs()` is used to add titles and labels to the plot.
+
+    -   The `title` argument takes a string for the title
+
+    -   `x` and `y` arguments is where we define or x and y axis titles
+
+#### Bar Plot {.unnumbered}
+
+Bar plots are useful for visualizing categorical data. Let's create a bar plot to visualize the count of loans by loan type.
+
+```{r}
+ggplot(data = filtered_hmda_data, aes(x = loan_type)) +
+  geom_bar() +
+  labs(title = "Count of Loans by Loan Type",
+       x = "Loan Type",
+       y = "Count")
+```
+
+-   `ggplot(data = filtered_hmda_data, aes(x = loan_type))`: This line initializes the ggplot object with the specified dataset (`filtered_hmda_data`) and maps the loan_type column to the x-axis.
+-   `geom_bar()`: This adds a bar plot layer to the ggplot object. By default, geom_bar() counts the number of occurrences of each loan_type.
+-   `labs(title = "Count of Loans by Loan Type", x = "Loan Type", y = "Count")`: This function is used to add titles and labels to the plot. It specifies the plot title and labels for the x and y axes..
+
+A common issue that many beginners have have when creating bar plots, is that many don't know the difference between `geom_col()` and `geom_bar()`.
+
+The primary difference between `geom_col()` and `geom_bar()` in ggplot2 lies in how they handle the data for the height of the bars in a bar plot.
+
+1.  **`geom_col()`**:
+
+    -   **Purpose**: It is used when you already have the values that you want to plot (i.e., the heights of the bars).
+
+    -   **Usage**: You provide both the x and y values directly. This is useful when your data is already summarized.
+
+    -   **Example**:
+
+        ``` r
+        ggplot(data, aes(x = category, y = value)) +   geom_col()
+        ```
+
+2.  **`geom_bar()`**:
+
+    -   **Purpose**: It is used to create bar plots from raw data, where the heights of the bars are calculated as the counts of cases at each x position.
+
+    -   **Usage**: You provide the x values, and ggplot2 will count the number of occurrences of each x value and use these counts as the heights of the bars.
+
+    -   **Example**:
+
+        ``` r
+        ggplot(data, aes(x = category)) +
+          geom_bar()
+        ```
+
+#### Box Plot {.unnumbered}
+
+Box plots are useful for visualizing the distribution of a continuous variable across different categories. They summarize key statistics like the median, quartiles, and potential outliers, making it easy to compare different groups. Let's create a box plot to visualize property values by loan type.
+
+```{r}
+ggplot(data = filtered_hmda_data, aes(x = loan_type, y = property_value)) +   geom_boxplot() +   labs(title = "Property Values by Loan Type",        x = "Loan Type",        y = "Property Value")
+```
+
+In this example:
+
+-   `geom_boxplot()` adds a box plot layer.
+
+-   `labs()` is used to add titles and labels to the plot.
+
+##### Explanation of Box Plot Components {.unnumbered .unlisted}
+
+-   **Median**: The thick line in the middle of the box represents the median of the data.
+
+-   **Interquartile Range (IQR)**: The box itself represents the IQR, which spans from the first quartile (25th percentile) to the third quartile (75th percentile).
+
+-   **Whiskers**: The lines extending from the box (whiskers) represent the range of the data within 1.5 times the IQR from the first and third quartiles. Data points outside this range are considered outliers.
+
+-   **Outliers**: Points outside the whiskers are potential outliers, indicating values that are significantly higher or lower than the rest of the data.
+
+#### Line Plot {.unnumbered}
+
+Line plots are useful for visualizing trends over time or ordered categories. Since the HMDA data we have been working with is not historical, we will use one of R's built-in datasets, AirPassengers, to demonstrate creating a line plot. The `AirPassengers` dataset contains monthly totals of international airline passengers from 1949 to 1960.
+
+First, let's load the dataset and take a look at its structure:
+
+```{r}
+# Load the AirPassengers dataset
+data("AirPassengers")
+
+airpassengers_data <- data.frame(
+  Month = time(AirPassengers),
+  Passengers = as.numeric(AirPassengers)
+)
+
+airpassengers_data
+```
+
+The `airpassengers_data` dataframe has two columns: `Month` and `Passengers`.
+
+#### Creating a Line Plot {.unnumbered .unlisted}
+
+Now, let's create a line plot to visualize the trend of airline passengers over time.
+
+```{r, message=FALSE}
+ggplot(data = airpassengers_data, aes(x = Month, y = Passengers)) +
+  geom_line(color = "blue") +
+  labs(title = "Trend of Airline Passengers Over Time",
+       x = "Month",
+       y = "Number of Passengers") +
+  theme_minimal()
+```
+
+In this example:
+
+-   `ggplot(data = airpassengers_data, aes(x = Month, y = Passengers))`: Initializes the ggplot object with the `airpassengers_data` dataset and maps the `Month` column to the x-axis and the `Passengers` column to the y-axis.
+
+-   `geom_line(color = "blue")`: Adds a line plot layer with the line color set to blue.
+
+-   `labs(title = "Trend of Airline Passengers Over Time", x = "Month", y = "Number of Passengers")`: Adds a title and labels to the plot.
+
+-   `theme_minimal()`: Applies a minimalistic theme to the plot.
+
+### Faceting
+
+Faceting is a powerful technique to create multiple plots based on the values of one or more categorical variables. It allows you to compare different subsets of the data side by side.
+
+#### Facet Wrap
+
+The `facet_wrap()` function splits the data into multiple panels based on the values of a single categorical variable.
+
+```{r}
+ggplot(data = filtered_hmda_data, aes(x = income, y = property_value)) +
+  geom_point() +
+  facet_wrap(~ loan_type) +
+  labs(title = "Property Value vs Income by Loan Type",
+       x = "Income",
+       y = "Property Value")
+```
+
+In this example, `facet_wrap(~ loan_type)` creates separate panels for each loan type, allowing us to compare the relationship between income and property value across different loan types.
+
+#### Facet Grid
+
+The `facet_grid()` function allows for more complex faceting based on two variables, creating a matrix of panels.
+
+I removed the filter the occupancy that limited occupancy to only primary residences. I also constructed a `case_when()` to label the occupancy type for each transaction
+
+```{r}
+# Filter and prep HMDA data for plotting
+filtered_hmda_data <- hmda_data%>%
+  filter(
+    # Filter for only originated transactions
+    action_taken == 1,
+    # Filter for only for home purchases
+    loan_purpose == 1,
+    # Filter for only primary homss
+    # This has been commented out
+    #occupancy_type == 1,
+    # Filter for primary liens
+    lien_status == 1,
+    # Filter for single unit homes
+    total_units == "1",
+    # Filter propery value 
+    !property_value %in% c("Exempt", NA),
+    # Filter income for values below 250 but above 0
+    income <=250 & income>0,
+    # Filter for Clark County
+    county_code == "32003"
+    
+  )%>%
+  mutate(
+    property_value = as.numeric(property_value),
+    # Assigning labels for each loan_type
+    loan_type = case_when(
+      loan_type == 1 ~ "Conventional",
+      loan_type == 2 ~ "FHA",
+      loan_type == 3 ~ "VA",
+      loan_type == 4 ~ "USDA"
+    ),
+    occupancy_type = case_when(
+      occupancy_type == 1 ~ "Primary Residence",
+      occupancy_type == 2 ~ "Second Residence",
+      occupancy_type == 3 ~ "Investment Property"
+    ))%>%
+    # Only keep property values under $1 million
+  filter(property_value<1000000)
+```
+
+Having prepped the data, we can now demonstrate the usage of `facet_grid()` 
+
+```{r}
+ggplot(data = filtered_hmda_data, aes(x = income, y = property_value)) +
+  geom_point() +
+  facet_grid(loan_type ~ occupancy_type) +
+  labs(title = "Property Value vs Income by Loan Type and Occupancy Type",
+       x = "Income",
+       y = "Property Value")
+```
+
+In this example, `facet_grid(loan_type ~ occupancy_type)` creates a grid of panels, with rows representing loan types and columns representing occupancy types.
+
+## More Information on `ggplot2`
+
+For more information on `ggpplot2` visit: <https://ggplot2.tidyverse.org/reference/index.html>
+
+# Basic Regression Analysis in R
+
+## Introduction {.unlisted .unumbered}
+
+Regression analysis is a powerful statistical method used to examine the relationship between a dependent variable and one or more independent variables. In this chapter, we will explore how to perform basic regression analysis in R using the HMDA (Home Mortgage Disclosure Act) dataset. Specifically, we will use the `income` variable to predict `property_value`.
+
+### Preparing the Data {.unlisted .unumbered}
+
+Before performing regression analysis, it's crucial to ensure that the data is clean and properly formatted. We will continue using the data that we previously loaded 
+
+```{r}
+# Filter and prep HMDA data for regression analysis
+filtered_hmda_data <- hmda_data %>%
+  filter(
+    action_taken == 1,
+    loan_purpose == 1,
+    occupancy_type == 1,
+    lien_status == 1,
+    total_units == "1",
+    !property_value %in% c("Exempt", NA),
+    income <= 250 & income > 0
+  ) %>%
+  mutate(
+    property_value = as.numeric(property_value),
+    loan_type = case_when(
+      loan_type == 1 ~ "Conventional",
+      loan_type == 2 ~ "FHA",
+      loan_type == 3 ~ "VA",
+      loan_type == 4 ~ "USDA"
+    )
+  ) %>%
+  filter(property_value < 1000000)
+```
+
+## Simple Linear Regression
+
+Simple linear regression is used to model the relationship between two continuous variables. In this case, we will model the relationship between `income` (independent variable) and `property_value` (dependent variable).
+
+### Fitting the Model
+
+We use the `lm()` function to fit a linear model.
+
+```{r}
+# Fit the linear regression model
+lm_model <- lm(property_value ~ income, data = filtered_hmda_data)
+
+# Display the summary of the model
+summary(lm_model)
+```
+
+### Interpreting the Results
+
+Let's interpret the results of the simple linear regression model using the provided output.
+
+#### Coefficients {.unnumbered}
+
+The `Coefficients` section provides the estimated values of the intercept and slope in the regression equation:
+
+-   **Intercept**: 251163.43 
+
+    -   This represents the estimated property value when `income` is zero.
+
+-   **Income**: 1910.72
+
+    -   This represents the estimated change in property value for each unit increase in `income`.
+
+#### Statistical Significance {.unnumbered}
+
+The `Pr(>|t|)` column provides the p-values for the coefficients:
+
+-   **Intercept**: The p-value is less than 0.0000000000000002, indicating that the intercept is statistically significant.
+
+-   **Income**: The p-value is also less than 0.0000000000000002, indicating that `income` is a statistically significant predictor of `property_value`.
+
+#### Model Fit {.unnumbered}
+
+-   **Residual standard error**: 129,400 on 34,193 degrees of freedom
+
+    -   This represents the average distance that the observed values fall from the regression line.
+
+-   **Multiple R-squared**: 0.3188
+
+    -   This indicates that approximately 31.88% of the variance in `property_value` can be explained by `income`.
+
+-   **Adjusted R-squared**: 0.3187
+
+    -   This is similar to the R-squared value but adjusted for the number of predictors in the model.
+
+-   **F-statistic**: 1.6e+04 on 1 and 34,193 DF, p-value: \< 0.00000000000000022
+
+    -   This indicates that the model is statistically significant overall.
+
+The results suggest that there is a statistically significant positive relationship between `income` and `property_value`. For every unit increase in `income`, the `property_value` is expected to increase by approximately 1910.72 units, holding other factors constant. The R-squared value indicates that `income` explains about 31.88% of the variability in `property_value`, which suggests that other factors not included in the model may also play a significant role in determining property values.
+
+#### Visualizing the Regression Line {.unnumbered}
+
+We can visualize the regression line using ggplot2.
+
+```{r}
+ggplot(data = filtered_hmda_data, aes(x = income, y = property_value)) +
+  geom_point() +
+  geom_smooth(method = "lm", color = "red", formula = y ~ x) +
+  labs(title = "Regression Line: Property Value vs Income",
+       x = "Income (in Thousands of Dollars)",
+       y = "Property Value")
+```
+
+
+In this plot:
+
+-   `geom_point()` adds the data points.
+
+-   `geom_smooth(method = "lm", color = "red", formula = y ~ x)` adds the regression line with the color red and using the formula `y ~ x` .
+
+#### Plotting Residuals Using `lm()` {.unnumbered}
+
+You can plot residuals of a linear model fitted with `lm()` using several methods in R. One common way is to use base R plotting functions to create diagnostic plots. Here is how you can plot the residuals:
+
+1.  **Basic Residual Plot**: Plotting residuals versus fitted values.
+
+```{r}
+# Fit the linear regression model
+lm_model <- lm(property_value ~ income, data = filtered_hmda_data)
+
+# Plot residuals vs. fitted values
+plot(lm_model$fitted.values, lm_model$residuals,
+     xlab = "Fitted Values",
+     ylab = "Residuals",
+     main = "Residuals vs Fitted Values")
+abline(h = 0, col = "red")
+```
+
+
+2.  **Diagnostic Plots** Plotting multiple diagnostic plots at once.
+
+```{r}
+# Fit the linear regression model
+lm_model <- lm(property_value ~ income, data = filtered_hmda_data)
+
+# Produce diagnostic plots
+par(mfrow = c(2, 2)) # just lets R know we want the plots to be in 2x2 structure
+plot(lm_model)
+```
+
+The `plot(lm_model)` function produces four diagnostic plots:
+
+-   Residuals vs Fitted
+
+-   Normal Q-Q
+
+-   Scale-Location (Spread-Location)
+
+-   Residuals vs Leverage
+
+These plots help to assess the fit of the model and to identify any potential issues such as non-linearity, heteroscedasticity, and influential observations.
+
+## Multiple Linear Regression
+
+Multiple linear regression is used to model the relationship between a dependent variable and two or more independent variables. In this section, we will extend our analysis to include additional predictors and dummy variables.
+
+### Including Multiple Variables
+
+To include more than one independent variable in our model, we simply add them to the formula. For instance, we might want to include both `income` and `loan_amount` as predictors of `property_value`.
+
+### Creating Dummy Variables
+
+Dummy variables are used to include categorical variables in the regression model. For example, the `loan_type` variable in our dataset is categorical, and we need to convert it to dummy variables.
+
+### Preparing the Data
+
+We will modify our previous data preparation steps to include additional variables and create dummy variables for `loan_type`.
+
+```{r}
+# Create dummy variables for loan_type
+filtered_hmda_data <- filtered_hmda_data %>%
+  mutate(
+    loan_type_conventional = ifelse(loan_type == "Conventional", 1, 0),
+    loan_type_fha = ifelse(loan_type == "FHA", 1, 0),
+    loan_type_va = ifelse(loan_type == "VA", 1, 0),
+    loan_type_usda = ifelse(loan_type == "USDA", 1, 0)
+  )
+```
+
+### Fitting the Multiple Linear Regression Model
+
+We use the `lm()` function to fit a multiple linear regression model.
+
+```{r}
+# Fit the multiple linear regression model
+mlm_model <- lm(property_value ~ income + loan_amount + loan_type_conventional + loan_type_fha + loan_type_va + loan_type_usda, data = filtered_hmda_data)
+
+# Display the summary of the model
+summary(mlm_model)
+```
+
+As we can see now instead of just having a coefficients and statistics for the intercept term and `income` we now also have coefficients for the the dummy variables we created based on the different loan types.
+
+## Robust Linear Regression
+
+Introduction to Robust Regression {.unlisted .unumbered} Robust regression is a technique used when the assumptions underlying ordinary least squares (OLS) regression are violated. These assumptions include the presence of normally distributed errors, constant variance (homoscedasticity), and the absence of outliers. In cases where the data contains outliers or exhibits heteroscedasticity (non-constant variance), OLS estimates can be significantly biased or inefficient.
+
+The rlm() function from the MASS package provides a robust alternative to OLS regression through the use of M-estimators. Unlike OLS, which minimizes the sum of squared residuals, rlm() minimizes a weighted sum of residuals, where weights are adjusted to reduce the influence of outliers. This adjustment allows rlm() to provide more reliable parameter estimates when dealing with problematic data conditions. [^1]
+
+[^1]: For a more advanced and comprehensive explanation of how `rlm()` works you may refer to <https://www.researchgate.net/publication/224817420_Modern_Applied_Statistics_With_S>
+
+### Preparing the Data {.unlisted .unumbered}
+
+We'll use the same HMDA dataset prepared for the basic regression analysis.
+
+### Fitting the Robust Linear Model
+
+We use the `rlm()` function from the `MASS` package to fit a robust linear model.
+
+```{r}
+library(MASS)
+
+# Fit the robust linear regression model
+rlm_model <- rlm(property_value ~ income, data = filtered_hmda_data)
+
+# Display the summary of the model
+summary(rlm_model)
+```
+
+The interpretation of summary is the same as it was when we ran a simple linear regression using the `lm()` model. One of the key differences is that you won't see an R^2^ statistic. since `rlm()` down-weight outliers the traditional calculation of R^2^ would not accurately reflect the model's fit or explanatory power.
+
