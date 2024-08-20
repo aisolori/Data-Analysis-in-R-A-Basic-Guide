@@ -15,4 +15,5 @@ rmd_files:
   - chapter4/data-visualization-ggplot.Rmd
   - chapter4/advanced-ggplot.Rmd
   - chapter5/regressions.Rmd
+  - chapter6/data-reporting.Rmd
   

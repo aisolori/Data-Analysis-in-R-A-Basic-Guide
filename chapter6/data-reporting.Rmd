@@ -1,0 +1,91 @@
+# Data Reporting
+
+The final and arguably most important step in data analysis is reporting. While collecting, prepping, and manipulating data are challenging tasks, they are all done with the goal of uncovering insights and sharing these discoveries with others.
+
+Fortunately, R offers multiple ways to share data analysis results. In the sections below, we'll explore some of the most commonly used methods for creating and sharing reports.
+
+[Link to Template](https://github.com/aisolori/Data-Analysis-in-R-A-Basic-Guide/blob/32a11a93895456db1bd9dcdd0c9703f368a68c67/word_template.Rmd)
+
+---
+title: "Word Template"
+author: "Antonio Solorio"
+date: "2024-08-19"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+## Word Outputs
+
+One of the most popular methods for creating reports is through Microsoft Word. R provides several useful tools for generating professionally formatted reports with dynamic content in Word documents. In the following section, we'll discuss how to set up an R Markdown YAML header to output a Word document, including how to use a Word reference document for customized formatting.
+
+### Setting Up the YAML Header for Word Output
+
+To create a Word document from an R Markdown file, you need to specify the output format in the YAML header. You can also use a Word reference document as a template to control the styling of the output, such as fonts, headings, and paragraph spacing. Below is an example of how to set up the YAML header:
+
+``` yaml
+---
+title: "Your Report Title"
+author: "Your Name"
+date: "`r Sys.Date()`"
+output: 
+  word_document:
+    reference_docx: "path/to/your-reference-doc.docx"
+---
+```
+
+In this example:
+
+-   `title`, `author`, and `date` fields are standard metadata for your report.
+
+-   The `output` field is set to `word_document`, indicating that the output will be a Word document.
+
+-   The `reference_docx` option specifies the path to your Word reference document, which will be used as a template for styling the output.
+
+To create the reference document, you can start by generating a basic Word document from R Markdown, then manually adjust the styles in Word (e.g., heading fonts, paragraph spacing) and save it as a `.docx` file.
+
+\`\`\`
+
+This file can then be used as the `reference_docx` in the YAML header to ensure consistent formatting across your reports.
+
+### Understanding How Styles Work in Word Documents
+
+Styles in Word documents are predefined sets of formatting options that control the appearance of text and other elements. When you use a reference document in R Markdown, these styles are applied to the corresponding elements in your report. Here's how styles work:
+
+1.  **Headings:** Word allows you to define styles for different levels of headings (e.g., Heading 1, Heading 2). These styles control font type, size, color, and spacing. When you apply a heading in your R Markdown file (e.g., `# Heading 1`, `## Heading 2`), the corresponding style from the reference document is applied in the output.
+
+2.  **Paragraphs:** The paragraph style controls the appearance of regular text. This includes font type, size, line spacing, indentation, and alignment. By adjusting the paragraph style in your reference document, you can ensure consistent formatting for all paragraphs in your report.
+
+3.  **Lists:** Bullet and numbered lists also have styles associated with them. These styles dictate the bullet type, indentation level, and spacing between list items. The reference document can be customized to match the desired list appearance in your final report.
+
+4.  **Tables:** Tables in Word can be styled using predefined table styles. These styles manage the appearance of borders, shading, and text within tables. If your report includes tables, the reference document’s table style will be applied to ensure they look consistent and professional.
+
+5.  **Text Formatting:** Inline text elements like bold, italics, and hyperlinks follow the styles defined in the reference document. By customizing these styles, you can control the appearance of text that is emphasized or linked.
+
+To modify styles in a Word reference document, open the document in Word, go to the "Styles" pane, and adjust the styles as needed.
+
+![](chapter6/images/word_styles.PNG)
+
+Once you've customized the styles, save the document, and use it as the `reference_docx` in your R Markdown YAML header. This will ensure that your Word output adheres to the formatting and styling defined in your reference document.
